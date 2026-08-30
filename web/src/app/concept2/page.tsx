@@ -4,6 +4,10 @@ import { useState } from "react";
 import HelicalBand, { type BandMode } from "@/components/field/HelicalBand";
 import Ribbon from "@/components/site/Ribbon";
 import Programme from "@/components/sections/Programme";
+import Committee from "@/components/sections/Committee";
+import Venues from "@/components/sections/Venues";
+import RegisterCta from "@/components/sections/RegisterCta";
+import Footer from "@/components/sections/Footer";
 import { EVENT_INFO, NAV_ITEMS } from "@/lib/constants";
 
 const MODES: { id: BandMode; label: string; note: string }[] = [
@@ -17,7 +21,8 @@ export default function Concept2() {
   const active = MODES.find((m) => m.id === mode)!;
 
   return (
-    <main id="main">
+    <>
+      <main id="main">
       <section className="relative flex h-svh max-h-[980px] min-h-[620px] flex-col overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-[52vw] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[90px]"
           style={{ background: "radial-gradient(circle,rgba(179,18,28,.34) 0%,transparent 70%)" }} />
@@ -80,6 +85,11 @@ export default function Concept2() {
 
       <Ribbon />
       <Programme />
+      <Committee />
+      <Venues />
+      <RegisterCta />
     </main>
+      <Footer />
+    </>
   );
 }

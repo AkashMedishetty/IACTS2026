@@ -1,12 +1,17 @@
 import EcgTrace from "@/components/field/EcgTrace";
 import Ribbon from "@/components/site/Ribbon";
 import Programme from "@/components/sections/Programme";
+import Committee from "@/components/sections/Committee";
+import Venues from "@/components/sections/Venues";
+import RegisterCta from "@/components/sections/RegisterCta";
+import Footer from "@/components/sections/Footer";
 import { EVENT_INFO, STATS, NAV_ITEMS } from "@/lib/constants";
 import { highlights } from "@/data/conference";
 
 export default function Concept3() {
   return (
-    <main id="main">
+    <>
+      <main id="main">
       <section className="relative flex h-svh max-h-[980px] min-h-[620px] flex-col overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute -top-[10vw] left-1/2 size-[46vw] -translate-x-1/2 rounded-full opacity-50 blur-[90px]"
           style={{ background: "radial-gradient(circle,rgba(179,18,28,.4) 0%,transparent 70%)" }} />
@@ -85,6 +90,11 @@ export default function Concept3() {
 
       <Ribbon />
       <Programme />
+      <Committee />
+      <Venues />
+      <RegisterCta />
     </main>
+      <Footer />
+    </>
   );
 }

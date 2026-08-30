@@ -1,6 +1,10 @@
 import CloudField from "@/components/field/CloudField";
 import Ribbon from "@/components/site/Ribbon";
 import Programme from "@/components/sections/Programme";
+import Committee from "@/components/sections/Committee";
+import Venues from "@/components/sections/Venues";
+import RegisterCta from "@/components/sections/RegisterCta";
+import Footer from "@/components/sections/Footer";
 import { EVENT_INFO, STATS, NAV_ITEMS } from "@/lib/constants";
 import { days, secretariat } from "@/data/conference";
 
@@ -14,7 +18,8 @@ function Arrow() {
 
 export default function Concept1() {
   return (
-    <main id="main">
+    <>
+      <main id="main">
       <section className="relative flex h-svh max-h-[980px] min-h-[600px] flex-col overflow-hidden">
         {/* blurred radial colour fields — the depth layer */}
         <div aria-hidden className="pointer-events-none absolute -right-[7vw] -top-[11vw] size-[34vw] rounded-full opacity-55 blur-[70px]"
@@ -114,6 +119,11 @@ export default function Concept1() {
 
       <Ribbon />
       <Programme />
+      <Committee />
+      <Venues />
+      <RegisterCta />
     </main>
+      <Footer />
+    </>
   );
 }
