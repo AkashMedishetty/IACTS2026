@@ -132,7 +132,7 @@ export default function HelicalBand({
       ctx.globalCompositeOperation = "lighter";
       for (const ring of rings) {
         if (visible && !reduce) ring.angle += ring.spin;
-        let fx = 0, fy = 0, exSum = 0;
+        let fx = 0, fy = 0, exSum = 0, zSum = 0;
         ctx.beginPath();
         for (let p = 0; p < PER; p++) {
           const th = (p / PER) * Math.PI * 2 + ring.angle;
@@ -141,6 +141,7 @@ export default function HelicalBand({
           const x3 = A.x + (B.x - A.x) * e;
           const y3 = A.y + (B.y - A.y) * e;
           const z3 = A.z + (B.z - A.z) * e;
+          zSum += z3;
           const s = FOV / (CAM + z3);
           const px = cx + x3 * s;
           const py = cy + (y3 + ring.vy[p]) * s;
@@ -158,12 +159,16 @@ export default function HelicalBand({
         }
         ctx.lineTo(fx, fy);
         const ex = exSum / PER;
+        // depth falloff: front fibres read bright, rear ones recede. A flat
+        // alpha made the whole band look like one faint cone.
+        const zAvg = zSum / PER;
+        const near = Math.max(0, Math.min(1, 0.5 + zAvg / (ring.radius * 1.6 || 1)));
         if (ex > 0.05) {
-          ctx.strokeStyle = `rgba(232,58,68,${Math.min(1, 0.4 + ex * 0.6)})`;
-          ctx.lineWidth = 1.1 + ex * 1.5;
+          ctx.strokeStyle = `rgba(240,86,96,${Math.min(1, 0.55 + ex * 0.45)})`;
+          ctx.lineWidth = 1.3 + ex * 1.7;
         } else {
-          ctx.strokeStyle = "rgba(179,18,28,0.26)";
-          ctx.lineWidth = 0.75;
+          ctx.strokeStyle = `rgba(196,26,38,${0.14 + near * 0.5})`;
+          ctx.lineWidth = 0.7 + near * 0.75;
         }
         ctx.stroke();
       }

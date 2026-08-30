@@ -68,7 +68,7 @@ export default function Concept2() {
             <p className="u-eyebrow leading-[1.9] text-faint">
               <span className="block text-bone">{active.label}</span>{active.note}
             </p>
-            <p className="max-w-[38ch] text-right font-mono text-[9px] leading-[1.7] tracking-[0.08em] text-faint">
+            <p className="max-w-[38ch] text-right font-mono text-[9.5px] leading-[1.75] tracking-[0.06em] text-muted">
               <span className="block uppercase tracking-[0.14em] text-bone">What you are looking at</span>
               The ventricular myocardium as a single continuous band coiled in a
               double helix — Torrent-Guasp&apos;s helical ventricular myocardial
