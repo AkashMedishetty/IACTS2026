@@ -4,6 +4,7 @@ import { useState } from "react";
 import HelicalBand, { type BandMode } from "@/components/field/HelicalBand";
 import Ribbon from "@/components/site/Ribbon";
 import Programme from "@/components/sections/Programme";
+import Strata from "@/components/sections/Strata";
 import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
 import RegisterCta from "@/components/sections/RegisterCta";
@@ -88,6 +89,7 @@ export default function Concept2() {
       </section>
 
       <Ribbon />
+      <Strata />
       <Programme />
       <Committee />
       <Venues />

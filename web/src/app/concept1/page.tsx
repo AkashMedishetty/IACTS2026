@@ -1,6 +1,7 @@
 import CloudField from "@/components/field/CloudField";
 import Ribbon from "@/components/site/Ribbon";
 import Programme from "@/components/sections/Programme";
+import Capabilities from "@/components/sections/Capabilities";
 import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
 import RegisterCta from "@/components/sections/RegisterCta";
@@ -122,6 +123,7 @@ export default function Concept1() {
       </section>
 
       <Ribbon />
+      <Capabilities variant="instrument" />
       <Programme />
       <Committee />
       <Venues />
