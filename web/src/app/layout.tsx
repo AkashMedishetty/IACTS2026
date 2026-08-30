@@ -1,23 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Playfair_Display, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import { eventJsonLd } from "@/lib/event-schema";
 
-/* next/font downloads and SELF-HOSTS these at build time — no runtime request
-   to Google, which is what keeps LCP honest on Indian mobile networks. */
-const display = Archivo({
+/* Self-hosted at build time by next/font — no runtime Google request, which is
+   what keeps LCP honest on Indian mobile networks. */
+const sans = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "800", "900"],
-  variable: "--f-display",
+  weight: ["400", "500", "600", "800", "900"],
+  variable: "--f-sans",
   display: "swap",
 });
 
-const serif = Instrument_Serif({
+const display = Playfair_Display({
   subsets: ["latin"],
-  weight: "400",
-  style: "italic",
-  variable: "--f-serif",
+  weight: ["500", "700"],
+  style: ["italic"],
+  variable: "--f-display",
   display: "swap",
 });
 
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f4ef",
+  themeColor: "#08080a",
   width: "device-width",
   initialScale: 1,
 };
@@ -61,7 +61,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${display.variable} ${serif.variable} ${mono.variable}`}>
+      <body className={`${sans.variable} ${display.variable} ${mono.variable}`}>
         <SmoothScroll />
         <a
           href="#main"

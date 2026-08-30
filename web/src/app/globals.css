@@ -1,179 +1,103 @@
 @import "tailwindcss";
 
 /* ============================================================
-   IACTS TECHNOCOLLEGE CME 2026 — THE OPERATIVE FIELD
-   Tokens derive from the client's own flyer. Do not invent colours.
+   IACTS TECHNOCOLLEGE CME 2026
+   Dark house system. Palette is IACTS crimson/gold on near-black.
    ============================================================ */
 
 @theme {
+  --color-ink: #08080a;
+  --color-ink-2: #0e0e11;
+  --color-ink-3: #16161a;
+  --color-bone: #f5f3ef;
   --color-crimson: #b3121c;
-  --color-crimson-lift: #e03a44;
+  --color-crimson-lift: #e0323c;
   --color-maroon: #7a0e14;
-  --color-gold: #b08a4f;
-  --color-gold-lift: #c9a468;
-  --color-bone: #f7f4ef;
-  --color-bone-deep: #efeae1;
-  --color-bone-sink: #e6e0d5;
-  --color-ink: #2a2a2a;
-  --color-ink-soft: #6b6560;
-  --color-ink-faint: #9a938c;
-  --color-venous: #4a6d8c;
+  --color-gold: #c18d21;
+  --color-gold-lift: #e4b75a;
+  --color-venous: #689ecc;
+  --color-muted: #8c8680;
+  --color-faint: #514c48;
 
-  --font-display: var(--f-display), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--f-serif), Georgia, serif;
+  --font-sans: var(--f-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--f-display), Georgia, serif;
   --font-mono: var(--f-mono), ui-monospace, monospace;
 
-  --ease-field: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
 }
 
 :root {
-  --hair: rgba(42, 42, 42, 0.13);
-  --hair-gold: rgba(176, 138, 79, 0.32);
-  --gutter: clamp(1.25rem, 4vw, 3.5rem);
-  --shell: 1680px;
+  --hair: rgba(245, 243, 239, 0.09);
+  --hair-gold: rgba(193, 141, 33, 0.3);
+  --gutter: clamp(1rem, 3vw, 3.25rem);
+  --shell: 1720px;
 }
 
-* {
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
+* { box-sizing: border-box; min-width: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--color-bone);
-  color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Theatre light — a lit field, not merely a pale one. This single layer is
-   what separates "light site" from "surgical light falling on bone". */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(120% 78% at 64% 4%, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0) 56%),
-    radial-gradient(92% 58% at 48% 102%, rgba(176, 138, 79, 0.11) 0%, rgba(176, 138, 79, 0) 72%);
-}
-
-/* Paper grain. Kept in CSS as a data URI so it costs no request. */
+/* film grain — one data URI, no request */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 60;
   pointer-events: none;
-  opacity: 0.38;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* app content sits above both atmosphere layers */
-.field-shell {
-  position: relative;
-  z-index: 2;
-}
+::selection { background: var(--color-crimson); color: var(--color-bone); }
+:focus-visible { outline: 2px solid var(--color-crimson-lift); outline-offset: 3px; }
 
-::selection {
-  background: var(--color-crimson);
-  color: var(--color-bone);
-}
-
-/* Focus: visible and on-brand. Never removed. */
-:focus-visible {
-  outline: 2px solid var(--color-crimson);
-  outline-offset: 3px;
-}
-
-/* ---------- reusable atoms ---------- */
-
-.u-shell {
-  width: 100%;
-  max-width: var(--shell);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
+.u-shell { width: 100%; max-width: var(--shell); margin-inline: auto; padding-inline: var(--gutter); }
 
 .u-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.625rem;
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  font-size: clamp(0.53rem, 0.7vw, 0.72rem);
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--color-ink-soft);
+  color: var(--color-muted);
 }
 
-.u-hair {
-  height: 1px;
-  background: var(--hair);
-  border: 0;
-}
-
-.u-tabular {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Display lockup: tight, optical, no synthetic bold ever */
-.u-display {
-  font-family: var(--font-display);
+/* gradient-clipped display type — the house headline treatment */
+.u-word {
   font-weight: 900;
-  letter-spacing: -0.035em;
-  line-height: 0.84;
-  text-wrap: balance;
-}
-
-.u-theme-line {
-  font-family: var(--font-serif);
-  font-style: italic;
-  color: var(--color-crimson);
-  letter-spacing: -0.012em;
-  line-height: 1;
-}
-
-/* Gradient wordmark — maroon into crimson, as the flyer sets it */
-.u-wordmark {
-  background: linear-gradient(178deg, var(--color-maroon) 4%, var(--color-crimson) 62%);
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  background: linear-gradient(128deg, var(--color-bone) 0%, var(--color-crimson-lift) 42%, var(--color-gold) 104%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Reveal primitive. Elements start hidden ONLY when JS is live, so a
-   no-JS or failed-hydration visitor still sees a complete page. */
-[data-reveal] {
-  will-change: transform, opacity;
+.u-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  background: linear-gradient(100deg, var(--color-crimson-lift) 0%, var(--color-gold-lift) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.js [data-reveal] {
-  opacity: 0;
-  transform: translate3d(0, var(--reveal-y, 1.4rem), 0);
-}
+/* Entrance is GATED on .anim (added by JS). Never make opacity:0 the resting
+   state — `animation both` + delay strands content invisible if the clock
+   never advances (no JS, frozen tab, headless capture). */
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+.anim [data-r] { animation: rise 1.05s var(--ease-out-expo) both; }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .js [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+  html { scroll-behavior: auto; }
+  .anim [data-r] { animation: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

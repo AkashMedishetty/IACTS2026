@@ -14,8 +14,8 @@ import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion } from "@/lib/m
  */
 export default function SmoothScroll() {
   useEffect(() => {
-    // marks JS as live so pre-reveal hidden state applies only when we can animate
-    document.documentElement.classList.add("js");
+    // gates the entrance reveal; without it content simply renders visible
+    document.documentElement.classList.add("anim");
 
     if (prefersReducedMotion()) return;
     registerGsap();
