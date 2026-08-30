@@ -29,7 +29,7 @@ export default function Programme() {
         </p>
       </header>
 
-      <div className="mt-[clamp(2.5rem,6vh,5rem)] grid gap-[clamp(2.5rem,6vh,6rem)]">
+      <div id="workshops" className="mt-[clamp(2.5rem,6vh,5rem)] grid gap-[clamp(2.5rem,6vh,6rem)]">
         {days.map((day, di) => (
           <article key={day.id} className="grid gap-[clamp(1rem,3vw,3.5rem)] lg:grid-cols-[minmax(0,26%)_minmax(0,1fr)]">
             <div className="lg:sticky lg:top-24 lg:self-start">

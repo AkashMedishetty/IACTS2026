@@ -72,7 +72,7 @@ export default function Committee() {
         ))}
       </div>
 
-      <div className="mt-[clamp(2.5rem,6vh,4.5rem)]">
+      <div id="abstracts" className="mt-[clamp(2.5rem,6vh,4.5rem)]">
         <p className="u-eyebrow" data-r>Executive Committee</p>
         <ul className="mt-5 grid list-none grid-cols-1 gap-x-[clamp(1.5rem,3vw,3.5rem)] p-0 sm:grid-cols-2 lg:grid-cols-3">
           {executiveCommittee.map((n, i) => (

@@ -8,6 +8,8 @@ import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
+import CinematicLoader from "@/components/site/CinematicLoader";
+import Dock from "@/components/site/Dock";
 import { EVENT_INFO, NAV_ITEMS } from "@/lib/constants";
 
 const MODES: { id: BandMode; label: string; note: string }[] = [
@@ -22,6 +24,8 @@ export default function Concept2() {
 
   return (
     <>
+      <CinematicLoader />
+      <Dock />
       <main id="main">
       <section className="relative flex h-svh max-h-[980px] min-h-[620px] flex-col overflow-hidden">
         <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 size-[52vw] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 blur-[90px]"

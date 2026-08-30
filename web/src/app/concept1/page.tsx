@@ -5,6 +5,8 @@ import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
+import CinematicLoader from "@/components/site/CinematicLoader";
+import Dock from "@/components/site/Dock";
 import { EVENT_INFO, STATS, NAV_ITEMS } from "@/lib/constants";
 import { days, secretariat } from "@/data/conference";
 
@@ -19,6 +21,8 @@ function Arrow() {
 export default function Concept1() {
   return (
     <>
+      <CinematicLoader />
+      <Dock />
       <main id="main">
       <section className="relative flex h-svh max-h-[980px] min-h-[600px] flex-col overflow-hidden">
         {/* blurred radial colour fields — the depth layer */}
