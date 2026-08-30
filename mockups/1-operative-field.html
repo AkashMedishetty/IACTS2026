@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IACTS Technocollege CME 2026 — Direction 1: The Operative Field</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DIRECTION 1 — THE OPERATIVE FIELD
+   The site is a surgical field under theatre light. Scroll = the operation.
+   Mockup only: production replaces the 2D canvas with R3F + real MRI mesh.
+   ============================================================ */
+
+:root{
+  --crimson:#B3121C;
+  --maroon:#7A0E14;
+  --gold:#B08A4F;
+  --gold-lt:#C9A468;
+  --bone:#F7F4EF;
+  --bone-deep:#EFEAE1;
+  --ink:#2A2A2A;
+  --ink-soft:#6B6560;
+  --hair:rgba(42,42,42,.14);
+  --hair-gold:rgba(176,138,79,.34);
+
+  --display:'Archivo',system-ui,sans-serif;
+  --body:'Instrument Sans',system-ui,sans-serif;
+  --serif:'Instrument Serif',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bone); color:var(--ink);
+  font-family:var(--body); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+
+/* Theatre light: a bright pool falling on the field, plus paper grain.
+   This is what makes it read as LIT rather than merely light-coloured. */
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(120% 80% at 62% 6%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 58%),
+    radial-gradient(90% 60% at 50% 100%, rgba(176,138,79,.10) 0%, rgba(176,138,79,0) 70%);
+}
+body::after{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.4;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+.wrap{position:relative; z-index:2}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:var(--mono); font-size:10px; font-weight:500;
+  letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft);
+}
+.rule{height:1px; background:var(--hair); border:0; margin:0}
+/* the brochure's gold diamond divider, rebuilt as a real rule */
+.rule-dia{display:flex; align-items:center; gap:14px; margin:26px 0}
+.rule-dia::before,.rule-dia::after{content:''; height:1px; flex:1; background:var(--hair-gold)}
+.rule-dia span{
+  width:7px; height:7px; background:var(--gold); transform:rotate(45deg);
+  flex:0 0 auto;
+}
+
+/* ---------- masthead ---------- */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:24px; padding:20px clamp(20px,4vw,56px);
+  border-bottom:1px solid var(--hair);
+}
+.seal{display:flex; align-items:center; gap:13px; min-width:0}
+.seal-mark{
+  width:38px; height:38px; border-radius:50%; flex:0 0 auto;
+  border:1.5px solid var(--crimson); position:relative;
+  display:grid; place-items:center;
+}
+.seal-mark::after{
+  content:''; width:11px; height:11px; background:var(--crimson);
+  clip-path:path('M5.5 11S0 6.8 0 3.6A3.4 3.4 0 0 1 5.5 1 3.4 3.4 0 0 1 11 3.6C11 6.8 5.5 11 5.5 11Z');
+}
+.seal-txt{font-size:11.5px; line-height:1.35; font-weight:600; letter-spacing:.005em}
+.seal-txt em{display:block; font-style:normal; color:var(--ink-soft); font-weight:500}
+.values{font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; text-align:right; color:var(--ink-soft)}
+.values b{color:var(--crimson); font-weight:600}
+
+/* ---------- hero ---------- */
+.hero{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
+  gap:clamp(24px,4vw,64px); align-items:center;
+  padding:clamp(32px,5vw,68px) clamp(20px,4vw,56px) 0;
+  min-height:calc(100vh - 80px);
+}
+.lockup{max-width:560px}
+.wordmark{
+  font-family:var(--display); font-weight:900; line-height:.82;
+  letter-spacing:-.035em; margin:0;
+  font-size:clamp(66px,11.5vw,152px);
+  background:linear-gradient(178deg,var(--maroon) 4%,var(--crimson) 62%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.sub1{
+  font-family:var(--display); font-weight:700; color:var(--ink);
+  font-size:clamp(24px,4.1vw,53px); letter-spacing:-.018em;
+  line-height:1; margin:.1em 0 0;
+}
+.sub2{
+  font-family:var(--display); font-weight:800; margin:.18em 0 0;
+  font-size:clamp(22px,3.7vw,48px); letter-spacing:-.015em; line-height:1;
+  color:var(--crimson);
+}
+.sub2 i{font-style:normal; color:var(--gold)}
+.theme{
+  font-family:var(--serif); font-style:italic; color:var(--crimson);
+  font-size:clamp(29px,4.6vw,56px); line-height:1; margin:0;
+  letter-spacing:-.012em;
+}
+
+/* the operative-note data block: tabular, ruled, dense */
+.facts{
+  display:grid; grid-template-columns:auto 1fr; gap:0 22px;
+  font-family:var(--mono); font-size:12px; margin-top:6px;
+  border-top:1px solid var(--hair);
+}
+.facts dt{
+  padding:9px 0 9px; color:var(--ink-soft); font-size:9.5px;
+  letter-spacing:.18em; text-transform:uppercase;
+  border-bottom:1px solid var(--hair);
+}
+.facts dd{
+  margin:0; padding:9px 0; font-weight:500; font-variant-numeric:tabular-nums;
+  border-bottom:1px solid var(--hair);
+}
+.facts dd b{color:var(--crimson); font-weight:600}
+
+/* ---------- the field (canvas + overlays) ---------- */
+.field{position:relative; aspect-ratio:1/1.04; width:100%}
+.field canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+.arcs{position:absolute; inset:0; pointer-events:none; will-change:transform}
+.slices{
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:8px; width:clamp(58px,7vw,84px);
+}
+.slice{
+  border:1px solid var(--hair-gold); background:rgba(255,255,255,.55);
+  aspect-ratio:1/.8; position:relative; overflow:hidden;
+}
+.slice canvas{position:absolute; inset:0}
+.slice span{
+  position:absolute; left:4px; bottom:3px; font-family:var(--mono);
+  font-size:6.5px; letter-spacing:.13em; color:var(--ink-soft);
+}
+/* engraved leader-line callout, borrowed from Direction 3 as recommended */
+.callout{position:absolute; font-family:var(--mono); font-size:9px; letter-spacing:.1em; color:var(--ink-soft); pointer-events:none}
+.callout b{display:block; color:var(--ink); font-weight:600; font-size:9.5px; letter-spacing:.06em}
+.callout::before{
+  content:''; position:absolute; top:6px; height:1px; background:var(--hair-gold);
+}
+.callout.l{text-align:right; right:calc(100% + 12px)}
+.callout.l::before{left:calc(100% + 2px); width:9px}
+
+/* ---------- sequence bar ---------- */
+.seqbar{
+  position:sticky; bottom:0; z-index:6; backdrop-filter:blur(9px);
+  background:rgba(247,244,239,.86); border-top:1px solid var(--hair);
+  display:flex; align-items:center; gap:clamp(10px,2vw,26px);
+  padding:11px clamp(20px,4vw,56px);
+}
+.seqbar .lab{font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; color:var(--ink-soft); white-space:nowrap}
+.track{flex:1; height:2px; background:var(--bone-deep); position:relative; min-width:60px}
+.track i{position:absolute; inset:0 auto 0 0; background:var(--crimson); width:0%}
+.stages{display:flex; gap:clamp(8px,1.4vw,20px); font-family:var(--mono); font-size:9px; letter-spacing:.13em; text-transform:uppercase}
+.stages b{color:var(--ink-soft); font-weight:500; transition:color .3s var(--ease)}
+.stages b.on{color:var(--crimson); font-weight:600}
+
+/* ---------- programme stages ---------- */
+.stage{
+  padding:clamp(56px,9vw,120px) clamp(20px,4vw,56px);
+  border-top:1px solid var(--hair); display:grid;
+  grid-template-columns:clamp(52px,6vw,92px) minmax(0,1fr) minmax(0,1.1fr);
+  gap:clamp(18px,3vw,48px); align-items:start;
+}
+.stage-no{
+  font-family:var(--display); font-weight:900; font-size:clamp(30px,4vw,52px);
+  color:var(--gold); line-height:.8; letter-spacing:-.04em;
+}
+.stage h2{
+  font-family:var(--display); font-weight:800; letter-spacing:-.022em;
+  font-size:clamp(26px,3.6vw,44px); line-height:1.02; margin:0 0 12px;
+}
+.stage h2 em{font-style:normal; color:var(--crimson)}
+.stage .lede{color:var(--ink-soft); font-size:15px; max-width:44ch; margin:0}
+.items{list-style:none; margin:0; padding:0; border-top:1px solid var(--hair)}
+.items li{
+  display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:baseline;
+  padding:13px 0; border-bottom:1px solid var(--hair); font-size:14.5px;
+}
+.items .n{font-family:var(--mono); font-size:10px; color:var(--gold); font-variant-numeric:tabular-nums}
+.items .tag{font-family:var(--mono); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft)}
+
+/* ---------- provenance ---------- */
+.prov{
+  margin:0 clamp(20px,4vw,56px) clamp(48px,7vw,96px);
+  border:1px solid var(--hair-gold); padding:clamp(20px,3vw,34px);
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:center;
+  background:rgba(255,255,255,.5);
+}
+.prov p{margin:0; font-size:14px; color:var(--ink-soft); max-width:62ch}
+.prov strong{color:var(--ink)}
+.prov .badge{font-family:var(--mono); font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--crimson); border:1px solid var(--hair-gold); padding:7px 11px; white-space:nowrap}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr; padding-top:34px; min-height:0}
+  .field{order:-1; aspect-ratio:1/.92}
+  .stage{grid-template-columns:1fr; gap:16px}
+  .stage-no{font-size:34px}
+  .prov{grid-template-columns:1fr}
+  .values{display:none}
+  .slices{width:52px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important; animation:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="seal">
+    <div class="seal-mark"></div>
+    <div class="seal-txt">Indian Association of<em>Cardiovascular-Thoracic Surgeons</em></div>
+  </div>
+  <div class="values">LEARN. COLLABORATE. INNOVATE. <b>TRANSFORM.</b></div>
+</header>
+
+<section class="hero">
+  <div class="lockup">
+    <h1 class="wordmark">IACTS</h1>
+    <div class="sub1">TECHNOCOLLEGE</div>
+    <div class="sub2">CME <i>2026</i></div>
+
+    <div class="rule-dia"><span></span></div>
+    <p class="theme">The Future Is Now !</p>
+    <div class="rule-dia"><span></span></div>
+
+    <dl class="facts">
+      <dt>Dates</dt><dd><b>23 — 25 October 2026</b></dd>
+      <dt>City</dt><dd>Hyderabad, India</dd>
+      <dt>Oct 23</dt><dd>Pre-Conference Workshop · NIMS</dd>
+      <dt>Oct 24–25</dt><dd>Scientific Programme · Dr. MCR HRD Institute</dd>
+      <dt>Registration</dt><dd>Opens soon — <b>notify me</b></dd>
+    </dl>
+  </div>
+
+  <div class="field" id="field">
+    <svg class="arcs" id="arcs" viewBox="0 0 600 600" fill="none" aria-hidden="true">
+      <g stroke="#B08A4F" stroke-opacity=".3">
+        <circle cx="330" cy="300" r="292" stroke-dasharray="1 7"/>
+        <circle cx="330" cy="300" r="246"/>
+        <circle cx="330" cy="300" r="198" stroke-dasharray="3 9"/>
+      </g>
+      <g stroke="#B3121C" stroke-opacity=".22">
+        <path d="M52 300a278 278 0 0 1 278-278"/>
+        <path d="M96 300a234 234 0 0 0 234 234"/>
+      </g>
+      <g fill="#B08A4F" fill-opacity=".5">
+        <circle cx="330" cy="8" r="3.2"/><circle cx="622" cy="300" r="2.4"/>
+      </g>
+    </svg>
+
+    <canvas id="heart" aria-label="Anatomical heart, reconstructed from MRI-derived geometry, under progressive dissection"></canvas>
+
+    <div class="slices" aria-hidden="true">
+      <div class="slice"><canvas data-slice="0"></canvas><span>CT · AX</span></div>
+      <div class="slice"><canvas data-slice="1"></canvas><span>VOLUME</span></div>
+      <div class="slice"><canvas data-slice="2"></canvas><span>LAYERS</span></div>
+    </div>
+
+    <div class="callout l" style="top:26%"><b>AI-ASSISTED</b>SEGMENTATION</div>
+    <div class="callout l" style="top:47%"><b>PRECISION</b>NAVIGATION</div>
+    <div class="callout l" style="top:68%"><b>REAL-TIME</b>IMAGING</div>
+  </div>
+</section>
+
+<div class="seqbar">
+  <span class="lab">OPERATIVE SEQUENCE</span>
+  <div class="track"><i id="prog"></i></div>
+  <div class="stages" id="stages">
+    <b class="on">Approach</b><b>Exposure</b><b>Repair</b><b>Closure</b>
+  </div>
+</div>
+
+<section class="stage">
+  <div class="stage-no">01</div>
+  <div>
+    <h2>Approach — <em>the hands-on day</em></h2>
+    <p class="lede">October 23 at NIMS. Before the lectures begin, the instruments
+    come out. Five parallel tracks, each capacity-limited.</p>
+  </div>
+  <ul class="items">
+    <li><span class="n">01</span><span>Hands-on Wet Lab Sessions</span><span class="tag">Cadaveric</span></li>
+    <li><span class="n">02</span><span>Robotic Simulation Training</span><span class="tag">Simulator</span></li>
+    <li><span class="n">03</span><span>Suturing &amp; Anastomosis Lab</span><span class="tag">Bench</span></li>
+    <li><span class="n">04</span><span>Endovascular Skills Workshop</span><span class="tag">Cath lab</span></li>
+    <li><span class="n">05</span><span>Perfusion &amp; ECMO Basics</span><span class="tag">Circuit</span></li>
+  </ul>
+</section>
+
+<section class="stage">
+  <div class="stage-no">02</div>
+  <div>
+    <h2>Exposure — <em>the scientific programme</em></h2>
+    <p class="lede">October 24 and 25 at the Dr. MCR HRD Institute Auditorium.
+    Where the field states what it currently knows.</p>
+  </div>
+  <ul class="items">
+    <li><span class="n">01</span><span>Keynote Lectures by Eminent Faculty</span><span class="tag">Plenary</span></li>
+    <li><span class="n">02</span><span>State-of-the-Art Orations</span><span class="tag">Oration</span></li>
+    <li><span class="n">03</span><span>Didactic Lectures</span><span class="tag">Teaching</span></li>
+    <li><span class="n">04</span><span>Paper &amp; Video Presentations</span><span class="tag">Submitted</span></li>
+    <li><span class="n">05</span><span>Panel Discussions</span><span class="tag">Debate</span></li>
+    <li><span class="n">06</span><span>Young Surgeons Forum</span><span class="tag">Trainee</span></li>
+  </ul>
+</section>
+
+<section class="stage">
+  <div class="stage-no">03</div>
+  <div>
+    <h2>Repair — <em>what the technology actually does</em></h2>
+    <p class="lede">The six capabilities the conference is organised around. Each one
+    is a stage of the dissection running alongside you.</p>
+  </div>
+  <ul class="items">
+    <li><span class="n">01</span><span>3D Anatomical Reconstruction</span><span class="tag">Imaging</span></li>
+    <li><span class="n">02</span><span>AI-Assisted Segmentation</span><span class="tag">Compute</span></li>
+    <li><span class="n">03</span><span>Precision Navigation</span><span class="tag">Intra-op</span></li>
+    <li><span class="n">04</span><span>Robotic Surgery Planning</span><span class="tag">Pre-op</span></li>
+    <li><span class="n">05</span><span>Real-Time Imaging</span><span class="tag">Intra-op</span></li>
+    <li><span class="n">06</span><span>Physiological Monitoring</span><span class="tag">Peri-op</span></li>
+  </ul>
+</section>
+
+<div class="prov">
+  <p><strong>The heart above is not an illustration.</strong> Production uses geometry
+  reconstructed directly from patient MRI data, sourced from the NIH 3D Heart Library
+  under a verified commercial-safe licence. For an audience that reads chambers for a
+  living, provenance is the design.</p>
+  <div class="badge">MRI-derived · licence verified</div>
+</div>
+
+</div>
+
+<script src="heart-points.js"></script>
+<script>
+(function(){
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* Anatomy comes from the flyer's OWN heart artwork, sampled by
+   tools/extract-heart.py into [x,y,isVenous,luminance] over a 600x600 stage.
+   Hand-authoring a cardiac silhouette in bezier produced a blob; this reads
+   as a real heart. Production swaps it for the MRI-derived mesh in R3F. */
+const RAW = (window.HEART_PTS || []);
+
+/* conduction pathway, placed against the extracted cloud's actual extent:
+   SA node high-right, down the septum, then the two bundle branches */
+const CONDUCT   = [[318,168],[306,214],[292,262],[278,306],[262,358],[244,418],[232,468]];
+const CONDUCT_B = [[278,306],[312,352],[326,414]];
+
+const cv = document.getElementById('heart');
+const ctx = cv.getContext('2d');
+const arcs = document.getElementById('arcs');
+const prog = document.getElementById('prog');
+const stageEls = [...document.querySelectorAll('#stages b')];
+
+/* hydrate the cloud from the extracted artwork */
+const pts = RAW.map(([x,y,venous,lum]) => ({
+  x, y, venous,
+  d: lum,                        // luminance drives size + depth read
+  j: Math.random()*6.2832,       // per-point phase so the beat isn't uniform
+  v: 0.5 + lum*0.6
+}));
+
+let W=0,H=0,S=1,dpr=1;
+function size(){
+  const r = cv.getBoundingClientRect();
+  dpr = Math.min(devicePixelRatio||1, 2);
+  W = r.width; H = r.height; S = Math.min(W,H)/600;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+const ox = () => (W - 600*S)/2;
+const oy = () => (H - 600*S)/2;
+
+let p = 0, pE = 0;
+function readScroll(){
+  const span = Math.max(1, document.body.scrollHeight - innerHeight);
+  p = Math.min(1, Math.max(0, scrollY/span));
+  prog.style.width = (p*100).toFixed(1)+'%';
+  const i = Math.min(3, Math.floor(p*4.001));
+  stageEls.forEach((b,k)=>b.classList.toggle('on', k===i));
+  if(arcs) arcs.style.transform =
+    'translate3d(0,'+(-p*38).toFixed(1)+'px,0) rotate('+(p*7).toFixed(2)+'deg)';
+}
+
+function poly(list,a,w,col){
+  ctx.save(); ctx.beginPath();
+  list.forEach(([x,y],i)=> i ? ctx.lineTo(ox()+x*S, oy()+y*S) : ctx.moveTo(ox()+x*S, oy()+y*S));
+  ctx.strokeStyle=col; ctx.globalAlpha=a; ctx.lineWidth=w;
+  ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke(); ctx.restore();
+}
+function shape(path,a,w,col){
+  ctx.save(); ctx.translate(ox(),oy()); ctx.scale(S,S);
+  ctx.globalAlpha=a; ctx.strokeStyle=col; ctx.lineWidth=w/S; ctx.stroke(path); ctx.restore();
+}
+let t=0;
+function frame(){
+  t += reduce ? 0 : 0.016;
+  pE += (p - pE)*0.09;
+  const P = pE;
+  ctx.clearRect(0,0,W,H);
+
+  /* two-phase cardiac beat, not a sine wobble */
+  const cyc = (t*0.62)%1;
+  const beat = Math.exp(-Math.pow((cyc-0.10)/0.075,2)) + 0.55*Math.exp(-Math.pow((cyc-0.30)/0.10,2));
+  const sc = 1 + (reduce?0:beat*0.017);
+
+  /* 1 — thoracic cage, retracting outward as the dissection proceeds */
+  const rk = P*58;
+  for(let i=0;i<7;i++){
+    const yy = 104+i*56, sp = 158-Math.abs(i-3)*11, rise = 30+Math.abs(i-3)*4;
+    const arc = [];
+    for(let k=0;k<=14;k++){
+      const u = k/14, xx = 300 + (u-0.5)*2*(sp+rk);
+      arc.push([xx, yy + rise*Math.pow((u-0.5)*2, 2) - rise*0.5]);
+    }
+    poly(arc, 0.085*(1-P*0.6), 1.9, '#8C8378');
+  }
+
+  /* 2 — the cloud. Above the plane the epicardium is retracted and goes
+     translucent gold; below it the anatomy is exposed. Points just under the
+     plane brighten, so the cut edge reads as a fresh incision. */
+  const plane = 80 + P*450;
+  ctx.save();
+  ctx.translate(ox()+300*S, oy()+300*S); ctx.scale(sc,sc);
+  ctx.translate(-(ox()+300*S), -(oy()+300*S));
+  for(const q of pts){
+    const above = q.y < plane;
+    const edge  = !above && (q.y - plane) < 16;
+    const wob = reduce?0:Math.sin(t*1.5+q.j)*0.8;
+    ctx.beginPath();
+    ctx.arc(ox()+(q.x+wob)*S, oy()+(q.y+wob*0.6)*S,
+            (0.8+q.d*0.85)*Math.max(S,0.55), 0, 6.2832);
+    if(above){
+      ctx.fillStyle = '#B08A4F';
+      ctx.globalAlpha = 0.10 + q.v*0.14*(1-P);
+    } else if(edge){
+      ctx.fillStyle = '#E03A44';
+      ctx.globalAlpha = 0.88;
+    } else if(q.venous){
+      ctx.fillStyle = '#4A6D8C';
+      ctx.globalAlpha = 0.40 + q.v*0.34;
+    } else {
+      ctx.fillStyle = q.d < 0.5 ? '#7A0E14' : '#B3121C';
+      ctx.globalAlpha = 0.40 + q.v*0.42;
+    }
+    ctx.fill();
+  }
+  ctx.restore();
+
+  /* 6 — conduction pathway lights from 45%, travelling impulse */
+  const dp = Math.max(0, Math.min(1,(P-0.45)/0.35));
+  if(dp>0){
+    poly(CONDUCT, dp*0.8, 1.6, '#C9A468');
+    poly(CONDUCT_B, dp*0.7, 1.4, '#C9A468');
+    if(!reduce){
+      const k=((t*0.62)%1)*(CONDUCT.length-1), i=Math.floor(k), f=k-i;
+      const a0=CONDUCT[i], a1=CONDUCT[Math.min(i+1,CONDUCT.length-1)];
+      const cx=ox()+(a0[0]+(a1[0]-a0[0])*f)*S, cy=oy()+(a0[1]+(a1[1]-a0[1])*f)*S;
+      const r=13*Math.max(S,.6);
+      const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+      g.addColorStop(0,'rgba(179,18,28,'+(dp*0.85)+')'); g.addColorStop(1,'rgba(179,18,28,0)');
+      ctx.save(); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,r,0,6.2832); ctx.fill(); ctx.restore();
+    }
+  }
+
+  /* 7 — the dissection plane, labelled like an instrument readout */
+  const py = oy()+plane*S;
+  ctx.save();
+  ctx.strokeStyle='#B3121C'; ctx.globalAlpha=0.5; ctx.lineWidth=1; ctx.setLineDash([8,5]);
+  ctx.beginPath(); ctx.moveTo(ox()+120*S,py); ctx.lineTo(ox()+470*S,py); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha=0.85; ctx.fillStyle='#B3121C';
+  ctx.fillRect(ox()+120*S, py-2.5, 2, 5);
+  ctx.font='500 '+Math.max(7,7.5*Math.max(S,.7))+'px "IBM Plex Mono",monospace';
+  ctx.globalAlpha=0.62; ctx.fillStyle='#6B6560';
+  ctx.fillText('DISSECTION PLANE  '+String(Math.round(P*100)).padStart(3,'0')+'%', ox()+124*S, py-7);
+  ctx.restore();
+
+  /* 8 — ECG trace along the floor of the field */
+  ctx.save(); const by = oy()+566*S; ctx.beginPath();
+  for(let i=0;i<=170;i++){
+    const u=i/170, x=ox()+(110+u*400)*S;
+    const ph=((u*2.4)+(reduce?0:-t*0.5)+1)%1;
+    let e=0;
+    e+=0.16*Math.exp(-Math.pow((ph-0.14)/0.045,2));
+    e-=0.30*Math.exp(-Math.pow((ph-0.27)/0.012,2));
+    e+=1.00*Math.exp(-Math.pow((ph-0.30)/0.011,2));
+    e-=0.42*Math.exp(-Math.pow((ph-0.335)/0.014,2));
+    e+=0.28*Math.exp(-Math.pow((ph-0.50)/0.050,2));
+    const y=by-e*26*S; i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  }
+  ctx.strokeStyle='#B3121C'; ctx.globalAlpha=0.55; ctx.lineWidth=1.3; ctx.stroke(); ctx.restore();
+
+  requestAnimationFrame(frame);
+}
+
+/* CT-like slice thumbnails — real greyscale sections, not decorative squares */
+document.querySelectorAll('.slice canvas').forEach((c,idx)=>{
+  const g=c.getContext('2d'), w=c.width=120, h=c.height=96;
+  g.fillStyle='#14110f'; g.fillRect(0,0,w,h);
+  for(let i=0;i<3;i++){
+    const rg=g.createRadialGradient(58+i*7,48,2,58+i*7,48,34-i*8);
+    rg.addColorStop(0,'rgba(240,236,228,'+(0.5-i*0.12)+')');
+    rg.addColorStop(1,'rgba(240,236,228,0)');
+    g.fillStyle=rg; g.beginPath(); g.arc(58+i*7,48,34-i*8,0,6.2832); g.fill();
+  }
+  if(idx===2){ g.strokeStyle='rgba(201,164,104,.6)'; g.lineWidth=1;
+    for(let y=14;y<h;y+=13){ g.beginPath(); g.moveTo(8,y); g.lineTo(w-8,y); g.stroke(); } }
+  const im=g.getImageData(0,0,w,h), d=im.data;
+  for(let i=0;i<d.length;i+=4){ const n=(Math.random()-.5)*30; d[i]+=n; d[i+1]+=n; d[i+2]+=n; }
+  g.putImageData(im,0,0);
+});
+
+addEventListener('resize', size, {passive:true});
+addEventListener('scroll', readScroll, {passive:true});
+size(); readScroll(); frame();
+})();
+</script>
+</body>
+</html>

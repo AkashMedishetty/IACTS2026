@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IACTS Technocollege CME 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#08080A; --dark-2:#0E0E11; --light:#F5F3EF;
+  --crimson:#B3121C; --crimson-lift:#E0323C; --gold:#C18D21; --gold-lift:#E4B75A;
+  --muted:#8C8680; --faint:#514C48;
+  --inter:'Inter',system-ui,sans-serif;
+  --display:'Playfair Display',Georgia,serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--dark);color:var(--light);
+  font-family:var(--inter);overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+.font-display{font-family:var(--display)}
+
+/* ---------- stage ---------- */
+.hero{position:relative;width:100%;height:100svh;min-height:600px;overflow:hidden;display:flex;flex-direction:column}
+
+/* blurred radial colour fields — the depth layer */
+.hero .glow{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55}
+.g1{width:34vw;height:34vw;top:-11vw;right:-7vw;background:radial-gradient(circle,rgba(179,18,28,.55) 0%,transparent 68%)}
+.g2{width:30vw;height:30vw;bottom:-12vw;left:-8vw;background:radial-gradient(circle,rgba(193,141,33,.42) 0%,transparent 70%)}
+.g3{width:44vw;height:44vw;top:24%;left:26%;background:radial-gradient(circle,rgba(179,18,28,.20) 0%,transparent 72%);filter:blur(100px)}
+
+/* fine grid + grain: density without clutter */
+.hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(rgba(245,243,239,.028) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(245,243,239,.028) 1px,transparent 1px);
+  background-size:clamp(48px,5vw,84px) clamp(48px,5vw,84px);
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 45%,#000 20%,transparent 78%);
+}
+.hero::after{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.05;z-index:3;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+#cloud{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.shell{position:relative;z-index:4;display:flex;flex-direction:column;height:100%;
+  padding:clamp(14px,2vh,26px) clamp(16px,3vw,52px)}
+/* ---------- glass nav ---------- */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:clamp(12px,2vw,32px);flex-shrink:0}
+.brand{display:flex;align-items:center;gap:clamp(8px,1vw,14px);min-width:0}
+.brand .mark{width:clamp(30px,3vw,42px);aspect-ratio:1;border:1px solid rgba(179,18,28,.55);border-radius:50%;
+  display:grid;place-items:center;flex:0 0 auto;background:rgba(179,18,28,.09)}
+.brand .mark svg{width:44%;fill:var(--crimson-lift)}
+.brand p{margin:0;font-size:clamp(8.5px,.72vw,12px);line-height:1.35;letter-spacing:.02em;color:var(--light)}
+.brand p span{display:block;color:var(--muted);font-weight:400}
+.links{display:none;align-items:center;gap:clamp(14px,1.9vw,34px);
+  font-size:clamp(9px,.72vw,11.5px);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.links a{color:inherit;text-decoration:none;position:relative;transition:color .35s var(--ease);white-space:nowrap}
+.links a::after{content:'';position:absolute;left:0;bottom:-6px;width:100%;height:1px;background:var(--crimson-lift);
+  transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.links a:hover{color:var(--light)}
+.links a:hover::after{transform:scaleX(1)}
+@media(min-width:1000px){.links{display:flex}}
+.pill{display:inline-flex;align-items:center;gap:clamp(6px,.7vw,11px);border-radius:999px;text-decoration:none;
+  font-size:clamp(9px,.75vw,12px);letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:#fff;
+  padding:clamp(9px,1.1vh,15px) clamp(15px,1.9vw,30px);
+  background:linear-gradient(135deg,var(--crimson) 0%,var(--gold) 130%);
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease);white-space:nowrap}
+.pill:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 40px -12px rgba(179,18,28,.75)}
+.pill svg{width:clamp(11px,1vw,15px);height:auto;stroke:currentColor;fill:none;stroke-width:2}
+
+/* ---------- centre lockup ---------- */
+.body{flex:1;display:flex;align-items:center;min-height:0;padding-block:clamp(10px,2vh,28px)}
+.lock{max-width:min(96vw,1180px)}
+.eyebrow{font-family:var(--mono);font-size:clamp(8.5px,.7vw,11.5px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold-lift);margin:0 0 clamp(10px,1.6vh,20px)}
+.eyebrow i{display:inline-block;width:clamp(22px,3vw,48px);height:1px;background:var(--gold);
+  vertical-align:middle;margin-right:12px;transform-origin:left}
+.word{font-family:var(--inter);font-weight:900;letter-spacing:-.045em;line-height:.82;margin:0;
+  font-size:clamp(62px,13.5vw,208px);
+  background:linear-gradient(128deg,#F5F3EF 0%,var(--crimson-lift) 42%,var(--gold) 104%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.line2{font-weight:800;letter-spacing:-.012em;line-height:1;margin:clamp(4px,.8vh,12px) 0 0;
+  font-size:clamp(15px,3.1vw,44px);color:var(--light)}
+.line2 b{color:var(--gold-lift);font-weight:800}
+.theme{font-family:var(--display);font-style:italic;font-weight:500;line-height:1;
+  font-size:clamp(21px,4vw,58px);margin:clamp(12px,2vh,26px) 0 0;
+  background:linear-gradient(100deg,var(--crimson-lift) 0%,var(--gold-lift) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ---------- stats ---------- */
+.stats{display:flex;align-items:flex-start;gap:clamp(18px,3.4vw,58px);margin-top:clamp(18px,3vh,40px);flex-wrap:wrap}
+.stat .v{font-weight:800;line-height:1;font-size:clamp(22px,2.8vw,50px);
+  background:linear-gradient(140deg,var(--light) 0%,var(--gold) 120%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.stat .l{font-family:var(--mono);font-size:clamp(7px,.58vw,10px);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin-top:6px}
+.cta-row{display:flex;align-items:center;gap:clamp(12px,1.6vw,24px);margin-top:clamp(20px,3.2vh,40px);flex-wrap:wrap}
+.ghost{font-family:var(--mono);font-size:clamp(8.5px,.7vw,11px);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(140,134,128,.35);padding-bottom:4px;
+  transition:color .4s var(--ease),border-color .4s var(--ease)}
+.ghost:hover{color:var(--gold-lift);border-color:var(--gold)}
+
+/* ---------- bottom meta ---------- */
+.meta{display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(14px,2vw,36px);
+  flex-wrap:wrap;flex-shrink:0;padding-top:clamp(10px,1.6vh,20px);border-top:1px solid rgba(245,243,239,.09)}
+.mcol{font-family:var(--mono);font-size:clamp(8px,.64vw,10.5px);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);line-height:1.9}
+.mcol b{display:block;color:var(--light);font-weight:500;letter-spacing:.1em}
+.mcol em{font-style:normal;color:var(--crimson-lift);display:block}
+
+/* Reveal is GATED on .anim, which JS adds on load.
+   Why not plain `animation ... both` with a delay: fill-mode `both` applies
+   the FROM keyframe during the delay, so if the animation clock never
+   advances (no JS, frozen tab, headless capture) every delayed element is
+   stranded at opacity 0. Gating means the fallback is "visible", not "blank". */
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.anim [data-r]{animation:rise 1.05s cubic-bezier(.16,1,.3,1) both}
+.anim .eyebrow[data-r]{animation-delay:.10s}
+.anim .word[data-r]{animation-delay:.20s}
+.anim .line2[data-r]{animation-delay:.32s}
+.anim .theme[data-r]{animation-delay:.42s}
+.anim .stats .stat:nth-child(1){animation-delay:.54s}
+.anim .stats .stat:nth-child(2){animation-delay:.61s}
+.anim .stats .stat:nth-child(3){animation-delay:.68s}
+.anim .stats .stat:nth-child(4){animation-delay:.75s}
+.anim .cta-row[data-r]{animation-delay:.86s}
+@media (prefers-reduced-motion:reduce){.anim [data-r]{animation:none}}
+</style>
+</head>
+<body>
+<div class="hero" id="hero">
+  <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+  <canvas id="cloud" aria-hidden="true"></canvas>
+  <div class="shell" id="shell">
+
+    <nav class="nav">
+      <div class="brand">
+        <span class="mark"><svg viewBox="0 0 12 12"><path d="M6 11.2S.4 7 .4 3.8A3.4 3.4 0 0 1 6 1.2 3.4 3.4 0 0 1 11.6 3.8C11.6 7 6 11.2 6 11.2Z"/></svg></span>
+        <p>Indian Association of<span>Cardiovascular-Thoracic Surgeons</span></p>
+      </div>
+      <div class="links">
+        <a href="#about">About</a><a href="#programme">Programme</a>
+        <a href="#workshops">Workshops</a><a href="#committee">Committee</a>
+        <a href="#abstracts">Abstracts</a><a href="#venue">Venue</a>
+      </div>
+      <a class="pill" href="#register">Register
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </nav>
+
+    <div class="body">
+      <div class="lock">
+        <p class="eyebrow" data-r><i></i>Technocollege CME · Hyderabad 2026</p>
+        <h1 class="word" data-r>IACTS</h1>
+        <div class="line2" data-r>TECHNOCOLLEGE CME <b>2026</b></div>
+        <p class="theme" data-r>The Future Is Now</p>
+
+        <div class="stats">
+          <div class="stat" data-r><div class="v" data-count="3">3</div><div class="l">Days</div></div>
+          <div class="stat" data-r><div class="v" data-count="5">5</div><div class="l">Hands-on Tracks</div></div>
+          <div class="stat" data-r><div class="v" data-count="7">7</div><div class="l">Session Formats</div></div>
+          <div class="stat" data-r><div class="v" data-count="2">2</div><div class="l">Venues</div></div>
+        </div>
+
+        <div class="cta-row" data-r>
+          <a class="pill" href="#register">Notify me when registration opens
+            <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="ghost" href="#programme">View the programme</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <p class="mcol"><b>23 — 25 Oct 2026</b>Hyderabad, India</p>
+      <p class="mcol"><b>Oct 23 · NIMS</b>Pre-conference workshop</p>
+      <p class="mcol"><b>Oct 24–25 · Dr. MCR HRD</b>Scientific programme</p>
+      <p class="mcol"><b>Organised by</b>Dept of CTVS, NIMS</p>
+      <p class="mcol"><em>Registration opens soon</em>Fees to be announced</p>
+    </div>
+
+  </div>
+</div>
+<script>
+(function(){
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const cv = document.getElementById('cloud'), ctx = cv.getContext('2d');
+const hero = document.getElementById('hero');
+let P = [], W = 0, H = 0, S = 1, t = 0, vis = true;
+const ptr = { x:0, y:0, tx:0, ty:0 };
+
+function size(){
+  const r = hero.getBoundingClientRect(), d = Math.min(devicePixelRatio||1, 2);
+  W = r.width; H = r.height; S = Math.min(W, H)/620;
+  cv.width = Math.round(W*d); cv.height = Math.round(H*d);
+  ctx.setTransform(d,0,0,d,0,0);
+}
+addEventListener('resize', size, { passive:true });
+addEventListener('pointermove', e => {
+  ptr.tx = (e.clientX/innerWidth - 0.5); ptr.ty = (e.clientY/innerHeight - 0.5);
+}, { passive:true });
+new IntersectionObserver(es => { vis = es[0].isIntersecting; }).observe(hero);
+
+/* Depth is DERIVED, not random. Random z scattered the silhouette into a
+   spray — the heart stopped being a heart. Here z is a rounded bulge across
+   the body, so the cloud reads as a solid organ with a front and a back. */
+fetch('heart-cloud.json').then(r => r.json()).then(d => {
+  P = d.pts.map(([x,y,ven,lum]) => {
+    const u = (x-300)/175;                       // -1..1 across the body
+    const shell = Math.cos(Math.max(-1.4, Math.min(1.4, u)))  // rounded front
+                * 66 * (0.45 + Math.random()*0.55);
+    return { x:x-300, y:y-300, z:(Math.random()<0.5?-shell:shell), ven, lum };
+  });
+}).catch(()=>{});
+function frame(){
+  if(vis && !reduce) t += 0.0022;
+  ptr.x += (ptr.tx-ptr.x)*0.06; ptr.y += (ptr.ty-ptr.y)*0.06;
+  ctx.clearRect(0,0,W,H);
+  const cx = W*0.62 + ptr.x*44, cy = H*0.46 + ptr.y*28;
+  const FOV = 700, CAM = 660;
+
+  ctx.globalCompositeOperation = 'lighter';   // glow, not paint
+  /* ±11° sway, not a full spin: the silhouette has to stay a readable heart
+     for surgeons. Depth still parallaxes, so it reads solid, not flat. */
+  const A = Math.sin(t*2.6)*0.19 + ptr.x*0.16;
+  const ca = Math.cos(A), sa = Math.sin(A);
+  for(let i=0;i<P.length;i++){
+    const p = P[i];
+    const x3 = p.x*ca + p.z*sa;
+    const z3 = -p.x*sa + p.z*ca;
+    const s = FOV/(CAM + z3);
+    const depth = 0.5 + z3/150;                  // 0 back -> 1 front
+    const r = (0.34 + Math.max(0,depth)*1.05)*Math.max(S,.45);
+    ctx.beginPath();
+    ctx.arc(cx + x3*s*S, cy + p.y*s*S, r, 0, 6.2832);
+    if(p.ven) ctx.fillStyle = 'rgba(104,158,204,'+(0.05+depth*0.30)+')';
+    else if(p.lum > 0.42) ctx.fillStyle = 'rgba(232,58,68,'+(0.07+depth*0.46)+')';
+    else ctx.fillStyle = 'rgba(179,18,28,'+(0.06+depth*0.34)+')';
+    ctx.fill();
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  requestAnimationFrame(frame);
+}
+size(); frame();
+
+/* entrance: the gold rail draws, then the lockup masks up in reading order */
+const rail = document.querySelector('.eyebrow i');
+if(!reduce && rail) rail.animate(
+  [{transform:'scaleX(0)'},{transform:'scaleX(1)'}],
+  { duration:900, easing:'cubic-bezier(.16,1,.3,1)', fill:'both' });
+
+/* Counters render their REAL value in markup; the count-up only overwrites it
+   when rAF actually runs. A frozen clock therefore shows 3/5/7/2, not 0/0/0/0. */
+document.documentElement.classList.add('anim');
+document.querySelectorAll('[data-count]').forEach(el => {
+  const target = +el.dataset.count;
+  if(reduce){ el.textContent = target; return; }
+  const t0 = performance.now(), dur = 1200, delay = 760;
+  const step = now => {
+    const k = Math.min(1, Math.max(0, (now - t0 - delay)/dur));
+    el.textContent = Math.round(target*(1 - Math.pow(1-k, 3)));
+    if(k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+});
+})();
+</script>
+</body>
+</html>
