@@ -4,6 +4,8 @@ import Programme from "@/components/sections/Programme";
 import Capabilities from "@/components/sections/Capabilities";
 import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
+import Abstracts from "@/components/sections/Abstracts";
+import Awards from "@/components/sections/Awards";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
 import CinematicLoader from "@/components/site/CinematicLoader";
@@ -96,8 +98,10 @@ export default function Concept3() {
       <Ribbon />
       <Capabilities variant="telemetry" />
       <Programme />
+      <Abstracts />
       <Committee />
       <Venues />
+      <Awards />
       <RegisterCta />
     </main>
       <Footer />

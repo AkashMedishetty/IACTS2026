@@ -7,6 +7,8 @@ import Programme from "@/components/sections/Programme";
 import Strata from "@/components/sections/Strata";
 import Committee from "@/components/sections/Committee";
 import Venues from "@/components/sections/Venues";
+import Abstracts from "@/components/sections/Abstracts";
+import Awards from "@/components/sections/Awards";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
 import CinematicLoader from "@/components/site/CinematicLoader";
@@ -91,7 +93,9 @@ export default function Concept2() {
       <Ribbon />
       <Strata />
       <Programme />
+      <Awards />
       <Committee />
+      <Abstracts />
       <Venues />
       <RegisterCta />
     </main>
