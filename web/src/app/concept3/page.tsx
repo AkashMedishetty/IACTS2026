@@ -7,6 +7,7 @@ import Venues from "@/components/sections/Venues";
 import Abstracts from "@/components/sections/Abstracts";
 import Awards from "@/components/sections/Awards";
 import Faculty from "@/components/sections/Faculty";
+import Sponsors from "@/components/sections/Sponsors";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
 import CinematicLoader from "@/components/site/CinematicLoader";
@@ -104,6 +105,7 @@ export default function Concept3() {
       <Faculty />
       <Venues />
       <Awards />
+      <Sponsors />
       <RegisterCta />
     </main>
       <Footer />
