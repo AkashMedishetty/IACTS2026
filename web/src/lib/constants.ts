@@ -48,12 +48,22 @@ export const STATS = [
   { value: 2, label: "Venues" },
 ] as const;
 
+/**
+ * Dock navigation. Every href MUST correspond to a real `id` on a rendered
+ * section — the Dock resolves each one with getElementById, so a stale entry
+ * renders a link that scrolls nowhere. `#about` was exactly that until
+ * About.tsx was built. Verified against the rendered HTML, not just source.
+ */
 export const NAV_ITEMS = [
   { label: "About", href: "#about" },
   { label: "Programme", href: "#programme" },
   { label: "Workshops", href: "#workshops" },
+  { label: "Faculty", href: "#faculty" },
   { label: "Committee", href: "#committee" },
   { label: "Abstracts", href: "#abstracts" },
+  { label: "Awards", href: "#awards" },
+  { label: "Industry", href: "#sponsors" },
+  { label: "FAQ", href: "#faq" },
   { label: "Venue", href: "#venue" },
 ] as const;
 

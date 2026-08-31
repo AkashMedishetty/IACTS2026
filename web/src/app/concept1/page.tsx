@@ -9,6 +9,7 @@ import Awards from "@/components/sections/Awards";
 import Faculty from "@/components/sections/Faculty";
 import Sponsors from "@/components/sections/Sponsors";
 import Faq from "@/components/sections/Faq";
+import About from "@/components/sections/About";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
 import CinematicLoader from "@/components/site/CinematicLoader";
@@ -128,6 +129,7 @@ export default function Concept1() {
       </section>
 
       <Ribbon />
+      <About />
       <Capabilities variant="instrument" />
       <Programme />
       <Faculty />

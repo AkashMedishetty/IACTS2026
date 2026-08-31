@@ -59,14 +59,16 @@ export default function Dock() {
       }}
     >
       <div className="overflow-hidden rounded-full border border-[var(--hair-gold)] bg-black/55 backdrop-blur-xl">
-        <div className="flex items-center gap-1 px-2 py-1.5">
+        <div
+          className="flex max-w-[calc(100vw-1.6rem)] items-center gap-1 overflow-x-auto px-2 py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {NAV_ITEMS.map((n) => {
             const on = active === n.href.slice(1);
             return (
               <Magnetic key={n.href} strength={0.22}>
                 <a
                   href={n.href}
-                  className={`block min-h-[34px] rounded-full px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.16em] no-underline transition-colors duration-300 ${
+                  className={`block min-h-[34px] shrink-0 rounded-full px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.16em] no-underline transition-colors duration-300 ${
                     on ? "bg-crimson text-bone" : "text-muted hover:text-bone"
                   }`}
                 >
