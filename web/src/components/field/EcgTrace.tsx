@@ -71,7 +71,7 @@ export default function EcgTrace({
       ctx.clearRect(0, 0, W, H);
 
       // graticule — ECG paper, at a different rate from the trace itself
-      ctx.strokeStyle = "rgba(179,18,28,0.09)";
+      ctx.strokeStyle = "rgba(179,18,28,0.13)";
       ctx.lineWidth = 1;
       const g = 22;
       const off = reduce ? 0 : (t * 40) % g;
@@ -82,7 +82,7 @@ export default function EcgTrace({
 
       // baseline
       const mid = H * 0.58;
-      ctx.strokeStyle = "rgba(245,243,239,0.07)";
+      ctx.strokeStyle = "rgba(12,12,14,0.06)";
       ctx.beginPath(); ctx.moveTo(0, mid); ctx.lineTo(W, mid); ctx.stroke();
 
       // the trace
@@ -95,10 +95,10 @@ export default function EcgTrace({
         const x = u * W;
         if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = "#E0323C";
+      ctx.strokeStyle = "#B3121C";
       ctx.lineWidth = 1.7;
       ctx.lineJoin = "round";
-      ctx.shadowColor = "rgba(224,50,60,0.55)";
+      ctx.shadowColor = "rgba(179,18,28,0.4)";
       ctx.shadowBlur = 12;
       ctx.stroke();
       ctx.shadowBlur = 0;

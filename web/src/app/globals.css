@@ -2,22 +2,35 @@
 
 /* ============================================================
    IACTS TECHNOCOLLEGE CME 2026
-   Dark house system. Palette is IACTS crimson/gold on near-black.
+   LIGHT house system — crisp clinical white, NOT the cream/bone
+   print-paper treatment that was rejected earlier.
+
+   The token NAMES are kept from the dark system on purpose: `ink` is
+   "the page", `bone` is "the type on it". Inverting the values instead
+   of renaming means all 13 sections and every site component keep
+   working untouched. `ink` therefore reads near-WHITE here.
+
+   Contrast is the real work. IACTS crimson (#b3121c) clears 6.4:1 on
+   white and survives, but gold #c18d21 is only ~2.6:1 and the bright
+   "-lift" variants are unusable as text on white — so in this system
+   the lift tokens resolve DARKER than their base, not lighter.
    ============================================================ */
 
 @theme {
-  --color-ink: #08080a;
-  --color-ink-2: #0e0e11;
-  --color-ink-3: #16161a;
-  --color-bone: #f5f3ef;
+  /* page surfaces, lightest to most recessed */
+  --color-ink: #fbfbfc;
+  --color-ink-2: #f3f3f6;
+  --color-ink-3: #e9e9ee;
+  /* type */
+  --color-bone: #0c0c0e;
   --color-crimson: #b3121c;
-  --color-crimson-lift: #e0323c;
+  --color-crimson-lift: #8d0e16;
   --color-maroon: #7a0e14;
-  --color-gold: #c18d21;
-  --color-gold-lift: #e4b75a;
-  --color-venous: #689ecc;
-  --color-muted: #8c8680;
-  --color-faint: #514c48;
+  --color-gold: #8a6314;
+  --color-gold-lift: #6d4d0f;
+  --color-venous: #2f6d9e;
+  --color-muted: #4f4b54;
+  --color-faint: #6e6a73;
 
   --font-sans: var(--f-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--f-display), Georgia, serif;
@@ -28,11 +41,13 @@
 }
 
 :root {
-  --hair: rgba(245, 243, 239, 0.09);
-  --hair-gold: rgba(193, 141, 33, 0.3);
-  --hair-crimson: rgba(224, 50, 60, 0.32);
+  --hair: rgba(12, 12, 14, 0.13);
+  --hair-gold: rgba(138, 99, 20, 0.38);
+  --hair-crimson: rgba(179, 18, 28, 0.32);
   --gutter: clamp(1rem, 3vw, 3.25rem);
   --shell: 1720px;
+  /* the hero canvases read this to pick a blend mode and ink colour */
+  --field-blend: multiply;
 }
 
 * { box-sizing: border-box; min-width: 0; }

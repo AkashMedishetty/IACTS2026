@@ -81,7 +81,13 @@ export default function CloudField({ className = "" }: { className?: string }) {
       const a = Math.sin(t * 2.6) * 0.19 + ptr.x * 0.16;
       const ca = Math.cos(a), sa = Math.sin(a);
 
-      ctx.globalCompositeOperation = "lighter"; // glow, not paint
+      /* LIGHT SYSTEM: "lighter" is additive — on a near-white page every
+         point blends toward white and the whole heart disappears. "multiply"
+         is its counterpart on light: overlapping points get DARKER, so the
+         dense myocardium still reads as mass and the depth falloff survives.
+         Alphas are raised because ink on white needs less help than glow on
+         black did. */
+      ctx.globalCompositeOperation = "multiply";
       for (let i = 0; i < pts.length; i++) {
         const p = pts[i];
         const x3 = p.x * ca + p.z * sa;
@@ -92,10 +98,10 @@ export default function CloudField({ className = "" }: { className?: string }) {
         ctx.beginPath();
         ctx.arc(cx + x3 * s * S, cy + p.y * s * S, r, 0, 6.2832);
         ctx.fillStyle = p.ven
-          ? `rgba(104,158,204,${0.05 + depth * 0.3})`
+          ? `rgba(47,109,158,${0.1 + depth * 0.34})`
           : p.lum > 0.42
-            ? `rgba(232,58,68,${0.07 + depth * 0.46})`
-            : `rgba(179,18,28,${0.06 + depth * 0.34})`;
+            ? `rgba(179,18,28,${0.12 + depth * 0.5})`
+            : `rgba(122,14,20,${0.1 + depth * 0.4})`;
         ctx.fill();
       }
       ctx.globalCompositeOperation = "source-over";

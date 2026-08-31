@@ -51,16 +51,23 @@ export default function Dock() {
   return (
     <nav
       aria-label="Sections"
-      className="fixed bottom-[clamp(0.9rem,2.4vh,1.8rem)] left-1/2 z-50 -translate-x-1/2 transition-all duration-700 ease-[var(--ease-out-expo)]"
-      style={{
-        opacity: shown ? 1 : 0,
-        transform: `translate(-50%,${shown ? "0" : "18px"})`,
-        pointerEvents: shown ? "auto" : "none",
-      }}
+      /* Centred with flex, NOT left-1/2 + -translate-x-1/2. The show/hide
+         animation needs an inline transform, and an inline transform overrides
+         the Tailwind translate class — the two fought each other and the whole
+         pill sat half off the left edge at 360px (measured L=-156 R=180).
+         inset-x-0 + justify-center cannot collide with a translateY. */
+      className="pointer-events-none fixed inset-x-0 bottom-[clamp(0.9rem,2.4vh,1.8rem)] z-50 flex justify-center px-3 transition-opacity duration-700 ease-[var(--ease-out-expo)]"
+      style={{ opacity: shown ? 1 : 0 }}
     >
-      <div className="overflow-hidden rounded-full border border-[var(--hair-gold)] bg-black/55 backdrop-blur-xl">
+      <div
+        className="pointer-events-auto max-w-full overflow-hidden rounded-full border border-[var(--hair-gold)] bg-white/80 backdrop-blur-xl transition-transform duration-700 ease-[var(--ease-out-expo)]"
+        style={{
+          transform: `translateY(${shown ? "0" : "18px"})`,
+          pointerEvents: shown ? "auto" : "none",
+        }}
+      >
         <div
-          className="flex max-w-[calc(100vw-1.6rem)] items-center gap-1 overflow-x-auto px-2 py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex items-center gap-1 overflow-x-auto px-2 py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {NAV_ITEMS.map((n) => {
             const on = active === n.href.slice(1);

@@ -129,7 +129,7 @@ export default function HelicalBand({
       const cx = W / 2, cy = H / 2;
       const e = tr.p < 0.5 ? 2 * tr.p * tr.p : -1 + (4 - 2 * tr.p) * tr.p;
 
-      ctx.globalCompositeOperation = "lighter";
+      ctx.globalCompositeOperation = "multiply"; // light system: additive would erase the band on white
       for (const ring of rings) {
         if (visible && !reduce) ring.angle += ring.spin;
         let fx = 0, fy = 0, exSum = 0, zSum = 0;
@@ -164,10 +164,10 @@ export default function HelicalBand({
         const zAvg = zSum / PER;
         const near = Math.max(0, Math.min(1, 0.5 + zAvg / (ring.radius * 1.6 || 1)));
         if (ex > 0.05) {
-          ctx.strokeStyle = `rgba(240,86,96,${Math.min(1, 0.55 + ex * 0.45)})`;
+          ctx.strokeStyle = `rgba(163,12,22,${Math.min(1, 0.6 + ex * 0.4)})`;
           ctx.lineWidth = 1.3 + ex * 1.7;
         } else {
-          ctx.strokeStyle = `rgba(196,26,38,${0.14 + near * 0.5})`;
+          ctx.strokeStyle = `rgba(150,16,26,${0.16 + near * 0.55})`;
           ctx.lineWidth = 0.7 + near * 0.75;
         }
         ctx.stroke();
