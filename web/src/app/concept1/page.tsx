@@ -8,6 +8,7 @@ import Abstracts from "@/components/sections/Abstracts";
 import Awards from "@/components/sections/Awards";
 import Faculty from "@/components/sections/Faculty";
 import Sponsors from "@/components/sections/Sponsors";
+import Faq from "@/components/sections/Faq";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
 import CinematicLoader from "@/components/site/CinematicLoader";
@@ -135,6 +136,7 @@ export default function Concept1() {
       <Awards />
       <Venues />
       <Sponsors />
+      <Faq />
       <RegisterCta />
     </main>
       <Footer />
