@@ -30,6 +30,7 @@
 :root {
   --hair: rgba(245, 243, 239, 0.09);
   --hair-gold: rgba(193, 141, 33, 0.3);
+  --hair-crimson: rgba(224, 50, 60, 0.32);
   --gutter: clamp(1rem, 3vw, 3.25rem);
   --shell: 1720px;
 }
