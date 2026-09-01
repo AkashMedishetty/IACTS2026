@@ -1,0 +1,45 @@
+{
+  "format": "iacts-colored-point-cloud/v2",
+  "source": "model.obj",
+  "texture": {
+    "source": "diffuse_0.jpg",
+    "width": 8192,
+    "height": 8192,
+    "colorSpace": "sRGB"
+  },
+  "points": 70000,
+  "topology": {
+    "vertices": 1052566,
+    "textureCoordinates": 1052566,
+    "triangles": 2000000,
+    "degenerateFaces": 0
+  },
+  "surfaceArea": 2.9472122364637414,
+  "seed": 20261023,
+  "normalization": {
+    "maxDimension": 8,
+    "sourceBounds": {
+      "min": [
+        -0.3779936134815216,
+        -0.49966222047805786,
+        -0.29056888818740845
+      ],
+      "max": [
+        0.3779645264148712,
+        0.4999437630176544,
+        0.28763073682785034
+      ]
+    },
+    "center": [
+      -0.000014543533325195312,
+      0.0001407712697982788,
+      -0.0014690756797790527
+    ],
+    "scale": 8.003153374515906
+  },
+  "files": {
+    "json": "cardio-thoracic.points.json",
+    "positions": "cardio-thoracic.points.f32",
+    "colors": "cardio-thoracic.points.colors.u8"
+  }
+}

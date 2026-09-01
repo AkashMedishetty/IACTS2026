@@ -43,9 +43,9 @@ export default function About() {
           </h2>
           <p className="mt-6 max-w-lg text-[1rem] leading-relaxed text-muted" data-r>
             A Technocollege CME convened by {conference.organisedBy} under the{" "}
-            {conference.association} — three days built so that the technology
-            reshaping cardiothoracic surgery is not described from a podium but
-            put into delegates&apos; hands.
+            {conference.association} — a three-day programme in which the
+            technology reshaping cardiothoracic surgery is delivered through
+            hands-on training alongside the scientific sessions.
           </p>
 
           <ul className="mt-8 flex list-none flex-wrap items-center gap-x-6 gap-y-2 p-0" data-r>

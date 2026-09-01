@@ -51,7 +51,7 @@ export default function Committee() {
           className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
           data-r
         >
-          The people <span className="u-serif">answerable for it</span>
+          Organising <span className="u-serif">committee</span>
         </h2>
         <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
           Convened by the Department of Cardiovascular &amp; Thoracic Surgery at
@@ -72,7 +72,7 @@ export default function Committee() {
         ))}
       </div>
 
-      <div id="abstracts" className="mt-[clamp(2.5rem,6vh,4.5rem)]">
+      <div id="executive-committee" className="mt-[clamp(2.5rem,6vh,4.5rem)]">
         <p className="u-eyebrow" data-r>Executive Committee</p>
         <ul className="mt-5 grid list-none grid-cols-1 gap-x-[clamp(1.5rem,3vw,3.5rem)] p-0 sm:grid-cols-2 lg:grid-cols-3">
           {executiveCommittee.map((n, i) => (

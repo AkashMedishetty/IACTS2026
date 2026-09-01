@@ -1,27 +1,6 @@
 import { EVENT_INFO } from "@/lib/constants";
 import { conference, secretariat, venues, closingPromises } from "@/data/conference";
 
-/** Single-stroke Hyderabad skyline: Durgam Cheruvu cable-stayed bridge,
-    Charminar, the Buddha statue at Hussain Sagar, T-Hub. Drawn with
-    stroke-dasharray so it can draw itself in. */
-function Skyline() {
-  return (
-    <svg viewBox="0 0 900 120" className="w-full" fill="none" aria-hidden="true"
-      stroke="rgba(193,141,33,.34)" strokeWidth="1.1">
-      {/* cable-stayed bridge */}
-      <path d="M20 108h150M84 108V34M84 40 26 104M84 40l58 64M84 52 44 104M84 52l40 52" />
-      {/* Charminar */}
-      <path d="M250 108V60h96v48M250 74h96M262 60V38m0 0a6 6 0 1 1 12 0v22M322 60V38m0 0a6 6 0 1 1 12 0v22M286 108V84h24v24" />
-      {/* Buddha statue on its plinth */}
-      <path d="M430 108h72M448 108V90h36v18M466 90V56m0 0c-9 0-14 8-14 16h28c0-8-5-16-14-16Zm0 0V44a7 7 0 1 1 0 0Z" />
-      {/* T-Hub */}
-      <path d="M580 108V52l70-14v70zM580 70h70M580 88h70M665 108V64l52-10v54z" />
-      {/* Kakatiya Kala Thoranam */}
-      <path d="M780 108V56h14v52M846 108V56h14v52M794 62c14-16 38-16 52 0" />
-    </svg>
-  );
-}
-
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-[var(--hair)] bg-ink-2">
@@ -73,8 +52,16 @@ export default function Footer() {
         </p>
       </div>
 
-      <div className="mt-[clamp(1.5rem,4vh,3rem)] opacity-70">
-        <Skyline />
+      <div className="mt-[clamp(2rem,5vh,4rem)] border-t border-[#b3122a]/20">
+        <div className="u-shell flex flex-wrap items-baseline justify-between gap-4 py-6">
+          <p className="font-mono text-[clamp(.95rem,1.5vw,1.35rem)] font-medium uppercase tracking-[.34em] text-[#b3122a]">
+            IACTS 2026
+          </p>
+          <p className="font-mono text-[9px] uppercase tracking-[.2em] text-[#7d656c]">
+            Technocollege CME · Hyderabad, India
+          </p>
+        </div>
+        <div className="h-1.5 bg-[#b3122a]" />
       </div>
     </footer>
   );

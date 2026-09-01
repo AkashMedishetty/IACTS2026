@@ -19,7 +19,7 @@ export default function Awards() {
       <div
         aria-hidden
         className="pointer-events-none absolute -right-[10vw] top-0 size-[36vw] rounded-full opacity-45 blur-[80px]"
-        style={{ background: "radial-gradient(circle,rgba(193,141,33,.35) 0%,transparent 70%)" }}
+        style={{ background: "radial-gradient(circle,rgba(179,18,42,.22) 0%,transparent 70%)" }}
       />
 
       <div className="relative u-shell">
@@ -31,7 +31,7 @@ export default function Awards() {
             className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
             data-r
           >
-            Work that moves the field <span className="u-serif">gets named</span>
+            Awards and <span className="u-serif">recognition</span>
           </h2>
         </header>
 

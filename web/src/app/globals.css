@@ -18,19 +18,19 @@
 
 @theme {
   /* page surfaces, lightest to most recessed */
-  --color-ink: #fbfbfc;
-  --color-ink-2: #f3f3f6;
-  --color-ink-3: #e9e9ee;
-  /* type */
-  --color-bone: #0c0c0e;
-  --color-crimson: #b3121c;
-  --color-crimson-lift: #8d0e16;
-  --color-maroon: #7a0e14;
-  --color-gold: #8a6314;
-  --color-gold-lift: #6d4d0f;
-  --color-venous: #2f6d9e;
-  --color-muted: #4f4b54;
-  --color-faint: #6e6a73;
+  --color-ink: #fffdfc;
+  --color-ink-2: #f8e9ed;
+  --color-ink-3: #efd3da;
+  /* type and the single interface accent family */
+  --color-bone: #160a0d;
+  --color-crimson: #b3122a;
+  --color-crimson-lift: #8c0b20;
+  --color-maroon: #5f0717;
+  --color-gold: #b3122a;
+  --color-gold-lift: #72091a;
+  --color-venous: #c51a38;
+  --color-muted: #614d53;
+  --color-faint: #7d656c;
 
   --font-sans: var(--f-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--f-display), Georgia, serif;
@@ -41,9 +41,9 @@
 }
 
 :root {
-  --hair: rgba(12, 12, 14, 0.13);
-  --hair-gold: rgba(138, 99, 20, 0.38);
-  --hair-crimson: rgba(179, 18, 28, 0.32);
+  --hair: rgba(95, 7, 23, 0.15);
+  --hair-gold: rgba(179, 18, 42, 0.34);
+  --hair-crimson: rgba(179, 18, 42, 0.34);
   --gutter: clamp(1rem, 3vw, 3.25rem);
   --shell: 1720px;
   /* the hero canvases read this to pick a blend mode and ink colour */
@@ -73,7 +73,7 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-::selection { background: var(--color-crimson); color: var(--color-bone); }
+::selection { background: var(--color-crimson); color: #fff; }
 :focus-visible { outline: 2px solid var(--color-crimson-lift); outline-offset: 3px; }
 
 .u-shell { width: 100%; max-width: var(--shell); margin-inline: auto; padding-inline: var(--gutter); }
@@ -91,7 +91,7 @@ body::after {
   font-weight: 900;
   letter-spacing: -0.045em;
   line-height: 0.82;
-  background: linear-gradient(128deg, var(--color-bone) 0%, var(--color-crimson-lift) 42%, var(--color-gold) 104%);
+  background: linear-gradient(128deg, var(--color-crimson) 0%, #e32646 48%, var(--color-maroon) 104%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -100,7 +100,7 @@ body::after {
 .u-serif {
   font-family: var(--font-display);
   font-style: italic;
-  background: linear-gradient(100deg, var(--color-crimson-lift) 0%, var(--color-gold-lift) 100%);
+  background: linear-gradient(100deg, var(--color-crimson) 0%, var(--color-maroon) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -112,8 +112,104 @@ body::after {
 @keyframes rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
 .anim [data-r] { animation: rise 1.05s var(--ease-out-expo) both; }
 
+
+/* Production route — The Living Operative Field. The canvas remains a normal
+   composited layer: no tint, blend mode, or filter touches its authored map. */
+.conference-site {
+  /* No grid. A single soft vignette so the 3D field reads as depth, not a plane. */
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(179, 18, 42, 0.05) 0%, transparent 60%),
+    radial-gradient(90% 60% at 50% 100%, rgba(95, 7, 23, 0.05) 0%, transparent 62%),
+    #fffdfc;
+}
+
+/* Each section is a STATION: a discrete, fully designed surface you arrive at.
+   Between stations the page is transparent, so the scroll reads as travelling
+   through the 3D field rather than sliding panels over it. */
+.conference-content {
+  padding-block: 34svh;
+}
+
+/* Seamless flow. Sections are ordinary document flow — no pinning, no runways,
+   nothing that can mistime. Generous gaps let the persistent 3D field read
+   between them, and each section carries its own readable surface. */
+.conference-content {
+  padding-block: 12svh;
+}
+
+.conference-content > section {
+  position: relative;
+  width: min(100% - 2 * var(--gutter), 1680px);
+  margin-inline: auto;
+  margin-block: 16svh;
+  padding-block: clamp(2rem, 4.5vh, 4rem) !important;
+  scroll-margin-top: 70px;
+  border: 1px solid rgba(179, 18, 42, 0.14);
+  border-radius: 3px;
+  background: rgba(255, 253, 252, 0.93);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 44px 110px -46px rgba(95, 7, 23, 0.3);
+}
+
+.conference-content > section:nth-child(even) {
+  background: rgba(253, 246, 248, 0.93);
+}
+
+.conference-content > section::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 2px;
+  background: #b3122a;
+}
+
+.conference-content > section > * {
+  width: 100%;
+  padding-inline: clamp(1.25rem, 2.5vw, 3rem);
+}
+
+@media (max-width: 1023px) {
+  .conference-content { padding-block: 5svh; }
+  .conference-content > section {
+    width: 100%;
+    margin-block: 7svh;
+    border-radius: 0;
+    border-inline: 0;
+    padding-block: clamp(1.75rem, 4vh, 2.75rem) !important;
+    background: rgba(255, 253, 252, 0.975);
+    backdrop-filter: none;
+    box-shadow: 0 18px 44px -26px rgba(95, 7, 23, 0.28);
+  }
+  /* u-shell already supplies the gutter; a second inline pad strands text on a
+     360px screen. */
+  .conference-content > section > * {
+    padding-inline: 0;
+  }
+}
+
+@keyframes conference-marquee {
+  to { transform: translate3d(-33.333%, 0, 0); }
+}
+
+.conference-marquee {
+  width: max-content;
+  animation: conference-marquee 22s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 1023px) {
+  /* Narrow viewports have no free column, so legibility wins and the model
+     leads in the hero and between sections instead of behind body copy. */
+  .conference-content { padding-block: 10svh; }
+  .station { padding-top: 26svh !important; }
+  .station-hold { min-height: 0 !important; }
+  .station-pin { position: static; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .anim [data-r] { animation: none; }
+  .conference-marquee { animation: none; transform: none; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

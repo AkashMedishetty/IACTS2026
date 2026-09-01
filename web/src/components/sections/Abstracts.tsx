@@ -33,7 +33,7 @@ export default function Abstracts() {
           className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
           data-r
         >
-          Bring your work — <span className="u-serif">the floor is open</span>
+          Abstract <span className="u-serif">submission</span>
         </h2>
         <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
           Two of the scientific programme&apos;s seven formats take submitted

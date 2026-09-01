@@ -1,3 +1,6 @@
 node_modules/
 .next/
 .DS_Store
+
+# Development capture artifacts (regenerable, large binaries)
+docs/captures/

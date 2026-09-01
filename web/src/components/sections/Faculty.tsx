@@ -30,7 +30,7 @@ export default function Faculty() {
             className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
             data-r
           >
-            The podium is built. <span className="u-serif">The names come next.</span>
+            Invited <span className="u-serif">faculty</span>
           </h2>
           <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-muted" data-r>
             Five of the seven scientific formats are filled by invited faculty.

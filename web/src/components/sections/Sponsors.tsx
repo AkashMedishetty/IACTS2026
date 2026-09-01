@@ -26,7 +26,7 @@ export default function Sponsors() {
       <div
         aria-hidden
         className="pointer-events-none absolute -left-[12vw] bottom-0 size-[34vw] rounded-full opacity-40 blur-[90px]"
-        style={{ background: "radial-gradient(circle,rgba(104,158,204,.3) 0%,transparent 70%)" }}
+        style={{ background: "radial-gradient(circle,rgba(179,18,42,.2) 0%,transparent 70%)" }}
       />
 
       <div className="relative u-shell">
@@ -38,12 +38,10 @@ export default function Sponsors() {
             className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
             data-r
           >
-            The technology is <span className="u-serif">the curriculum</span>
+            Industry <span className="u-serif">participation</span>
           </h2>
           <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
-            This is not a hall of stalls beside a lecture theatre. Six
-            technology domains are taught as content, and five stations run on
-            real equipment in delegates&apos; hands.
+            Six technology domains are delivered as programme content, and five skills stations run on live equipment with delegate participation.
           </p>
         </header>
 

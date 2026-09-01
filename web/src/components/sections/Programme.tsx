@@ -20,12 +20,11 @@ export default function Programme() {
           data-r
         >
           Three days, two venues,
-          <span className="u-serif"> one operative sequence</span>
+          <span className="u-serif"> one scientific programme</span>
         </h2>
         <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
-          October 23 is hands-on at NIMS. October 24 and 25 move to the Dr. MCR
-          HRD Institute auditorium, where the field states what it currently
-          knows and argues about the rest.
+          October 23 is the hands-on pre-conference workshop at NIMS. October 24 and 25
+          move to the Dr. MCR HRD Institute auditorium for the scientific programme.
         </p>
       </header>
 
@@ -37,8 +36,8 @@ export default function Programme() {
                 className="text-[clamp(2rem,4.6vw,4rem)] font-extrabold uppercase leading-none tracking-[-0.03em]"
                 style={
                   di === 0
-                    ? { color: "#C18D21" }
-                    : { color: "transparent", WebkitTextStroke: "1px #C18D21" }
+                    ? { color: "#B3122A" }
+                    : { color: "transparent", WebkitTextStroke: "1px #B3122A" }
                 }
                 data-r
               >

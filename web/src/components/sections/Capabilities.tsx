@@ -4,7 +4,7 @@ import { capabilities } from "@/data/conference";
     marks, a slice stack, an isocontour, a waveform, a reticle. No icon
     library, no emoji, no images. */
 function Glyph({ i }: { i: number }) {
-  const s = "rgba(193,141,33,.55)";
+  const s = "rgba(179,18,42,.55)";
   const paths = [
     "M8 32h48M32 8v48M32 32m-14 0a14 14 0 1 0 28 0a14 14 0 1 0-28 0", // reconstruction
     "M10 46c8-26 36-26 44 0M10 46h44M22 34h20", // segmentation
@@ -44,9 +44,9 @@ export default function Capabilities({
           data-r
         >
           {telemetry ? (
-            <>Six channels, <span className="u-serif">read continuously</span></>
+            <>Six technology <span className="u-serif">domains</span></>
           ) : (
-            <>Six capabilities, <span className="u-serif">one operating field</span></>
+            <>Six technology <span className="u-serif">domains</span></>
           )}
         </h2>
       </header>

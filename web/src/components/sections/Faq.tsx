@@ -79,7 +79,7 @@ export default function Faq() {
           className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
           data-r
         >
-          What we know, and <span className="u-serif">what we don&apos;t yet</span>
+          Frequently asked <span className="u-serif">questions</span>
         </h2>
       </header>
 
@@ -113,9 +113,9 @@ export default function Faq() {
             Awaiting the organising committee
           </p>
           <p className="mt-3 text-[0.85rem] leading-relaxed text-faint" data-r>
-            {open.length} answers are not published yet. Rather than guess them,
-            they are listed here — and each disappears from this list the moment
-            the real figure is supplied.
+            {open.length} details are still to be confirmed by the organising committee.
+            They are listed here and will be published as soon as they are
+            available.
           </p>
           <ul className="mt-5 list-none border-t border-[var(--hair-crimson)] p-0">
             {open.map((q) => (

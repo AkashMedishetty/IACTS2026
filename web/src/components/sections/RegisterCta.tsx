@@ -26,13 +26,13 @@ export default function RegisterCta() {
         <p className="u-eyebrow" data-r>{EVENT_INFO.dateLabel} · {EVENT_INFO.city}</p>
 
         <h2 className="mt-6 max-w-4xl text-[clamp(2.2rem,6.5vw,5.5rem)] font-extrabold leading-[0.95] tracking-[-0.035em]" data-r>
-          The future is now.
-          <span className="u-serif block"> Be in the room.</span>
+          Delegate registration
+          <span className="u-serif block"> opens soon.</span>
         </h2>
 
         <div className="mt-[clamp(2rem,5vh,3.5rem)] max-w-xl" data-r>
           <label htmlFor="notify" className="u-eyebrow block">
-            Email — we will write to you when registration opens
+            Email address — we will notify you when registration opens
           </label>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <input
@@ -46,13 +46,13 @@ export default function RegisterCta() {
               type="button"
               disabled
               className="min-h-[46px] cursor-not-allowed rounded-full px-6 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-white opacity-45"
-              style={{ background: "linear-gradient(135deg,#B3121C 0%,#C18D21 130%)" }}
+              style={{ background: "linear-gradient(135deg,#B3122A 0%,#5F0717 130%)" }}
             >
               Notify me
             </button>
           </div>
           <p className="mt-3 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-crimson-lift">
-            Capture not yet connected — no submission is stored
+            Online registration is not yet open
           </p>
         </div>
 

@@ -29,7 +29,7 @@ export const days = [
     venue: "NIMS (Nizam's Institute of Medical Sciences), Hyderabad",
     stage: "Approach",
     blurb:
-      "Before the lectures begin, the instruments come out. Five parallel hands-on tracks, each capacity-limited.",
+      "Five parallel hands-on tracks, each with limited capacity.",
     items: [
       { title: "Hands-on Wet Lab Sessions", tag: "Cadaveric" },
       { title: "Robotic Simulation Training", tag: "Simulator" },
@@ -44,7 +44,7 @@ export const days = [
     kicker: "Scientific Programme",
     venue: "Dr. MCR HRD Institute Auditorium, Hyderabad",
     stage: "Exposure",
-    blurb: "Two days in which the field states what it currently knows — and argues about the rest.",
+    blurb: "Two days of keynote lectures, orations, plenary sessions, panel discussions and submitted presentations.",
     items: [
       { title: "Keynote Lectures by Eminent Faculty", tag: "Plenary" },
       { title: "State-of-the-Art Orations", tag: "Oration" },
