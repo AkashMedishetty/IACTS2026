@@ -26,3 +26,15 @@ function resolveBlobToken(): string | undefined {
 }
 
 export const BLOB_TOKEN: string | undefined = resolveBlobToken()
+
+/** True when a usable read-write token was found in the environment. */
+export const BLOB_CONFIGURED = Boolean(BLOB_TOKEN)
+
+/**
+ * Uploads fail confusingly when the store has not been connected yet, so say
+ * exactly what is wrong and how to fix it rather than surfacing an SDK error.
+ */
+export const BLOB_NOT_CONFIGURED_MESSAGE =
+  'File storage is not configured yet. Connect the Vercel Blob store to this ' +
+  'project (Storage -> Blob -> Connect Project) so BLOB_READ_WRITE_TOKEN is ' +
+  'available, then run `vercel env pull .env.local` for local development.'

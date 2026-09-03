@@ -1,6 +1,12 @@
 import HeroFieldMock from "@/components/lab/HeroFieldMock";
 import HeroBandMock from "@/components/lab/HeroBandMock";
 import HeroSignalMock from "@/components/lab/HeroSignalMock";
+import type { Metadata } from "next";
+
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 
 const DIRECTIONS = [
   {

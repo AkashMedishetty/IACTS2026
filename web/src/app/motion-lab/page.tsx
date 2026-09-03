@@ -1,6 +1,12 @@
 import ThoracicDepth from "@/components/motion-lab/ThoracicDepth";
 import MyocardiumUnwound from "@/components/motion-lab/MyocardiumUnwound";
 import CardiacCycle from "@/components/motion-lab/CardiacCycle";
+import type { Metadata } from "next";
+
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 
 const CONCEPTS = [
   ["01", "Thoracic Depth Scan", "Scroll peels through drape, ribs and myocardium."],

@@ -340,13 +340,6 @@ export default function RegisterForm() {
                 </span>
               </label>
             ) : null}
-            <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/20 bg-white p-4">
-              <input type="radio" name="pm" className="mt-0.5 size-4 accent-[#b3122a]" checked={v.paymentMethod === "cash"} onChange={() => set("paymentMethod", "cash")} />
-              <span>
-                <span className="block text-[14px] font-semibold text-[#160a0d]">Pay at the registration desk</span>
-                <span className="mt-1 block text-[12px] leading-[1.6] text-[#614d53]">Your place is held as pending until payment is received.</span>
-              </span>
-            </label>
             {v.paymentMethod === "bank-transfer" ? (
               <div className="grid gap-4 border border-[#b3122a]/15 bg-white p-4 sm:grid-cols-2">
                 <p className="sm:col-span-2 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">

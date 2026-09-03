@@ -16,6 +16,12 @@ import CinematicLoader from "@/components/site/CinematicLoader";
 import Dock from "@/components/site/Dock";
 import { EVENT_INFO, STATS, NAV_ITEMS } from "@/lib/constants";
 import { days, secretariat } from "@/data/conference";
+import type { Metadata } from "next";
+
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 
 function Arrow() {
   return (

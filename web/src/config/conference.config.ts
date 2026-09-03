@@ -323,7 +323,7 @@ export const conferenceConfig: ConferenceConfig = {
     methods: {
       razorpay: false,        // enable once gateway credentials are issued
       bankTransfer: true,     // primary method for IACTS 2026
-      cash: true              // spot registration at the counter
+      cash: false             // not offered through the site
     },
 
     // Set from the admin panel (Settings → Payment Methods). Never hardcode

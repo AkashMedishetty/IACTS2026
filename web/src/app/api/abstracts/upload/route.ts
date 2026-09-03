@@ -1,5 +1,5 @@
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
-import { BLOB_TOKEN } from '@/lib/blob'
+import { BLOB_TOKEN, BLOB_CONFIGURED, BLOB_NOT_CONFIGURED_MESSAGE } from '@/lib/blob'
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import User from '@/lib/models/User'
@@ -29,6 +29,10 @@ function blobDiagnostics() {
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    if (!BLOB_CONFIGURED) {
+      console.error('Upload rejected:', BLOB_NOT_CONFIGURED_MESSAGE)
+      return NextResponse.json({ success: false, message: BLOB_NOT_CONFIGURED_MESSAGE }, { status: 503 })
+    }
     const body = (await request.json()) as HandleUploadBody
 
     console.log('[blob-upload] incoming request', {

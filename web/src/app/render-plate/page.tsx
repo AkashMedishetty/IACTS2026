@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
+import type { Metadata } from "next";
+
+export const metadata = {
+  robots: { index: false, follow: false },
+};
+
 
 /**
  * LOCAL RENDER RIG — not part of any concept, not linked, noindex.

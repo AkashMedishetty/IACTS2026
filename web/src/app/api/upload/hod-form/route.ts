@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
-import { BLOB_TOKEN } from '@/lib/blob'
+import { BLOB_TOKEN, BLOB_CONFIGURED, BLOB_NOT_CONFIGURED_MESSAGE } from '@/lib/blob'
 
 export async function POST(request: NextRequest) {
   try {
+    if (!BLOB_CONFIGURED) {
+      console.error('Upload rejected:', BLOB_NOT_CONFIGURED_MESSAGE)
+      return NextResponse.json({ success: false, message: BLOB_NOT_CONFIGURED_MESSAGE }, { status: 503 })
+    }
     const formData = await request.formData()
     const file = formData.get('file') as File | null
 
