@@ -25,7 +25,7 @@ export function Seal() {
 
 export default function SiteHeader({ cta = true }: { cta?: boolean }) {
   const [open, setOpen] = useState(false);
-  const nav = NAV_ITEMS.slice(0, 6);
+  const nav = NAV_ITEMS.filter((n) => ["About", "Programme", "Workshops", "Abstracts", "Fees", "Venue"].includes(n.label));
 
   return (
     <>
@@ -41,7 +41,7 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
 
           <nav aria-label="Primary" className="hidden items-center gap-[clamp(1rem,2vw,2rem)] xl:flex">
             {nav.map((n) => (
-              <a key={n.href} href={`/${n.href}`} className="font-mono text-[9px] font-medium uppercase tracking-[.16em] text-[#614d53] no-underline transition-colors hover:text-[#b3122a]">
+              <a key={n.path} href={n.path} className="font-mono text-[9px] font-medium uppercase tracking-[.16em] text-[#614d53] no-underline transition-colors hover:text-[#b3122a]">
                 {n.label}
               </a>
             ))}
@@ -73,7 +73,7 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
         <div className="fixed inset-0 z-40 grid bg-[#b3122a] px-[var(--gutter)] pb-10 pt-20 text-white xl:hidden">
           <nav aria-label="Mobile" className="self-center">
             {NAV_ITEMS.map((n, i) => (
-              <a key={n.href} href={`/${n.href}`} onClick={() => setOpen(false)} className="flex items-baseline gap-4 border-b border-white/25 py-3 text-[clamp(1.6rem,7vw,3rem)] font-black uppercase leading-none tracking-[-.05em] text-white no-underline">
+              <a key={n.path} href={n.path} onClick={() => setOpen(false)} className="flex items-baseline gap-4 border-b border-white/25 py-3 text-[clamp(1.6rem,7vw,3rem)] font-black uppercase leading-none tracking-[-.05em] text-white no-underline">
                 <span className="font-mono text-[9px] font-normal tracking-[.16em] text-white/60">0{i + 1}</span>
                 {n.label}
               </a>
