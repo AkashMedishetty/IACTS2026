@@ -23,9 +23,9 @@ function Plate({
           src={portrait}
           alt={name}
           loading="lazy"
-          className="mb-4 size-[104px] rounded-sm border border-[var(--hair)] bg-white object-cover object-top"
-          width={104}
-          height={104}
+          className="mb-4 h-[136px] w-[120px] rounded-sm border border-[var(--hair)] bg-white object-contain"
+          width={120}
+          height={136}
         />
       ) : null}
       <p className="u-eyebrow text-gold-lift">{role}</p>
