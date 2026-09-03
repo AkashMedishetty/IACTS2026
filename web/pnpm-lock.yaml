@@ -14,6 +14,9 @@ importers:
       '@react-three/fiber':
         specifier: ^9.7.0
         version: 9.7.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.185.1)
+      '@sparticuz/chromium':
+        specifier: ^121.0.0
+        version: 121.0.0
       '@vercel/blob':
         specifier: ^2.8.0
         version: 2.8.0
@@ -764,6 +767,10 @@ packages:
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
+
+  '@sparticuz/chromium@121.0.0':
+    resolution: {integrity: sha512-0DiRzlCJljjMKOUh0W36zeR1ibG7EZkwIG+ve8Lg0+tbCM6TWaFlHMSt/6K6Y7o7PFy3eaPoLrUvGRRYUvd81g==}
+    engines: {node: '>= 16'}
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -4227,6 +4234,16 @@ snapshots:
       - immer
 
   '@rtsao/scc@1.1.0': {}
+
+  '@sparticuz/chromium@121.0.0':
+    dependencies:
+      follow-redirects: 1.16.0
+      tar-fs: 3.0.4
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - bare-buffer
+      - debug
+      - react-native-b4a
 
   '@swc/helpers@0.5.23':
     dependencies:

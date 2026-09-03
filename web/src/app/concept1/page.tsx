@@ -60,7 +60,7 @@ export default function Concept1() {
                 </a>
               ))}
             </div>
-            <a href="#register"
+            <a href="/register"
               className="inline-flex items-center gap-2 rounded-full px-[clamp(15px,1.9vw,30px)] py-[clamp(9px,1.1vh,15px)] font-mono text-[clamp(9px,.75vw,12px)] font-semibold uppercase tracking-[0.14em] text-white no-underline transition-transform duration-500 hover:-translate-y-0.5"
               style={{ background: "linear-gradient(135deg,#B3121C 0%,#C18D21 130%)" }}>
               Register <Arrow />
@@ -97,7 +97,7 @@ export default function Concept1() {
               </div>
 
               <div className="mt-[clamp(20px,3.2vh,40px)] flex flex-wrap items-center gap-[clamp(12px,1.6vw,24px)]" data-r>
-                <a href="#register"
+                <a href="/register"
                   className="inline-flex items-center gap-2 rounded-full px-[clamp(15px,1.9vw,30px)] py-[clamp(9px,1.1vh,15px)] font-mono text-[clamp(9px,.75vw,12px)] font-semibold uppercase tracking-[0.14em] text-white no-underline transition-transform duration-500 hover:-translate-y-0.5"
                   style={{ background: "linear-gradient(135deg,#B3121C 0%,#C18D21 130%)" }}>
                   Notify me when registration opens <Arrow />

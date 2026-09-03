@@ -317,7 +317,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a href="#register" className="hidden min-h-9 items-center gap-2 rounded-full bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.16em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
+            <a href="/register" className="hidden min-h-9 items-center gap-2 rounded-full bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.16em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
               Registration · Soon <Arrow />
             </a>
             <button
@@ -401,7 +401,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               <a href="#programme" className="flex min-h-12 items-center justify-between gap-3 bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.15em] text-white no-underline transition-transform hover:-translate-y-0.5">
                 Scientific programme <Arrow />
               </a>
-              <a href="#register" className="flex min-h-12 items-center justify-between gap-3 border border-[#b3122a]/30 bg-white/[0.93] px-5 font-mono text-[9px] font-medium uppercase tracking-[.15em] text-[#b3122a] no-underline backdrop-blur-sm transition-colors hover:bg-[#f8e9ed]">
+              <a href="/register" className="flex min-h-12 items-center justify-between gap-3 border border-[#b3122a]/30 bg-white/[0.93] px-5 font-mono text-[9px] font-medium uppercase tracking-[.15em] text-[#b3122a] no-underline backdrop-blur-sm transition-colors hover:bg-[#f8e9ed]">
                 Delegate registration <Arrow />
               </a>
             </div>

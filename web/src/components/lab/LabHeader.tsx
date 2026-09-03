@@ -35,7 +35,7 @@ export default function LabHeader({ index }: { index: string }) {
           </a>
         ))}
         <a
-          href="#register"
+          href="/register"
           className="rounded-full bg-crimson px-[clamp(1rem,1.6vw,1.7rem)] py-[.7rem] font-mono text-[.58rem] font-semibold uppercase tracking-[.16em] text-white no-underline"
         >
           {EVENT_INFO.dateLabel.split(" 2026")[0]}

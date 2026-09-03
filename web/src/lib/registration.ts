@@ -7,7 +7,7 @@
  */
 
 import { conferenceConfig } from '@/config/conference.config'
-import { pricingTiers } from '@/config/pricing.config'
+import { pricingTiers, workshops as configuredWorkshops } from '@/config/pricing.config'
 
 export type RegistrationTierKey = 'earlyBird' | 'regular' | 'onsite'
 export type RegistrationTier = string
@@ -118,4 +118,45 @@ export const registrationLabels = {
 
 export function getTierSummary(): string {
   return TIER_ORDER.filter((k) => tierWindow(k)?.enabled).map(formatWindow).join(' · ')
+}
+
+export interface AmountBreakdown {
+  currency: string
+  tier: RegistrationTier
+  tierKey: RegistrationTierKey
+  base: number
+  workshops: number
+  total: number
+  lines: Array<{ label: string; amount: number }>
+}
+
+/**
+ * Authoritative price for a registration. The client never supplies amounts —
+ * they are always recomputed here from the configured matrix.
+ */
+export function computeRegistrationAmount(params: {
+  categoryKey: string
+  workshopSelections?: string[]
+  at?: Date
+}): AmountBreakdown {
+  const tierKey = getCurrentTierKey(params.at || new Date())
+  const tier = tierLabel(tierKey)
+  const pricing = getTierPricing(tier)
+  const category = pricing[params.categoryKey]
+
+  const base = category?.amount ?? 0
+  const currency = category?.currency || conferenceConfig.payment.currency
+  const lines: Array<{ label: string; amount: number }> = [
+    { label: category?.label || params.categoryKey, amount: base },
+  ]
+
+  let workshopTotal = 0
+  for (const id of params.workshopSelections || []) {
+    const w = configuredWorkshops.find((x) => x.id === id)
+    if (!w) continue
+    workshopTotal += w.amount || 0
+    if (w.amount) lines.push({ label: w.name, amount: w.amount })
+  }
+
+  return { currency, tier, tierKey, base, workshops: workshopTotal, total: base + workshopTotal, lines }
 }

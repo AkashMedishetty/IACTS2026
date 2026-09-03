@@ -128,7 +128,7 @@ export default function Nav() {
               </a>
             ))}
             <a
-              href="#register"
+              href="/register"
               className="u-eyebrow border border-[var(--hair-gold)] px-3.5 py-2 text-crimson transition-colors duration-300 hover:bg-crimson hover:text-bone"
             >
               Register · Soon
@@ -185,7 +185,7 @@ export default function Nav() {
             <span className="mt-8 block overflow-hidden">
               <a
                 data-menu-link
-                href="#register"
+                href="/register"
                 onClick={() => setOpen(false)}
                 className="u-eyebrow inline-block border border-[var(--hair-gold)] px-4 py-3 text-crimson"
               >

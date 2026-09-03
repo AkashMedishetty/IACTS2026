@@ -6,7 +6,7 @@ import { generateRegistrationId } from '@/lib/utils/generateId'
 import { EmailService } from '@/lib/email/service'
 import Razorpay from 'razorpay'
 import { sanitizeAccommodation } from '@/lib/accommodation'
-import { getCurrentTierKey } from '@/lib/registration'
+import { getCurrentTierKey, computeRegistrationAmount, tierLabel } from '@/lib/registration'
 
 // Initialize Razorpay only if credentials are available
 let razorpay: Razorpay | null = null
@@ -270,6 +270,12 @@ export async function POST(request: NextRequest) {
       registration: registration
     })
     
+    // Authoritative pricing — never trust an amount sent by the browser.
+    const serverAmount = computeRegistrationAmount({
+      categoryKey: registration?.type,
+      workshopSelections: registration?.workshopSelections || [],
+    })
+
     // Prepare user data
     const userData = {
       email: email.toLowerCase(),
@@ -299,7 +305,7 @@ export async function POST(request: NextRequest) {
         registrationId,
         type: registration?.type || 'delegate',
         status: 'pending' as const,
-        tier: body?.payment?.tier || body?.currentTier || undefined,
+        tier: tierLabel(getCurrentTierKey()),
         membershipNumber: registration?.membershipNumber || '',
         workshopSelections: registration?.workshopSelections || [],
         accompanyingPersons: (registration?.accompanyingPersons || []).map((p: any) => ({
@@ -316,7 +322,8 @@ export async function POST(request: NextRequest) {
       payment: payment ? {
         method: payment.method || 'bank-transfer',
         status: 'pending' as const,
-        amount: payment.amount || 0,
+        // Amount is recomputed server-side; a client-supplied value is ignored.
+        amount: serverAmount.total,
         bankTransferUTR: payment.bankTransferUTR,
         screenshotUrl: payment.screenshotUrl,
         paymentDate: new Date()

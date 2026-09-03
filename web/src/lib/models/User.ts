@@ -75,11 +75,13 @@ export interface IUser extends Document {
     }>
     accommodation?: {
       required: boolean
-      roomType: 'single' | 'sharing'
+      roomType: string
       checkIn: string
       checkOut: string
       nights: number
       totalAmount: number
+      /** True when the delegate's tier includes a complimentary stay. */
+      complimentary?: boolean
     }
     registrationDate: Date
     confirmedDate?: Date
@@ -249,11 +251,12 @@ const UserSchema = new Schema<IUser>({
     }],
     accommodation: {
       required: { type: Boolean, default: false },
-      roomType: { type: String, enum: ['single', 'sharing'] },
+      roomType: { type: String },
       checkIn: { type: String },
       checkOut: { type: String },
       nights: { type: Number, default: 0 },
-      totalAmount: { type: Number, default: 0 }
+      totalAmount: { type: Number, default: 0 },
+      complimentary: { type: Boolean, default: false }
     },
     registrationDate: {
       type: Date,

@@ -257,11 +257,11 @@ export const conferenceConfig: ConferenceConfig = {
 
   contact: {
     // Flyer carries no phone number — left blank rather than invented.
-    email: "nimscvts@gmail.com",
+    email: "contact@iactstechnocollegecme2026.com",
     phone: "",
-    website: process.env.NEXT_PUBLIC_APP_URL || "",
-    supportEmail: "nimscvts@gmail.com",
-    abstractsEmail: "nimscvts@gmail.com"
+    website: process.env.NEXT_PUBLIC_APP_URL || "https://iactstechnocollegecme2026.com",
+    supportEmail: "contact@iactstechnocollegecme2026.com",
+    abstractsEmail: "contact@iactstechnocollegecme2026.com"
   },
 
   // Living Operative Field palette (see BRAND.md)
@@ -383,7 +383,7 @@ export const conferenceConfig: ConferenceConfig = {
 
   email: {
     fromName: "IACTS Technocollege CME 2026",
-    replyTo: "nimscvts@gmail.com",
+    replyTo: "contact@iactstechnocollegecme2026.com",
     footerText: "© 2026 IACTS Technocollege CME — Department of CTVS, NIMS Hyderabad.",
     logoUrl: "/images/logo.png"
   },
