@@ -6,7 +6,7 @@
 
 import { conferenceConfig, ConferenceConfig } from '../../config/conference.config'
 import Configuration from '../models/Configuration'
-import { pricingTiers as configuredPricing } from '../../config/pricing.config'
+import { pricingTiers as configuredPricing, workshops as configuredWorkshops, accompanyingPersonFee } from '../../config/pricing.config'
 
 /**
  * Generate pricing categories dynamically from conference config
@@ -96,30 +96,19 @@ export async function seedPricingTiers(config: ConferenceConfig = conferenceConf
  */
 export async function seedWorkshops(config: ConferenceConfig = conferenceConfig) {
   try {
-    // Default workshops (customize in conference.config.ts)
-    const workshops = [
-      {
-        id: 'workshop-1',
-        name: 'Advanced Techniques Workshop',
-        description: 'Hands-on workshop covering advanced techniques',
-        amount: 2000,
-        currency: config.payment.currency,
-        maxSeats: 50,
-        duration: '4 hours',
-        isActive: true
-      },
-      {
-        id: 'workshop-2',
-        name: 'Clinical Practice Update',
-        description: 'Latest updates in clinical practice',
-        amount: 1500,
-        currency: config.payment.currency,
-        maxSeats: 40,
-        duration: '3 hours',
-        isActive: true
-      }
-    ]
-    
+    // The real programme, from config/pricing.config.ts — no placeholders.
+    const workshops = configuredWorkshops.map((w) => ({
+      id: w.id,
+      name: w.name,
+      description: w.description || '',
+      amount: w.amount,
+      currency: w.currency || config.payment.currency,
+      ...(typeof w.maxSeats === 'number' ? { maxSeats: w.maxSeats } : {}),
+      ...(w.instructor ? { instructor: w.instructor } : {}),
+      duration: w.duration || '',
+      isActive: true,
+    }))
+
     await Configuration.findOneAndUpdate(
       { type: 'workshops', key: 'workshops_list' },
       {
@@ -127,12 +116,12 @@ export async function seedWorkshops(config: ConferenceConfig = conferenceConfig)
         key: 'workshops_list',
         value: workshops,
         isActive: true,
-        description: 'Conference workshops'
+        description: 'Conference workshops',
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     )
-    
-    console.log('✅ Workshops seeded successfully')
+
+    console.log(`✅ Workshops seeded successfully (${workshops.length})`)
     return workshops
   } catch (error) {
     console.error('❌ Error seeding workshops:', error)
@@ -140,17 +129,15 @@ export async function seedWorkshops(config: ConferenceConfig = conferenceConfig)
   }
 }
 
-/**
- * Seed accompanying person pricing
- */
 export async function seedAccompanyingPerson(config: ConferenceConfig = conferenceConfig) {
   try {
+    // Amount comes from config/pricing.config.ts; 0 when nothing is published.
     const accompanyingConfig = {
-      enabled: config.registration.accompanyingPersonEnabled,
-      amount: 3000,
-      currency: config.payment.currency,
-      description: 'Includes conference materials and meals',
-      maxPersons: config.registration.maxAccompanyingPersons || 2
+      enabled: config.registration.accompanyingPersonEnabled && accompanyingPersonFee.enabled,
+      amount: accompanyingPersonFee.amount || 0,
+      currency: accompanyingPersonFee.currency || config.payment.currency,
+      description: accompanyingPersonFee.label || 'Accompanying Person',
+      maxPersons: config.registration.maxAccompanyingPersons || 0
     }
     
     await Configuration.findOneAndUpdate(

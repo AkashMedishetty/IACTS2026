@@ -28,6 +28,14 @@ export interface AccommodationRecord {
   complimentary?: boolean
 }
 
+/** True when the given pricing tier may request accommodation at all. */
+export function accommodationAvailableFor(tierKey?: string): boolean {
+  const cfg = conferenceConfig.accommodation
+  if (!cfg?.enabled) return false
+  if (!cfg.availableForTiers?.length) return true
+  return cfg.availableForTiers.includes(String(tierKey))
+}
+
 export const accommodationWindow = () => ({
   from: conferenceConfig.accommodation.checkInFrom,
   to: conferenceConfig.accommodation.checkOutBy,
@@ -54,6 +62,11 @@ export function sanitizeAccommodation(
   const none: AccommodationRecord = { required: false, nights: 0, totalAmount: 0 }
 
   if (!cfg?.enabled || !input?.required) return none
+
+  // Accommodation is offered only to the configured tiers (Early Bird).
+  if (cfg.availableForTiers?.length && !cfg.availableForTiers.includes(String(opts.tierKey))) {
+    return none
+  }
 
   const { from, to } = accommodationWindow()
   const checkIn = clampDay(input.checkIn, from, to) ?? from

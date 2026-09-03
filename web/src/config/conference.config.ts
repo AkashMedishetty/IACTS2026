@@ -194,6 +194,8 @@ export interface ConferenceConfig {
     checkOutBy: string
     roomTypes: string[]
     defaultRoomType: string
+    /** Only these pricing tiers may request accommodation at all. */
+    availableForTiers: string[]
     /** Early Bird delegates receive complimentary twin-sharing at the venue. */
     complimentaryForTiers: string[]
     complimentaryRoomType: string
@@ -402,6 +404,7 @@ export const conferenceConfig: ConferenceConfig = {
     checkOutBy: "2026-10-25",
     roomTypes: ["sharing", "single"],
     defaultRoomType: "sharing",
+    availableForTiers: ["earlyBird"],
     complimentaryForTiers: ["earlyBird"],
     complimentaryRoomType: "sharing",
     note: "All Early Bird registrations include complimentary twin-sharing accommodation at the venue."

@@ -19,6 +19,12 @@ function requireEnv(name: string): string {
   return value.trim()
 }
 
+/** Staff accounts must use a designation the schema actually allows. */
+function staffDesignation(config: ConferenceConfig): string {
+  const options = config.registration.formFields.designations || []
+  return options.find((d) => /other/i.test(d)) || options[options.length - 1] || 'Other'
+}
+
 function addressFrom(config: ConferenceConfig) {
   return {
     street: config.venue.address || '',
@@ -45,8 +51,12 @@ async function seedStaffUser(
 ) {
   const email = requireEnv(opts.emailEnv).toLowerCase()
   const password = requireEnv(opts.passwordEnv)
-  if (password.length < 12) {
-    throw new Error(`${opts.passwordEnv} must be at least 12 characters.`)
+  if (password.length < 12 || /^[0-9]+$/.test(password)) {
+    console.warn(
+      `   ⚠️  ${opts.passwordEnv} is weak (${password.length} chars${/^[0-9]+$/.test(password) ? ', digits only' : ''}).\n` +
+      `      This account can read every delegate's personal data and payments.\n` +
+      `      Change it from the admin panel before going live.`,
+    )
   }
 
   const existing = await User.findOne({ email })
@@ -62,8 +72,8 @@ async function seedStaffUser(
       title: opts.title,
       firstName: opts.firstName,
       lastName: opts.lastName,
-      phone: process.env[opts.phoneEnv]?.trim() || '',
-      designation: opts.designation,
+      phone: process.env[opts.phoneEnv]?.trim() || '0000000000', // internal account placeholder
+      designation: staffDesignation(config),
       institution: config.organizationName,
       address: addressFrom(config),
     },
@@ -77,7 +87,7 @@ async function seedStaffUser(
     isEmailVerified: true,
   })
 
-  console.log(`   ✅ ${opts.role} created: ${email}`)
+  console.log(`   ✅ ${opts.role} created: ${email} (${opts.designation})`)
   return user
 }
 
