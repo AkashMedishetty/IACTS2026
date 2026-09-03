@@ -111,7 +111,6 @@ export default function RegisterForm() {
             specialization: v.specialization || "",
             institution: v.institution.trim(),
             mciNumber: v.mciNumber.trim(),
-            dietaryRequirements: v.dietaryRequirements || "",
             address: {
               street: v.street || "",
               city: v.city || "",
@@ -218,8 +217,6 @@ export default function RegisterForm() {
           <Field label="Last name" required><input className={inputCls} value={v.lastName || ""} onChange={(e) => set("lastName", e.target.value)} /></Field>
           <Field label="City"><input className={inputCls} value={v.city || ""} onChange={(e) => set("city", e.target.value)} /></Field>
           <Field label="State"><input className={inputCls} value={v.state || ""} onChange={(e) => set("state", e.target.value)} /></Field>
-          <Field label="Dietary requirements"><input className={inputCls} placeholder="Vegetarian, allergies, none…" value={v.dietaryRequirements || ""} onChange={(e) => set("dietaryRequirements", e.target.value)} /></Field>
-          <div className="hidden sm:block" />
         </Section>
 
         <Section n="03" title="Professional details">
