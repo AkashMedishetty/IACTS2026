@@ -72,6 +72,4 @@ export const PENDING = pending;
 
 export const CONCEPTS = [
   { id: "concept1", name: "The Operative Field", mechanic: "Scroll-driven dissection of an MRI-derived heart" },
-  { id: "concept2", name: "The Helical Band", mechanic: "Torrent-Guasp myocardial band, three cardiac states" },
-  { id: "concept3", name: "The Signal", mechanic: "One continuous ECG trace as the whole navigation" },
 ] as const;
