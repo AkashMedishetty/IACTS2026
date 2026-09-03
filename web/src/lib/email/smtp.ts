@@ -7,6 +7,31 @@ import connectDB from '../mongodb'
 // which was the main throughput bottleneck for bulk sends.
 let cachedTransporter: any = null
 
+/**
+ * A transport that only logs. Silently pretending to send is dangerous: the app
+ * records "sent" while nothing is delivered. So this is refused in production
+ * unless explicitly opted into with EMAIL_SIMULATE=true.
+ */
+function simulationTransport(reason: string) {
+  const allowed = process.env.NODE_ENV !== 'production' || process.env.EMAIL_SIMULATE === 'true'
+  if (!allowed) {
+    throw new Error(
+      `Refusing to simulate email in production (${reason}). ` +
+      `Fix SMTP_HOST/SMTP_USER/SMTP_PASS, or set EMAIL_SIMULATE=true to allow logging instead of sending.`,
+    )
+  }
+  console.warn(`\n🚨 EMAIL SIMULATION ACTIVE — nothing is being delivered (${reason}).\n`)
+  return {
+    simulated: true,
+    sendMail: async (mailOptions: any) => {
+      console.warn('📧 SIMULATED (not sent) ->', mailOptions.to, '|', mailOptions.subject)
+      return { messageId: 'simulated-' + Date.now(), simulated: true }
+    },
+    verify: async () => true,
+  }
+}
+
+
 // Create reusable transporter object using SMTP
 export async function createSMTPTransporter() {
   // Reuse the pooled transporter if we've already created a real one in this process
@@ -26,17 +51,7 @@ export async function createSMTPTransporter() {
       pass: smtpPass ? 'SET' : 'NOT SET' 
     })
     
-    // Return a mock transporter for development
-    return {
-      sendMail: async (mailOptions: any) => {
-        console.log('📧 EMAIL SIMULATION - Would send email:')
-        console.log('To:', mailOptions.to)
-        console.log('Subject:', mailOptions.subject)
-        console.log('Content:', mailOptions.text || 'HTML content provided')
-        return { messageId: 'simulated-' + Date.now() }
-      },
-      verify: async () => true
-    }
+    return simulationTransport('SMTP is not configured')
   }
 
   // SMTP configuration — pooled connections for fast bulk sending
@@ -70,21 +85,8 @@ export async function createSMTPTransporter() {
     cachedTransporter = transporter
     return transporter
   } catch (error) {
-    console.error('❌ SMTP connection error:', error)
-    console.warn('⚠️ Falling back to email simulation mode')
-    
-    // Return mock transporter on error
-    return {
-      sendMail: async (mailOptions: any) => {
-        console.log('📧 EMAIL SIMULATION (SMTP Error) - Would send email:')
-        console.log('To:', mailOptions.to)
-        console.log('Subject:', mailOptions.subject)
-        console.log('Content:', mailOptions.text || 'HTML content provided')
-        console.log('Error details:', error)
-        return { messageId: 'simulated-error-' + Date.now() }
-      },
-      verify: async () => true
-    }
+    console.error('❌ SMTP connection failed:', (error as Error)?.message || error)
+    return simulationTransport(`SMTP error: ${(error as Error)?.message || 'unknown'}`)
   }
 }
 
