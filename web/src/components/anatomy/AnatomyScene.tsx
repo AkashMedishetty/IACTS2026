@@ -10,10 +10,10 @@ import AnatomyParticles, {
   type SolidMeshData,
 } from "./AnatomyParticles";
 
-const POINTS_URL = "/models/cardio-thoracic/cardio-thoracic.points.f32";
-const COLORS_URL = "/models/cardio-thoracic/cardio-thoracic.points.colors.u8";
-const SOLID_URL = "/models/cardio-thoracic/cardio-thoracic.textured.meshbin";
-const DIFFUSE_URL = "/models/cardio-thoracic/cardio-thoracic.diffuse.jpg";
+const POINTS_URL = "/models/heart/heart.points.f32";
+const COLORS_URL = "/models/heart/heart.points.colors.u8";
+const SOLID_URL = "/models/heart/heart.textured.meshbin";
+const DIFFUSE_URL = "/models/heart/heart.diffuse.jpg";
 const EXPECTED_VALUES = 70_000 * 3;
 const SOLID_HEADER_BYTES = 64;
 const SOLID_MAGIC = 0x54434149;

@@ -1,0 +1,43 @@
+{
+  "format": "iacts-colored-point-cloud/v2",
+  "source": "heart.fbx",
+  "texture": {
+    "source": "heart_basecolor.jpg",
+    "width": 2048,
+    "height": 2048,
+    "colorSpace": "sRGB"
+  },
+  "points": 70000,
+  "topology": {
+    "meshes": 1,
+    "triangles": 8650005
+  },
+  "surfaceArea": 490703.404176217,
+  "seed": 20261023,
+  "normalization": {
+    "maxDimension": 8,
+    "sourceBounds": {
+      "min": [
+        -157.58602905273438,
+        -239.52899169921875,
+        -115.4805908203125
+      ],
+      "max": [
+        163.63108825683594,
+        207.71701049804688,
+        94.51405334472656
+      ]
+    },
+    "center": [
+      3.0225296020507812,
+      -15.905990600585938,
+      -10.483268737792969
+    ],
+    "scale": 0.017887247646031414
+  },
+  "files": {
+    "json": "heart.points.json",
+    "positions": "heart.points.f32",
+    "colors": "heart.points.colors.u8"
+  }
+}

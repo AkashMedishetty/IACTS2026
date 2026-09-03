@@ -414,7 +414,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               <span aria-hidden="true" className="absolute left-0 top-1/2 h-px w-3 -translate-y-1/2 hidden bg-[#b3122a]/40 xl:block" />
               <span aria-hidden="true" className="absolute right-0 top-1/2 h-px w-3 -translate-y-1/2 hidden bg-[#b3122a]/40 xl:block" />
               <p className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-[.2em] text-[#7d656c]">
-                Cardiothoracic point cloud · 70,000 samples
+                Anatomical heart · 70,000 point samples
               </p>
             </div>
           </div>
