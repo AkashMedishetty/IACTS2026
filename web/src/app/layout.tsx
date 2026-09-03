@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/site/SmoothScroll";
 import { eventJsonLd } from "@/lib/event-schema";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 
 /* Self-hosted at build time by next/font — no runtime Google request, which is
    what keeps LCP honest on Indian mobile networks. */
@@ -69,7 +70,9 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <div className="field-shell">{children}</div>
+        <SessionProvider>
+          <div className="field-shell">{children}</div>
+        </SessionProvider>
         <script
           type="application/ld+json"
           // structured data is static and contains no user input
