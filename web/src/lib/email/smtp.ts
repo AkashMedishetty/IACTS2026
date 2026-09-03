@@ -13,11 +13,13 @@ let cachedTransporter: any = null
  * unless explicitly opted into with EMAIL_SIMULATE=true.
  */
 function simulationTransport(reason: string) {
-  const allowed = process.env.NODE_ENV !== 'production' || process.env.EMAIL_SIMULATE === 'true'
+  // Opt-in only, in every environment. Reporting a send that did not happen
+  // is worse than a visible failure the app can record and retry.
+  const allowed = process.env.EMAIL_SIMULATE === 'true'
   if (!allowed) {
     throw new Error(
-      `Refusing to simulate email in production (${reason}). ` +
-      `Fix SMTP_HOST/SMTP_USER/SMTP_PASS, or set EMAIL_SIMULATE=true to allow logging instead of sending.`,
+      `Email not sent (${reason}). ` +
+      `Fix SMTP_HOST/SMTP_USER/SMTP_PASS, or set EMAIL_SIMULATE=true to log instead of sending.`,
     )
   }
   console.warn(`\n🚨 EMAIL SIMULATION ACTIVE — nothing is being delivered (${reason}).\n`)

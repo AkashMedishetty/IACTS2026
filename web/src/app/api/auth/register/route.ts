@@ -270,6 +270,10 @@ export async function POST(request: NextRequest) {
       registration: registration
     })
     
+    // Email delivery is reported to the client but never gates the registration.
+    let emailDelivered = true
+    let emailFailureReason: string | null = null
+
     // Authoritative pricing — never trust an amount sent by the browser.
     const serverAmount = computeRegistrationAmount({
       categoryKey: registration?.type,
@@ -492,6 +496,7 @@ export async function POST(request: NextRequest) {
         payment?.method !== 'pay-now') {
       try {
         console.log('📧 Sending registration confirmation email...')
+        // Registration is already persisted at this point. Email is best-effort.
         // Fetch workshop details for email
         let workshopDetails: Array<{id: string, name: string}> = []
         if (registration?.workshopSelections && registration.workshopSelections.length > 0) {
@@ -510,7 +515,7 @@ export async function POST(request: NextRequest) {
         )
         const registrationTypeLabel = registrationCategory?.label || newUser.registration.type
 
-        await EmailService.sendRegistrationConfirmation({
+        const emailResult: any = await EmailService.sendRegistrationConfirmation({
           userId: newUser._id.toString(),
           email: newUser.email,
           name: `${newUser.profile.firstName} ${newUser.profile.lastName}`,
@@ -521,10 +526,48 @@ export async function POST(request: NextRequest) {
           accompanyingPersons: registration?.accompanyingPersons || [],
           accommodation: newUser.registration.accommodation?.required ? newUser.registration.accommodation : undefined
         })
+        // sendEmail reports failure by RETURN VALUE, not by throwing.
+        if (emailResult && emailResult.success === false) {
+          throw new Error(emailResult.error || 'Email provider reported a failure')
+        }
         console.log('✅ Registration confirmation email sent')
+        try {
+          await User.updateOne(
+            { _id: newUser._id },
+            { $set: { 'registration.confirmationEmail': { sent: true, sentAt: new Date(), attemptedAt: new Date() } } },
+          )
+        } catch { /* delivery state is advisory; never block on it */ }
       } catch (emailError) {
-        console.error('⚠️ Failed to send registration email (non-blocking):', emailError)
-        // Don't fail the registration if email fails
+        // The delegate IS registered. Email is best-effort: record the failure
+        // against the record and in the error log so admin can retry it.
+        emailDelivered = false
+        emailFailureReason = (emailError as Error)?.message || 'Unknown email error'
+        console.error('⚠️ Registration email failed (registration unaffected):', emailFailureReason)
+
+        try {
+          await User.updateOne(
+            { _id: newUser._id },
+            { $set: { 'registration.confirmationEmail': { sent: false, attemptedAt: new Date(), error: emailFailureReason } } },
+          )
+        } catch (persistError) {
+          console.error('   could not record email failure on the user:', persistError)
+        }
+
+        try {
+          const { logError } = await import('@/lib/errors/service')
+          await logError({
+            message: `Registration confirmation email failed: ${emailFailureReason}`,
+            severity: 'warning',
+            category: 'email',
+            source: 'backend',
+            endpoint: '/api/auth/register',
+            userId: newUser._id,
+            userEmail: newUser.email,
+            metadata: { additionalInfo: { registrationId: newUser.registration.registrationId } },
+          })
+        } catch (logFailure) {
+          console.error('   could not write to the error log:', logFailure)
+        }
       }
     } else {
       console.log('ℹ️ Skipping confirmation email - will send after payment confirmation')
@@ -540,7 +583,9 @@ export async function POST(request: NextRequest) {
         id: newUser._id,
         email: newUser.email,
         registrationId: newUser.registration.registrationId,
-        name: `${newUser.profile.firstName} ${newUser.profile.lastName}`
+        name: `${newUser.profile.firstName} ${newUser.profile.lastName}`,
+        emailDelivered,
+        emailFailureReason
       }
     }, { status: 201 })
 

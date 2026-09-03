@@ -59,7 +59,7 @@ export default function RegisterForm() {
   });
   const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
-  const [done, setDone] = useState<null | { registrationId: string; name: string; amount: number }>(null);
+  const [done, setDone] = useState<null | { registrationId: string; name: string; amount: number; emailDelivered: boolean }>(null);
 
   const set = (k: string, val: any) => setV((p) => ({ ...p, [k]: val }));
 
@@ -136,7 +136,12 @@ export default function RegisterForm() {
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
-      setDone({ registrationId: data.data.registrationId, name: data.data.name, amount: price.total });
+      setDone({
+        registrationId: data.data.registrationId,
+        name: data.data.name,
+        amount: price.total,
+        emailDelivered: data.data.emailDelivered !== false,
+      });
     } catch {
       setErrors(["Could not reach the server. Please check your connection and try again."]);
     } finally {
@@ -161,6 +166,16 @@ export default function RegisterForm() {
             Amount payable: <strong className="text-[#160a0d]">₹{done.amount.toLocaleString("en-IN")}</strong> ({tier})
           </p>
         </div>
+
+        {!done.emailDelivered ? (
+          <div role="status" className="mt-6 border-l-2 border-[#b3122a] bg-[#f8e9ed] px-5 py-4">
+            <p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#b3122a]">Please save your registration ID</p>
+            <p className="mt-2 text-[13px] leading-[1.7] text-[#5f0717]">
+              Your registration is <strong>confirmed and saved</strong>, but we could not send your confirmation email
+              just now. Note the ID above, and the secretariat will follow up. Nothing further is needed from you.
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-6 border border-[#b3122a]/15 bg-white p-5">
           <h2 className="font-mono text-[9px] uppercase tracking-[.2em] text-[#7d656c]">Completing your payment</h2>

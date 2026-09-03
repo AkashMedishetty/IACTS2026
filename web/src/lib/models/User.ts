@@ -84,6 +84,14 @@ export interface IUser extends Document {
       complimentary?: boolean
     }
     registrationDate: Date
+    /** Delivery state of the confirmation email. A failure here never blocks
+     *  the registration itself — it is recorded so admin can retry. */
+    confirmationEmail?: {
+      sent: boolean
+      sentAt?: Date
+      attemptedAt?: Date
+      error?: string
+    }
     confirmedDate?: Date
     paymentDate?: Date
     paymentType?: 'regular' | 'pending' | 'online' | 'bank-transfer' | 'complementary' | 'sponsored' | 'complimentary'
@@ -261,6 +269,12 @@ const UserSchema = new Schema<IUser>({
     registrationDate: {
       type: Date,
       default: Date.now
+    },
+    confirmationEmail: {
+      sent: { type: Boolean, default: false },
+      sentAt: { type: Date },
+      attemptedAt: { type: Date },
+      error: { type: String }
     },
     confirmedDate: Date,
     paymentDate: Date,
