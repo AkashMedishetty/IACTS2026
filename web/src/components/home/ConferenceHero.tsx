@@ -4,21 +4,17 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { conference, days, secretariat } from "@/data/conference";
-import { STATS } from "@/lib/constants";
+import { STATS, NAV_ITEMS } from "@/lib/constants";
 import type { InteractionState } from "@/components/anatomy/AnatomyParticles";
 
 const AnatomyScene = dynamic(() => import("@/components/anatomy/AnatomyScene"), {
   ssr: false,
 });
 
-const navigation = [
-  ["About", "#about"],
-  ["Programme", "#programme"],
-  ["Highlights", "#highlights"],
-  ["People", "#committee"],
-  ["Abstracts", "#abstracts"],
-  ["Venue", "#venue"],
-] as const;
+/* Real routes, not on-page anchors — every nav item has its own page. */
+const navigation = NAV_ITEMS.filter((n) =>
+  ["About", "Programme", "Workshops", "Faculty", "Abstracts", "Fees", "Venue"].includes(n.label),
+).map((n) => [n.label, n.path] as const);
 
 const chapters = [
   { short: "Cloud", label: "Point cloud", at: 0 },

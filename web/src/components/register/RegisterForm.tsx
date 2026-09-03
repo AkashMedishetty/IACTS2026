@@ -58,10 +58,32 @@ export default function RegisterForm() {
     checkOut: acc.checkOutBy,
   });
   const [errors, setErrors] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [screenshot, setScreenshot] = useState<{ url: string; name: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<null | { registrationId: string; name: string; amount: number; emailDelivered: boolean }>(null);
 
   const set = (k: string, val: any) => setV((p) => ({ ...p, [k]: val }));
+
+  async function uploadScreenshot(file: File) {
+    setUploading(true);
+    setErrors([]);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/upload/payment-screenshot", { method: "POST", body });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setErrors([data.message || "Could not upload that image. Please try again."]);
+        return;
+      }
+      setScreenshot({ url: data.data.url, name: file.name });
+    } catch {
+      setErrors(["Could not upload the screenshot. Check your connection and try again."]);
+    } finally {
+      setUploading(false);
+    }
+  }
 
   const selectedCategory = categories.find((c) => c.key === v.type);
   const price = useMemo(
@@ -127,7 +149,11 @@ export default function RegisterForm() {
               ? { required: true, roomType: v.roomType, checkIn: v.checkIn, checkOut: v.checkOut }
               : { required: false },
           },
-          payment: { method: v.paymentMethod },
+          payment: {
+            method: v.paymentMethod,
+            bankTransferUTR: v.paymentMethod === "bank-transfer" ? (v.utr || "").trim() : undefined,
+            screenshotUrl: v.paymentMethod === "bank-transfer" ? screenshot?.url : undefined,
+          },
         }),
       });
       const data = await res.json();
@@ -321,6 +347,33 @@ export default function RegisterForm() {
                 <span className="mt-1 block text-[12px] leading-[1.6] text-[#614d53]">Your place is held as pending until payment is received.</span>
               </span>
             </label>
+            {v.paymentMethod === "bank-transfer" ? (
+              <div className="grid gap-4 border border-[#b3122a]/15 bg-white p-4 sm:grid-cols-2">
+                <p className="sm:col-span-2 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">
+                  Proof of payment — optional now, required before your place is confirmed
+                </p>
+                <Field label="UTR / Transaction reference" hint="The reference from your NEFT, IMPS or UPI payment.">
+                  <input className={inputCls} value={v.utr || ""} onChange={(e) => set("utr", e.target.value)} placeholder="e.g. UTR123456789" />
+                </Field>
+                <div>
+                  <span className={labelCls}>Payment screenshot</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    className="mt-1.5 block w-full text-[12px] text-[#614d53] file:mr-3 file:border-0 file:bg-[#b3122a] file:px-4 file:py-2 file:font-mono file:text-[9px] file:uppercase file:tracking-[.14em] file:text-white"
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadScreenshot(f); }}
+                  />
+                  <span className="mt-1 block text-[11px] leading-4 text-[#7d656c]">
+                    {uploading ? "Uploading…" : screenshot ? `Attached: ${screenshot.name}` : "JPEG, PNG, GIF or WebP. Max 5 MB."}
+                  </span>
+                </div>
+                <p className="sm:col-span-2 text-[11px] leading-[1.6] text-[#7d656c]">
+                  If you have not paid yet, leave these blank — you will receive the account details and can send the
+                  reference to the secretariat afterwards.
+                </p>
+              </div>
+            ) : null}
+
             <label className="mt-2 flex cursor-pointer items-start gap-3">
               <input type="checkbox" className="mt-0.5 size-4 accent-[#b3122a]" checked={!!v.consent} onChange={(e) => set("consent", e.target.checked)} />
               <span className="text-[12px] leading-[1.7] text-[#614d53]">
