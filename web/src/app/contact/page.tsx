@@ -14,9 +14,15 @@ export default function Page() {
               {secretariat.department}<br />{secretariat.city}<br />
               <a href={`mailto:${conferenceConfig.contact.email}`} className="text-[#b3122a]">{conferenceConfig.contact.email}</a>
             </p>
-            {secretariat.phones.length === 0 ? (
-              <p className="mt-3 font-mono text-[9px] uppercase tracking-[.14em] text-[#7d656c]">Telephone numbers to be announced</p>
-            ) : null}
+            {secretariat.phones.map((p) => (
+              <a
+                key={p.number}
+                href={`tel:+91${p.number}`}
+                className="mt-2 block font-mono text-[0.64rem] uppercase leading-[1.7] tracking-[0.12em] text-[#b3122a] no-underline"
+              >
+                {p.name} · +91 {p.number}
+              </a>
+            ))}
           </div>
           <div className="border border-[#b3122a]/15 bg-white px-5 py-4">
             <p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">Venues</p>

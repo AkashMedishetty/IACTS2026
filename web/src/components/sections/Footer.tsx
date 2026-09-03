@@ -39,11 +39,15 @@ export default function Footer() {
               className="mt-2 inline-block text-[0.9rem] text-bone underline decoration-[var(--hair-gold)] underline-offset-4 transition-colors duration-500 hover:text-gold-lift">
               {secretariat.email}
             </a>
-            {secretariat.phones.length === 0 ? (
-              <p className="mt-2 font-mono text-[0.64rem] uppercase tracking-[0.14em] text-crimson-lift">
-                Telephone numbers to be announced
-              </p>
-            ) : null}
+            {secretariat.phones.map((p) => (
+              <a
+                key={p.number}
+                href={`tel:+91${p.number}`}
+                className="mt-2 block font-mono text-[0.64rem] uppercase leading-[1.7] tracking-[0.12em] text-[#b3122a] no-underline"
+              >
+                {p.name} · +91 {p.number}
+              </a>
+            ))}
           </div>
         </div>
 

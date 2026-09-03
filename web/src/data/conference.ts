@@ -151,11 +151,11 @@ export const patrons = [
 /** portrait: null until the committee supplies usable high-res files.
     The flyer crops are ~200-300px and are NOT web-usable. */
 export const leadership = [
-  { name: "Dr. G. Ravindra", role: "Organising Chairman", portrait: null },
-  { name: "Dr. Amaresh Rao Malempati", role: "Organising Secretary", portrait: null },
-  { name: "Dr. Tella Rama Krishna Dev", role: "Organising Co-Secretary", portrait: null },
-  { name: "Dr. Anita Bhalla", role: "Organising Co-Secretary", portrait: null },
-  { name: "Dr. Abhijeet Dashetwar", role: "Treasurer", portrait: null },
+  { name: "Dr. G. Ravindra", role: "Organising Chairman", portrait: "/committee/ravindra.png" },
+  { name: "Dr. Amaresh Rao Malempati", role: "Organising Secretary", portrait: "/committee/amaresh.png" },
+  { name: "Dr. Tella Rama Krishna Dev", role: "Organising Co-Secretary", portrait: "/committee/rama-krishna.png" },
+  { name: "Dr. Anita Bhalla", role: "Organising Co-Secretary", portrait: "/committee/anita.png" },
+  { name: "Dr. Abhijeet Dashetwar", role: "Treasurer", portrait: "/committee/abhijeet.png" },
 ] as const;
 
 export const executiveCommittee = [
@@ -179,6 +179,7 @@ export const venues = [
     full: "Nizam's Institute of Medical Sciences",
     hosts: "Pre-Conference Workshop — October 23",
     address: null,
+    image: "/venues/nims.jpg",
   },
   {
     id: "mcr",
@@ -186,6 +187,7 @@ export const venues = [
     full: "Dr. MCR HRD Institute Auditorium",
     hosts: "Scientific Programme — October 24 & 25",
     address: null,
+    image: "/venues/mcr.jpg",
   },
 ] as const;
 
@@ -193,8 +195,11 @@ export const secretariat = {
   department: "Department of CTVS, NIMS",
   city: "Hyderabad, Telangana",
   email: "nimscvts@gmail.com",
-  /** Both numbers are literally blank in the source flyer. */
-  phones: [] as string[],
+  /** Supplied by the committee (absent from the flyer itself). */
+  phones: [
+    { name: "Dr. Abhijeet M Dashetwar", number: "9866010604" },
+    { name: "Dr. K. Sahir Vardhan Reddy", number: "9177099793" },
+  ],
 } as const;
 
 /** Everything the site must NOT invent. Surfaces read this to render
@@ -210,7 +215,7 @@ export const pending = {
   sponsorshipTiers: null,
   accommodation: "early-bird-complimentary",
   sessionTimetable: null,
-  phones: null,
+  phones: "published",
 } as const;
 
 export const closingPromises = [

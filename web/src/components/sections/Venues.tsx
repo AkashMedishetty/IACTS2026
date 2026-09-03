@@ -37,6 +37,14 @@ export default function Venues() {
       <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(2rem,4vw,4rem)] lg:grid-cols-2">
         {venues.map((v, i) => (
           <article key={v.id} data-r className="border-t border-[var(--hair-gold)] pt-6">
+            {"image" in v && v.image ? (
+              <img
+                src={v.image as string}
+                alt={v.full}
+                loading="lazy"
+                className="mb-6 aspect-[16/10] w-full rounded-sm border border-[var(--hair)] object-cover"
+              />
+            ) : null}
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="u-eyebrow text-gold-lift">

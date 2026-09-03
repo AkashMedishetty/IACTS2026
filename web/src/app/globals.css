@@ -117,7 +117,7 @@ body::after {
   font-size: clamp(0.53rem, 0.7vw, 0.72rem);
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-muted-foreground);
 }
 
 /* gradient-clipped display type — the house headline treatment */

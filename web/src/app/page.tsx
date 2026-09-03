@@ -5,6 +5,7 @@ import Strata from "@/components/sections/Strata";
 import Committee from "@/components/sections/Committee";
 import Abstracts from "@/components/sections/Abstracts";
 import Venues from "@/components/sections/Venues";
+import Hyderabad from "@/components/sections/Hyderabad";
 import Faq from "@/components/sections/Faq";
 import RegisterCta from "@/components/sections/RegisterCta";
 import Footer from "@/components/sections/Footer";
@@ -21,6 +22,7 @@ export default function Page() {
             <Committee />
             <Abstracts />
             <Venues />
+            <Hyderabad />
             <Faq />
             <RegisterCta />
           </div>

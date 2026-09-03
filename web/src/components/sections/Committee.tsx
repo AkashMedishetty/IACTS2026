@@ -1,27 +1,33 @@
 import { patrons, leadership, executiveCommittee } from "@/data/conference";
 
 /**
- * Every `portrait` is null and will stay null: the flyer's headshots are
- * ~200-300px crops, unusable on web, and originals have not arrived. So this
- * communicates standing through composition instead of photography — engraved
- * nameplates, not placeholder avatars or grey initial-boxes that read as a
- * broken loading state.
- *
- * When portraits do arrive they slot in as `portrait: { src, alt }` on the
- * leadership entries; only Plate needs to change.
+ * Leadership portraits are supplied by the committee and render above each
+ * plate; entries without one fall back to the type-only treatment.
  */
 function Plate({
   name,
   role,
+  portrait,
   size = "lead",
 }: {
   name: string;
   role: string;
+  portrait?: string | null;
   size?: "patron" | "lead";
 }) {
   const big = size === "patron";
   return (
     <div data-r className="group relative border-t border-[var(--hair-gold)] pt-4">
+      {portrait ? (
+        <img
+          src={portrait}
+          alt={name}
+          loading="lazy"
+          className="mb-4 size-[104px] rounded-sm border border-[var(--hair)] bg-white object-cover object-top"
+          width={104}
+          height={104}
+        />
+      ) : null}
       <p className="u-eyebrow text-gold-lift">{role}</p>
       <p
         className={`mt-2 font-bold tracking-[-0.02em] transition-colors duration-500 group-hover:text-crimson-lift ${
@@ -68,7 +74,7 @@ export default function Committee() {
 
       <div className="mt-[clamp(2rem,5vh,3.5rem)] grid gap-[clamp(1.25rem,2.5vw,2.5rem)] sm:grid-cols-2 lg:grid-cols-3">
         {leadership.map((l) => (
-          <Plate key={l.name} name={l.name} role={l.role} />
+          <Plate key={l.name} name={l.name} role={l.role} portrait={l.portrait} />
         ))}
       </div>
 
