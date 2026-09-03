@@ -15,7 +15,7 @@ export default function MotionMast({ index }: { index: string }) {
           <span className="grid size-10 place-items-center rounded-full border border-crimson/35 font-mono text-[.58rem] font-bold tracking-[.1em] text-crimson">IA</span>
           <span className="text-[.72rem] font-semibold leading-[1.2]">
             Indian Association of
-            <small className="block font-normal text-muted">Cardiovascular–Thoracic Surgeons</small>
+            <small className="block font-normal text-muted-foreground">Cardiovascular–Thoracic Surgeons</small>
           </span>
         </a>
 
@@ -25,7 +25,7 @@ export default function MotionMast({ index }: { index: string }) {
 
         <nav className="hidden items-center gap-[clamp(1rem,2vw,2.25rem)] md:flex" aria-label="Primary">
           {links.map((label) => (
-            <a key={label} href="#" className="font-mono text-[.56rem] uppercase tracking-[.18em] text-muted no-underline hover:text-crimson">
+            <a key={label} href="#" className="font-mono text-[.56rem] uppercase tracking-[.18em] text-muted-foreground no-underline hover:text-crimson">
               {label}
             </a>
           ))}

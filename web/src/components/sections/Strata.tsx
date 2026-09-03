@@ -26,7 +26,7 @@ export default function Strata() {
           >
             Eight scientific <span className="u-serif">highlights</span>
           </h2>
-          <p className="mt-4 max-w-xl text-[0.92rem] leading-relaxed text-muted" data-r>
+          <p className="mt-4 max-w-xl text-[0.92rem] leading-relaxed text-muted-foreground" data-r>
             The eight areas the programme is built around, as published by the
             organising committee.
           </p>
@@ -60,7 +60,7 @@ export default function Strata() {
 
               <ul className="mt-3 grid list-none gap-1.5 border-t border-[var(--hair)] p-0 pt-3">
                 {item.points.map((point) => (
-                  <li key={point} className="text-[0.78rem] leading-snug text-muted">
+                  <li key={point} className="text-[0.78rem] leading-snug text-muted-foreground">
                     {point}
                   </li>
                 ))}

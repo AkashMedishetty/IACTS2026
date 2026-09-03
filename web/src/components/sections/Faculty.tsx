@@ -32,7 +32,7 @@ export default function Faculty() {
           >
             Invited <span className="u-serif">faculty</span>
           </h2>
-          <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-muted" data-r>
+          <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
             Five of the seven scientific formats are filled by invited faculty.
             The invitation list is not published yet — what is settled is the
             standard those sessions are held to.
@@ -75,7 +75,7 @@ export default function Faculty() {
               <li
                 key={l.title}
                 data-r
-                className="border border-[var(--hair)] px-3 py-1.5 text-[0.78rem] text-muted"
+                className="border border-[var(--hair)] px-3 py-1.5 text-[0.78rem] text-muted-foreground"
               >
                 {l.title}
               </li>

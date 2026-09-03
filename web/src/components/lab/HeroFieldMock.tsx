@@ -31,7 +31,7 @@ export default function HeroFieldMock() {
                 is now.
               </span>
             </h1>
-            <p className="mt-[clamp(1.4rem,3vh,2.6rem)] max-w-[37ch] text-[clamp(.92rem,1.2vw,1.18rem)] leading-[1.55] text-muted">
+            <p className="mt-[clamp(1.4rem,3vh,2.6rem)] max-w-[37ch] text-[clamp(.92rem,1.2vw,1.18rem)] leading-[1.55] text-muted-foreground">
               Three days where the next generation of cardiothoracic surgery
               moves from the screen to the surgeon&apos;s hands.
             </p>

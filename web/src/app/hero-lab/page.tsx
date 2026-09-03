@@ -39,7 +39,7 @@ export default function HeroLabPage() {
             Three different grammars.
           </span>
         </h1>
-        <p className="mt-7 max-w-[58ch] text-[clamp(.92rem,1.2vw,1.15rem)] leading-[1.65] text-muted">
+        <p className="mt-7 max-w-[58ch] text-[clamp(.92rem,1.2vw,1.15rem)] leading-[1.65] text-muted-foreground">
           These are composition specifications, not production routes. Each one
           uses the real conference content and real cardiac canvas, with a
           deliberate 360px geometry rather than a compressed desktop hero.
@@ -55,7 +55,7 @@ export default function HeroLabPage() {
               <span className="font-mono text-[.58rem] tracking-[.18em] text-crimson">{d.no}</span>
               <strong className="mt-5 block text-[clamp(1.25rem,2vw,1.8rem)]">{d.name}</strong>
               <span className="mt-2 block font-display italic text-crimson">{d.idea}</span>
-              <span className="mt-5 block text-[.78rem] leading-[1.55] text-muted">{d.note}</span>
+              <span className="mt-5 block text-[.78rem] leading-[1.55] text-muted-foreground">{d.note}</span>
             </a>
           ))}
         </nav>

@@ -80,7 +80,7 @@ export default function CardiacCycle() {
               <h1 className="m-0 max-w-[8ch] text-[clamp(3.2rem,8.5vw,9.5rem)] font-black uppercase leading-[.78] tracking-[-.08em]">
                 One cycle.<br /><span className="font-display font-normal italic normal-case text-crimson">The future now.</span>
               </h1>
-              <p className="max-w-[28ch] text-[.82rem] leading-[1.6] text-muted md:text-right">Skills on day one. Science on days two and three. One field moving as a system.</p>
+              <p className="max-w-[28ch] text-[.82rem] leading-[1.6] text-muted-foreground md:text-right">Skills on day one. Science on days two and three. One field moving as a system.</p>
             </div>
           </motion.div>
         </div>

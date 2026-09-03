@@ -29,8 +29,36 @@
   --color-gold: #b3122a;
   --color-gold-lift: #72091a;
   --color-venous: #c51a38;
-  --color-muted: #614d53;
   --color-faint: #7d656c;
+
+
+  /* ---- shadcn/ui token layer, mapped to the Living Operative Field palette.
+     The ported admin/dashboard UI is written against these names. ---- */
+  --color-background: #fffdfc;
+  --color-foreground: #160a0d;
+  --color-card: #ffffff;
+  --color-card-foreground: #160a0d;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #160a0d;
+  --color-primary: #b3122a;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f8e9ed;
+  --color-secondary-foreground: #5f0717;
+  --color-muted: #f8e9ed;
+  --color-muted-foreground: #614d53;
+  --color-accent: #f8e9ed;
+  --color-accent-foreground: #b3122a;
+  --color-destructive: #c81e1e;
+  --color-destructive-foreground: #ffffff;
+  --color-border: rgba(95, 7, 23, 0.15);
+  --color-input: rgba(95, 7, 23, 0.22);
+  --color-ring: #b3122a;
+  --color-chart-1: #b3122a;
+  --color-chart-2: #e32646;
+  --color-chart-3: #5f0717;
+  --color-chart-4: #c18d21;
+  --color-chart-5: #7d656c;
+  --radius: 0.5rem;
 
   --font-sans: var(--f-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--f-display), Georgia, serif;

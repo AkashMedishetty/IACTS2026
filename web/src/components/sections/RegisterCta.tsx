@@ -35,7 +35,7 @@ export default function RegisterCta() {
           <span className="u-serif block"> open.</span>
         </h2>
 
-        <p className="mt-5 max-w-[52ch] text-[clamp(.9rem,1.1vw,1.05rem)] leading-[1.7] text-muted" data-r>
+        <p className="mt-5 max-w-[52ch] text-[clamp(.9rem,1.1vw,1.05rem)] leading-[1.7] text-muted-foreground" data-r>
           {tierLabel(activeKey)} rates apply
           {conferenceConfig.payment.tiers[activeKey]?.endDate
             ? ` until ${fmtDate(conferenceConfig.payment.tiers[activeKey]?.endDate)}`
@@ -70,7 +70,7 @@ export default function RegisterCta() {
                     const amt = pricingTiers[k]?.categories?.[cat.key]?.amount ?? 0;
                     const active = k === activeKey;
                     return (
-                      <td key={k} className={`border-b py-3.5 text-right tabular-nums ${active ? "border-[#b3122a] text-[1.05rem] font-bold text-[#b3122a]" : "border-[var(--hair)] text-[0.95rem] text-muted"}`}>
+                      <td key={k} className={`border-b py-3.5 text-right tabular-nums ${active ? "border-[#b3122a] text-[1.05rem] font-bold text-[#b3122a]" : "border-[var(--hair)] text-[0.95rem] text-muted-foreground"}`}>
                         ₹{amt.toLocaleString("en-IN")}
                       </td>
                     );

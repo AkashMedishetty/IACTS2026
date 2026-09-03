@@ -40,7 +40,7 @@ export default function Sponsors() {
           >
             Industry <span className="u-serif">participation</span>
           </h2>
-          <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
+          <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
             Six technology domains are delivered as programme content, and five skills stations run on live equipment with delegate participation.
           </p>
         </header>
@@ -74,7 +74,7 @@ export default function Sponsors() {
                 <li
                   key={s.title}
                   data-r
-                  className="border border-[var(--hair)] px-3 py-1.5 text-[0.78rem] text-muted"
+                  className="border border-[var(--hair)] px-3 py-1.5 text-[0.78rem] text-muted-foreground"
                 >
                   {s.title} <span className="text-faint">· {s.tag}</span>
                 </li>
@@ -103,7 +103,7 @@ export default function Sponsors() {
 
             <div className="mt-6 border border-[var(--hair-gold)] p-[clamp(1.25rem,2.5vw,2rem)]" data-r>
               <p className="u-eyebrow">Register interest</p>
-              <p className="mt-2 text-[0.88rem] leading-relaxed text-muted">
+              <p className="mt-2 text-[0.88rem] leading-relaxed text-muted-foreground">
                 The prospectus is being prepared. Until it is published, the
                 organising secretariat is the only route.
               </p>

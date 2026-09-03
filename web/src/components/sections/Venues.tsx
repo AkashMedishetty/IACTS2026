@@ -28,7 +28,7 @@ export default function Venues() {
         <h2 className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]" data-r>
           Two venues across <span className="u-serif">three days</span>
         </h2>
-        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
+        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
           The pre-conference workshop is held at NIMS. The scientific programme is
           held at the Dr. MCR HRD Institute auditorium.
         </p>
@@ -45,7 +45,7 @@ export default function Venues() {
                 <h3 className="mt-3 text-[clamp(1.35rem,2.6vw,2.2rem)] font-extrabold tracking-[-0.02em]">
                   {v.name}
                 </h3>
-                <p className="mt-1.5 text-[0.88rem] text-muted">{v.full}</p>
+                <p className="mt-1.5 text-[0.88rem] text-muted-foreground">{v.full}</p>
                 <p className="mt-4 max-w-sm text-[0.9rem] leading-relaxed">{v.hosts}</p>
               </div>
               <Locator index={i} />
@@ -60,7 +60,7 @@ export default function Venues() {
 
       <div className="mt-[clamp(2.5rem,6vh,4.5rem)] border-t border-[var(--hair)] pt-6">
         <p className="u-eyebrow" data-r>The city</p>
-        <p className="mt-4 max-w-2xl text-[0.92rem] leading-relaxed text-muted" data-r>
+        <p className="mt-4 max-w-2xl text-[0.92rem] leading-relaxed text-muted-foreground" data-r>
           Hyderabad, Telangana. Both venues sit within the city, alongside the
           Charminar, Hussain Sagar, the Durgam Cheruvu bridge and T-Hub.
         </p>

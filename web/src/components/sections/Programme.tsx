@@ -22,7 +22,7 @@ export default function Programme() {
           Three days, two venues,
           <span className="u-serif"> one scientific programme</span>
         </h2>
-        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
+        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
           October 23 is the hands-on pre-conference workshop at NIMS. October 24 and 25
           move to the Dr. MCR HRD Institute auditorium for the scientific programme.
         </p>
@@ -45,13 +45,13 @@ export default function Programme() {
               </p>
               <p className="u-eyebrow mt-4 text-bone" data-r>{day.date}</p>
               <p className="u-eyebrow mt-1.5" data-r>{day.kicker}</p>
-              <p className="mt-4 max-w-xs text-[0.82rem] leading-relaxed text-muted" data-r>
+              <p className="mt-4 max-w-xs text-[0.82rem] leading-relaxed text-muted-foreground" data-r>
                 {day.venue}
               </p>
             </div>
 
             <div>
-              <p className="max-w-lg text-[0.95rem] leading-relaxed text-muted" data-r>
+              <p className="max-w-lg text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
                 {day.blurb}
               </p>
               <ul className="mt-[clamp(1.5rem,4vh,2.5rem)] list-none border-t border-[var(--hair)] p-0">

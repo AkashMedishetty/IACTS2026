@@ -53,7 +53,7 @@ export default function HeroSignalMock() {
             <h2 className="m-0 text-[clamp(2.1rem,5.5vw,6.5rem)] font-black uppercase leading-[.84] tracking-[-.07em]">
               Is now<span className="text-crimson">.</span>
             </h2>
-            <p className="mt-4 max-w-[40ch] text-[clamp(.82rem,1vw,1rem)] leading-[1.55] text-muted">
+            <p className="mt-4 max-w-[40ch] text-[clamp(.82rem,1vw,1rem)] leading-[1.55] text-muted-foreground">
               A three-day live reading of where cardiothoracic surgery is going—and
               the skills required to get there.
             </p>

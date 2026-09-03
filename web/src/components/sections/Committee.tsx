@@ -53,7 +53,7 @@ export default function Committee() {
         >
           Organising <span className="u-serif">committee</span>
         </h2>
-        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
+        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
           Convened by the Department of Cardiovascular &amp; Thoracic Surgery at
           NIMS, Hyderabad, under the patronage of the institute&apos;s Director
           and Dean.

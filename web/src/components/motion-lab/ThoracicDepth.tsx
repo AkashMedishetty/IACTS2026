@@ -90,7 +90,7 @@ export default function ThoracicDepth() {
                 The future is <span className="font-display font-normal italic normal-case text-crimson">inside.</span>
               </h1>
             </div>
-            <p className="max-w-[30ch] text-[clamp(.78rem,1vw,1rem)] leading-[1.6] text-muted md:text-right">
+            <p className="max-w-[30ch] text-[clamp(.78rem,1vw,1rem)] leading-[1.6] text-muted-foreground md:text-right">
               Drape. Thorax. Myocardium. Technology.<br />One scroll, four layers of surgical depth.
             </p>
           </motion.div>

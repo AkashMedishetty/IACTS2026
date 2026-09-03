@@ -9,7 +9,7 @@ export default function LabHeader({ index }: { index: string }) {
         </span>
         <p className="m-0 max-w-[24ch] text-[clamp(.62rem,.76vw,.78rem)] font-semibold leading-[1.25] tracking-[-.01em] text-bone">
           Indian Association of
-          <span className="block font-normal text-muted">
+          <span className="block font-normal text-muted-foreground">
             Cardiovascular–Thoracic Surgeons
           </span>
         </p>
@@ -29,7 +29,7 @@ export default function LabHeader({ index }: { index: string }) {
           <a
             key={label}
             href={href}
-            className="font-mono text-[clamp(.55rem,.6vw,.65rem)] uppercase tracking-[.18em] text-muted no-underline transition-colors hover:text-crimson"
+            className="font-mono text-[clamp(.55rem,.6vw,.65rem)] uppercase tracking-[.18em] text-muted-foreground no-underline transition-colors hover:text-crimson"
           >
             {label}
           </a>

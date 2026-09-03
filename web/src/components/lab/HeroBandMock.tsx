@@ -58,7 +58,7 @@ export default function HeroBandMock() {
                   onClick={() => setMode(m.id)}
                   className={`min-h-11 flex-1 border px-3 font-mono text-[.55rem] uppercase tracking-[.16em] transition-colors ${{
                     true: "border-crimson bg-crimson text-white",
-                    false: "border-black/15 bg-white/70 text-muted hover:border-crimson/40",
+                    false: "border-black/15 bg-white/70 text-muted-foreground hover:border-crimson/40",
                   }[String(mode === m.id) as "true" | "false"]}`}
                 >
                   {m.label}
@@ -70,7 +70,7 @@ export default function HeroBandMock() {
                 <p className="m-0 font-mono text-[.55rem] uppercase tracking-[.18em] text-crimson">
                   {active.label}
                 </p>
-                <p className="mt-1 text-[.78rem] text-muted">{active.note}</p>
+                <p className="mt-1 text-[.78rem] text-muted-foreground">{active.note}</p>
               </div>
               <p className="m-0 text-right font-mono text-[.52rem] uppercase leading-[1.7] tracking-[.14em] text-faint">
                 {EVENT_INFO.dateLabel}
@@ -81,7 +81,7 @@ export default function HeroBandMock() {
         </div>
       </div>
 
-      <p className="absolute right-[clamp(1rem,3vw,3rem)] top-[24%] z-20 hidden max-w-[24ch] text-right text-[clamp(.7rem,.8vw,.82rem)] leading-[1.55] text-muted lg:block">
+      <p className="absolute right-[clamp(1rem,3vw,3rem)] top-[24%] z-20 hidden max-w-[24ch] text-right text-[clamp(.7rem,.8vw,.82rem)] leading-[1.55] text-muted-foreground lg:block">
         The ventricular myocardium as a continuous band, coiled into a double
         helix and made visible as motion.
       </p>

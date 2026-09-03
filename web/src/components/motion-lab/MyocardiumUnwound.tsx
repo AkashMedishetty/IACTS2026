@@ -76,7 +76,7 @@ export default function MyocardiumUnwound() {
                 <article key={no} className="bg-[#f6f4f1]/90 p-[clamp(1rem,2.4vw,2.3rem)] backdrop-blur-md">
                   <span className="font-mono text-[.55rem] tracking-[.18em] text-crimson">{no}</span>
                   <h3 className="mt-5 text-[clamp(1.7rem,3vw,3.5rem)] font-black uppercase leading-none tracking-[-.055em]">{title}</h3>
-                  <p className="mt-2 text-[.78rem] text-muted">{note}</p>
+                  <p className="mt-2 text-[.78rem] text-muted-foreground">{note}</p>
                 </article>
               ))}
             </div>

@@ -35,7 +35,7 @@ export default function Abstracts() {
         >
           Abstract <span className="u-serif">submission</span>
         </h2>
-        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted" data-r>
+        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
           Two of the scientific programme&apos;s seven formats take submitted
           work. Submission itself opens with registration.
         </p>
@@ -76,7 +76,7 @@ export default function Abstracts() {
             {UNPUBLISHED.map(([t, d]) => (
               <li key={t} data-r className="border-b border-[var(--hair)] py-3">
                 <p className="text-[0.92rem] font-semibold">{t}</p>
-                <p className="mt-0.5 text-[0.8rem] text-muted">{d}</p>
+                <p className="mt-0.5 text-[0.8rem] text-muted-foreground">{d}</p>
               </li>
             ))}
           </ul>

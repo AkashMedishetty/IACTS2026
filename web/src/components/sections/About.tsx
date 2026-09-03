@@ -41,7 +41,7 @@ export default function About() {
           >
             <span className="u-word">{conference.positioning}</span>
           </h2>
-          <p className="mt-6 max-w-lg text-[1rem] leading-relaxed text-muted" data-r>
+          <p className="mt-6 max-w-lg text-[1rem] leading-relaxed text-muted-foreground" data-r>
             A Technocollege CME convened by {conference.organisedBy} under the{" "}
             {conference.association} — a three-day programme in which the
             technology reshaping cardiothoracic surgery is delivered through
@@ -68,7 +68,7 @@ export default function About() {
               >
                 <span className="font-mono text-[0.62rem] tabular-nums text-faint">{n}</span>
                 <span className="text-[0.95rem] font-semibold">{when}</span>
-                <span className="col-start-2 text-[0.85rem] text-muted sm:col-start-auto">
+                <span className="col-start-2 text-[0.85rem] text-muted-foreground sm:col-start-auto">
                   {what}
                 </span>
                 <span className="col-start-2 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-gold sm:col-start-auto">
@@ -99,7 +99,7 @@ export default function About() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 u-serif text-[clamp(1rem,1.8vw,1.35rem)] leading-snug text-muted" data-r>
+          <p className="mt-6 u-serif text-[clamp(1rem,1.8vw,1.35rem)] leading-snug text-muted-foreground" data-r>
             {conference.closing}
           </p>
         </aside>

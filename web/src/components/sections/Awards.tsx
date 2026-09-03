@@ -49,7 +49,7 @@ export default function Awards() {
               <p className="mt-2 u-eyebrow">{t.sub}</p>
               <ul className="mt-5 list-none border-t border-[var(--hair)] p-0">
                 {t.points.map((p) => (
-                  <li key={p} className="border-b border-[var(--hair)] py-2.5 text-[0.88rem] text-muted">
+                  <li key={p} className="border-b border-[var(--hair)] py-2.5 text-[0.88rem] text-muted-foreground">
                     {p}
                   </li>
                 ))}

@@ -107,7 +107,7 @@ export default function Faq() {
                   +
                 </span>
               </summary>
-              <p className="pb-5 pl-[calc(0.62rem+1rem)] pr-8 text-[0.9rem] leading-relaxed text-muted">
+              <p className="pb-5 pl-[calc(0.62rem+1rem)] pr-8 text-[0.9rem] leading-relaxed text-muted-foreground">
                 {a}
               </p>
             </details>
@@ -128,7 +128,7 @@ export default function Faq() {
               <li
                 key={q}
                 data-r
-                className="border-b border-[var(--hair)] py-2.5 text-[0.85rem] text-muted"
+                className="border-b border-[var(--hair)] py-2.5 text-[0.85rem] text-muted-foreground"
               >
                 {q}
               </li>

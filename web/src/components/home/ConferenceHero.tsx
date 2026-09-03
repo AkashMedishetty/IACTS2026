@@ -135,7 +135,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
 
   useEffect(() => {
     if (reducedMotion) return;
-    const timer = window.setTimeout(() => setEntryActive(false), 3_450);
+    const timer = window.setTimeout(() => setEntryActive(false), 2_100);
     return () => window.clearTimeout(timer);
   }, [reducedMotion]);
 
@@ -196,12 +196,12 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
             role="presentation"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.08, delay: 1.02 }}
+            transition={{ duration: 0.08, delay: 0.62 }}
           >
             <motion.div
               className="absolute inset-0 bg-[#fffdfc]"
               exit={{ scaleY: 0 }}
-              transition={{ duration: 0.95, ease: [0.76, 0, 0.24, 1] }}
+              transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
               style={{ transformOrigin: "50% 50%" }}
             />
             <motion.div
@@ -209,14 +209,14 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               exit={{ y: "-102%" }}
-              transition={{ scaleX: { duration: 0.72, ease: [0.76, 0, 0.24, 1] }, y: { duration: 1.05, ease: [0.76, 0, 0.24, 1] } }}
+              transition={{ scaleX: { duration: 0.45, ease: [0.76, 0, 0.24, 1] }, y: { duration: 0.65, ease: [0.76, 0, 0.24, 1] } }}
             />
             <motion.div
               className="absolute inset-x-0 bottom-0 h-1/2 origin-right bg-[#b3122a]"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               exit={{ y: "102%" }}
-              transition={{ scaleX: { duration: 0.72, ease: [0.76, 0, 0.24, 1] }, y: { duration: 1.05, ease: [0.76, 0, 0.24, 1] } }}
+              transition={{ scaleX: { duration: 0.45, ease: [0.76, 0, 0.24, 1] }, y: { duration: 0.65, ease: [0.76, 0, 0.24, 1] } }}
             />
 
             <motion.div
@@ -224,7 +224,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 1.06 }}
-              transition={{ delay: 0.58, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 0.34, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="flex items-start justify-between gap-6 font-mono text-[8px] uppercase leading-5 tracking-[.2em] text-white/70 sm:text-[10px]">
                 <span>IACTS Technocollege CME 2026</span>
@@ -238,7 +238,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
                       className="m-0 text-[clamp(2.9rem,11vw,10.5rem)] font-black uppercase leading-[1.02] tracking-[-.075em]"
                       initial={{ y: "108%" }}
                       animate={{ y: 0 }}
-                      transition={{ delay: 0.72 + index * 0.16, duration: 0.86, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ delay: 0.4 + index * 0.1, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     >
                       {line}
                     </motion.p>
@@ -248,7 +248,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
                   className="mt-[clamp(1rem,2.4vw,2rem)] h-px w-full origin-left bg-white/70"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ delay: 1.12, duration: 0.9, ease: [0.65, 0, 0.35, 1] }}
+                  transition={{ delay: 0.66, duration: 0.55, ease: [0.65, 0, 0.35, 1] }}
                 />
               </div>
 
@@ -263,7 +263,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ delay: 0.48, duration: 1.55, ease: [0.65, 0, 0.35, 1] }}
+              transition={{ delay: 0.3, duration: 0.95, ease: [0.65, 0, 0.35, 1] }}
             />
 
             <button

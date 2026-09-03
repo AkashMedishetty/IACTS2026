@@ -50,7 +50,7 @@ export default function Concept1() {
               </span>
               <p className="m-0 text-[clamp(8.5px,.72vw,12px)] font-semibold leading-[1.35]">
                 Indian Association of
-                <span className="block font-normal text-muted">Cardiovascular-Thoracic Surgeons</span>
+                <span className="block font-normal text-muted-foreground">Cardiovascular-Thoracic Surgeons</span>
               </p>
             </div>
             <div className="hidden items-center gap-[clamp(14px,1.9vw,34px)] lg:flex">

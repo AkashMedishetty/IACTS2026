@@ -23,18 +23,18 @@ export default function Footer() {
           <div data-r>
             <p className="u-eyebrow text-gold-lift">Dates</p>
             <p className="mt-2 text-[0.9rem]">{EVENT_INFO.dateLabel}</p>
-            <p className="text-[0.9rem] text-muted">{EVENT_INFO.city}</p>
+            <p className="text-[0.9rem] text-muted-foreground">{EVENT_INFO.city}</p>
           </div>
           {venues.map((v) => (
             <div key={v.id} data-r>
               <p className="u-eyebrow text-gold-lift">{v.name}</p>
-              <p className="mt-2 text-[0.9rem] text-muted">{v.hosts}</p>
+              <p className="mt-2 text-[0.9rem] text-muted-foreground">{v.hosts}</p>
             </div>
           ))}
           <div data-r>
             <p className="u-eyebrow text-gold-lift">Secretariat</p>
-            <p className="mt-2 text-[0.9rem] text-muted">{secretariat.department}</p>
-            <p className="text-[0.9rem] text-muted">{secretariat.city}</p>
+            <p className="mt-2 text-[0.9rem] text-muted-foreground">{secretariat.department}</p>
+            <p className="text-[0.9rem] text-muted-foreground">{secretariat.city}</p>
             <a href={`mailto:${secretariat.email}`}
               className="mt-2 inline-block text-[0.9rem] text-bone underline decoration-[var(--hair-gold)] underline-offset-4 transition-colors duration-500 hover:text-gold-lift">
               {secretariat.email}
