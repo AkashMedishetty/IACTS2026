@@ -189,7 +189,7 @@ export default function Nav() {
                 onClick={() => setOpen(false)}
                 className="u-eyebrow inline-block border border-[var(--hair-gold)] px-4 py-3 text-crimson"
               >
-                Register · Opening soon
+                Register
               </a>
             </span>
             <p className="u-eyebrow mt-10">{conference.dates.label} · {conference.city}</p>

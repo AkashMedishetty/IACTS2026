@@ -54,9 +54,15 @@ export default function Faq() {
     ],
     [
       "Is registration open?",
-      conference.registrationStatus === "opening-soon"
-        ? "Not yet. Registration is opening soon; the fee schedule and delegate categories are published together with it."
-        : "Yes — see the registration section.",
+      "Yes. Early Bird rates run until 27 September 2026, Standard until 11 October 2026, and Spot registration is available at the venue. Early Bird registrations include complimentary twin-sharing accommodation.",
+    ],
+    [
+      "What does registration cost?",
+      "Residents/Trainees ₹3,000, IACTS Members ₹5,000 and Non-Members ₹7,000 at the Early Bird rate. Standard and Spot rates are higher — the full matrix is in the registration section.",
+    ],
+    [
+      "How do I pay?",
+      "By bank transfer (NEFT/IMPS/UPI), quoting the registration ID issued when you register. Payment can also be made at the registration desk. Your place is confirmed once the secretariat verifies the payment.",
     ],
     [
       "How do I reach the organisers?",

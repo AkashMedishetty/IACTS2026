@@ -318,7 +318,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
 
           <div className="flex items-center gap-2">
             <a href="/register" className="hidden min-h-9 items-center gap-2 rounded-full bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.16em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
-              Registration · Soon <Arrow />
+              Register <Arrow />
             </a>
             <button
               type="button"
@@ -450,7 +450,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
 
             <div className="border border-[#b3122a]/15 bg-white/[0.9] px-3 py-3 backdrop-blur-sm">
               <p className="font-mono text-[8px] uppercase tracking-[.16em] text-[#7d656c]">
-                Registration status<br /><span className="text-[#b3122a]">Opening soon · fees to be announced</span>
+                Registration<br /><span className="text-[#b3122a]">Open now · Early Bird until 27/09/2026</span>
               </p>
             </div>
           </div>

@@ -18,7 +18,7 @@ export const conference = {
   dates: { start: "2026-10-23", end: "2026-10-25", label: "23 — 25 October 2026" },
   city: "Hyderabad, India",
   organisedBy: "Department of CTVS, NIMS Hyderabad",
-  registrationStatus: "opening-soon" as const,
+  registrationStatus: "open" as const,
 } as const;
 
 export const days = [
@@ -200,14 +200,15 @@ export const secretariat = {
 /** Everything the site must NOT invent. Surfaces read this to render
     honest "announced soon" states instead of placeholder values. */
 export const pending = {
-  registrationFees: null,
-  delegateCategories: null,
+  /* Published — see config/pricing.config.ts for the authoritative matrix. */
+  registrationFees: "published",
+  delegateCategories: "published",
   abstractDeadline: null,
   abstractRules: null,
   cmeCreditHours: null,
   accreditingCouncil: null,
   sponsorshipTiers: null,
-  accommodation: null,
+  accommodation: "early-bird-complimentary",
   sessionTimetable: null,
   phones: null,
 } as const;
