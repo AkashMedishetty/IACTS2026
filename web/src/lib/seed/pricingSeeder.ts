@@ -6,6 +6,7 @@
 
 import { conferenceConfig, ConferenceConfig } from '../../config/conference.config'
 import Configuration from '../models/Configuration'
+import { pricingTiers as configuredPricing } from '../../config/pricing.config'
 
 /**
  * Generate pricing categories dynamically from conference config
@@ -34,101 +35,38 @@ function generatePricingCategories(config: ConferenceConfig) {
  */
 export function generateDefaultPricing(config: ConferenceConfig) {
   const tiers: Record<string, any> = {}
-  
-  // Early Bird Tier
-  if (config.payment.tiers.earlyBird?.enabled) {
+  const tierKeys = ['earlyBird', 'regular', 'onsite'] as const
+
+  for (const tierKey of tierKeys) {
+    const window = config.payment.tiers[tierKey]
+    if (!window?.enabled) continue
+
+    const source = configuredPricing[tierKey]
     const categories = generatePricingCategories(config)
-    
-    // Set default amounts (can be customized)
-    Object.keys(categories).forEach(key => {
-      if (key.includes('member') || key.includes('cvsi')) {
-        categories[key].amount = 8000
-      } else if (key.includes('student') || key.includes('resident')) {
-        categories[key].amount = 5000
-      } else if (key.includes('international')) {
-        categories[key].amount = 300 // USD
-      } else if (key.includes('complimentary') || key.includes('sponsored')) {
-        categories[key].amount = 0
-      } else {
-        categories[key].amount = 10000 // Default non-member
-      }
+
+    // Amounts come from config/pricing.config.ts — the published fee matrix.
+    // Anything not priced there stays 0 rather than being guessed.
+    Object.keys(categories).forEach((catKey) => {
+      const configured = source?.categories?.[catKey]
+      categories[catKey].amount = typeof configured?.amount === 'number' ? configured.amount : 0
+      if (configured?.description) categories[catKey].description = configured.description
+      if (configured?.label) categories[catKey].label = configured.label
     })
-    
-    tiers.earlyBird = {
-      id: 'early-bird',
-      name: config.payment.tiers.earlyBird.label,
-      description: 'Save with early registration',
-      startDate: config.payment.tiers.earlyBird.startDate,
-      endDate: config.payment.tiers.earlyBird.endDate,
+
+    tiers[tierKey] = {
+      id: source?.id || tierKey,
+      name: window.label || source?.name || tierKey,
+      description: source?.description || '',
+      startDate: window.startDate,
+      endDate: window.endDate,
       isActive: true,
-      categories
+      categories,
     }
   }
-  
-  // Regular Tier
-  if (config.payment.tiers.regular?.enabled) {
-    const categories = generatePricingCategories(config)
-    
-    Object.keys(categories).forEach(key => {
-      if (key.includes('member') || key.includes('cvsi')) {
-        categories[key].amount = 10000
-      } else if (key.includes('student') || key.includes('resident')) {
-        categories[key].amount = 7000
-      } else if (key.includes('international')) {
-        categories[key].amount = 400
-      } else if (key.includes('complimentary') || key.includes('sponsored')) {
-        categories[key].amount = 0
-      } else {
-        categories[key].amount = 12000
-      }
-    })
-    
-    tiers.regular = {
-      id: 'regular',
-      name: config.payment.tiers.regular.label,
-      description: 'Standard registration pricing',
-      startDate: config.payment.tiers.regular.startDate,
-      endDate: config.payment.tiers.regular.endDate,
-      isActive: true,
-      categories
-    }
-  }
-  
-  // Onsite/Late Tier
-  if (config.payment.tiers.onsite?.enabled) {
-    const categories = generatePricingCategories(config)
-    
-    Object.keys(categories).forEach(key => {
-      if (key.includes('member') || key.includes('cvsi')) {
-        categories[key].amount = 12000
-      } else if (key.includes('student') || key.includes('resident')) {
-        categories[key].amount = 9000
-      } else if (key.includes('international')) {
-        categories[key].amount = 500
-      } else if (key.includes('complimentary') || key.includes('sponsored')) {
-        categories[key].amount = 0
-      } else {
-        categories[key].amount = 15000
-      }
-    })
-    
-    tiers.onsite = {
-      id: 'onsite',
-      name: config.payment.tiers.onsite.label,
-      description: 'On-site registration pricing',
-      startDate: config.payment.tiers.onsite.startDate,
-      endDate: config.payment.tiers.onsite.endDate,
-      isActive: true,
-      categories
-    }
-  }
-  
+
   return tiers
 }
 
-/**
- * Seed pricing tiers to database
- */
 export async function seedPricingTiers(config: ConferenceConfig = conferenceConfig) {
   try {
     const pricing = generateDefaultPricing(config)

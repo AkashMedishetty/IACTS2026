@@ -185,6 +185,21 @@ export interface ConferenceConfig {
   }
   
   // Features Toggle
+  accommodation: {
+    enabled: boolean
+    /** Delegate ticks a box to request accommodation. */
+    optIn: boolean
+    /** Selectable nights are clamped to these (the conference dates). */
+    checkInFrom: string
+    checkOutBy: string
+    roomTypes: string[]
+    defaultRoomType: string
+    /** Early Bird delegates receive complimentary twin-sharing at the venue. */
+    complimentaryForTiers: string[]
+    complimentaryRoomType: string
+    note: string
+  }
+
   features: {
     userDashboard: boolean
     adminPanel: boolean
@@ -378,6 +393,20 @@ export const conferenceConfig: ConferenceConfig = {
     linkedin: ""
   },
 
+  // Accommodation — delegates opt in with a checkbox; nights are limited to
+  // the conference dates. Early Bird includes complimentary twin sharing.
+  accommodation: {
+    enabled: true,
+    optIn: true,
+    checkInFrom: "2026-10-23",
+    checkOutBy: "2026-10-25",
+    roomTypes: ["sharing", "single"],
+    defaultRoomType: "sharing",
+    complimentaryForTiers: ["earlyBird"],
+    complimentaryRoomType: "sharing",
+    note: "All Early Bird registrations include complimentary twin-sharing accommodation at the venue."
+  },
+
   features: {
     userDashboard: true,
     adminPanel: true,
@@ -505,7 +534,7 @@ export function getEmailSubject(type: string): string {
 /**
  * Get category label from key
  * Returns the label for a registration category, or the key itself if not found
- * Example: getCategoryLabel("cvsi-member") -> "CVSI Member"
+ * Example: getCategoryLabel("iacts-member") -> "IACTS Member"
  */
 export function getCategoryLabel(key: string): string {
   const category = conferenceConfig.registration.categories.find(c => c.key === key)
@@ -515,7 +544,7 @@ export function getCategoryLabel(key: string): string {
 /**
  * Get all valid category keys
  * Returns an array of all registration category keys defined in config
- * Example: ["cvsi-member", "consultant", "postgraduate", "international", "complimentary"]
+ * Example: ["resident", "iacts-member", "non-member", "complimentary"]
  */
 export function getCategoryKeys(): string[] {
   return conferenceConfig.registration.categories.map(c => c.key)

@@ -30,9 +30,9 @@ export async function GET(request: NextRequest) {
     // Sample data for preview
     const sampleData = {
       name: 'Dr. Sample Name',
-      registrationId: 'NV2026-PREVIEW',
+      registrationId: `${conferenceConfig.registrationPrefix}-PREVIEW`,
       institution: 'Sample Hospital',
-      category: 'CVSI Member',
+      category: conferenceConfig.registration.categories[0]?.label || 'Delegate',
       city: conferenceConfig.venue.city,
       country: conferenceConfig.venue.country
     }

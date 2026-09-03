@@ -5,6 +5,8 @@ import User from '@/lib/models/User'
 import { generateRegistrationId } from '@/lib/utils/generateId'
 import { EmailService } from '@/lib/email/service'
 import Razorpay from 'razorpay'
+import { sanitizeAccommodation } from '@/lib/accommodation'
+import { getCurrentTierKey } from '@/lib/registration'
 
 // Initialize Razorpay only if credentials are available
 let razorpay: Razorpay | null = null
@@ -150,18 +152,10 @@ export async function POST(request: NextRequest) {
           dietaryRequirements: p.dietaryRequirements || '',
           age: p.age ?? 18
         }))
-        if (registration?.accommodation?.required) {
-          existingUser.registration.accommodation = {
-            required: true,
-            roomType: registration.accommodation.roomType,
-            checkIn: registration.accommodation.checkIn,
-            checkOut: registration.accommodation.checkOut,
-            nights: registration.accommodation.nights || 0,
-            totalAmount: registration.accommodation.totalAmount || 0
-          }
-        } else {
-          existingUser.registration.accommodation = { required: false } as any
-        }
+        existingUser.registration.accommodation = sanitizeAccommodation(
+          registration?.accommodation,
+          { tierKey: getCurrentTierKey() },
+        ) as any
         await existingUser.save()
 
         // Create new Razorpay order
@@ -314,14 +308,9 @@ export async function POST(request: NextRequest) {
           dietaryRequirements: p.dietaryRequirements || '',
           age: p.age ?? 18
         })),
-        accommodation: registration?.accommodation?.required ? {
-          required: true,
-          roomType: registration.accommodation.roomType,
-          checkIn: registration.accommodation.checkIn,
-          checkOut: registration.accommodation.checkOut,
-          nights: registration.accommodation.nights || 0,
-          totalAmount: registration.accommodation.totalAmount || 0
-        } : { required: false },
+        accommodation: sanitizeAccommodation(registration?.accommodation, {
+          tierKey: getCurrentTierKey(),
+        }),
         registrationDate: new Date()
       },
       payment: payment ? {
