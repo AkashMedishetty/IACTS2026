@@ -15,6 +15,8 @@ import {
   CheckCircle, BookOpen, List, Layout, Clock, Brain, Stethoscope, Award
 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
+import { TOPICS_BY_SPECIALTY } from '@/lib/abstracts-taxonomy'
+import { SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 export function AbstractsSettingsManager() {
   const { toast } = useToast()
@@ -35,8 +37,7 @@ export function AbstractsSettingsManager() {
         const configData = {
           ...data.data,
           submittingForOptions: data.data.submittingForOptions || [
-            { key: 'arthroscopy', label: 'Arthroscopy', enabled: true },
-            { key: 'sports-medicine', label: 'Sports Medicine', enabled: true }
+            ...SPECIALTY_OPTIONS
           ],
           submissionCategories: data.data.submissionCategories || [
             { key: 'award-paper', label: 'Award Paper', enabled: true },
@@ -44,8 +45,7 @@ export function AbstractsSettingsManager() {
             { key: 'poster-presentation', label: 'Poster Presentation', enabled: true }
           ],
           topicsBySpecialty: data.data.topicsBySpecialty || {
-            'arthroscopy': ['Knee Arthroscopy', 'Shoulder Arthroscopy', 'Hip Arthroscopy', 'Elbow Arthroscopy', 'Wrist & Ankle Arthroscopy', 'Cartilage Repair', 'Miscellaneous'],
-            'sports-medicine': ['ACL / PCL Reconstruction', 'Meniscal Surgery', 'Rotator Cuff & Shoulder Instability', 'Sports Injuries', 'Rehabilitation & Biomechanics', 'Miscellaneous']
+            ...TOPICS_BY_SPECIALTY
           }
         }
         setConfig(configData)
@@ -88,7 +88,7 @@ export function AbstractsSettingsManager() {
   }
 
   // Topic management for specialties
-  const addTopic = (specialty: 'arthroscopy' | 'sports-medicine') => {
+  const addTopic = (specialty: string) => {
     setConfig({
       ...config,
       topicsBySpecialty: {
@@ -98,7 +98,7 @@ export function AbstractsSettingsManager() {
     })
   }
 
-  const removeTopic = (specialty: 'arthroscopy' | 'sports-medicine', index: number) => {
+  const removeTopic = (specialty: string, index: number) => {
     const newTopics = [...(config.topicsBySpecialty?.[specialty] || [])]
     newTopics.splice(index, 1)
     setConfig({
@@ -110,7 +110,7 @@ export function AbstractsSettingsManager() {
     })
   }
 
-  const updateTopic = (specialty: 'arthroscopy' | 'sports-medicine', index: number, value: string) => {
+  const updateTopic = (specialty: string, index: number, value: string) => {
     const newTopics = [...(config.topicsBySpecialty?.[specialty] || [])]
     newTopics[index] = value
     setConfig({
@@ -137,7 +137,7 @@ export function AbstractsSettingsManager() {
             TASCON 2026 Abstracts Configuration
           </CardTitle>
           <CardDescription>
-            Manage abstract submission settings for Arthroscopy and Sports Medicine specialties
+            Manage abstract submission settings for each subspecialty
           </CardDescription>
         </CardHeader>
       </Card>
@@ -272,7 +272,7 @@ export function AbstractsSettingsManager() {
               {config.submittingForOptions?.map((option: any, index: number) => (
                 <div key={option.key} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
                   <div className="flex items-center gap-3">
-                    {option.key === 'arthroscopy' ? (
+                    {option.key === SPECIALTY_OPTIONS[0]?.key ? (
                       <Brain className="h-5 w-5 text-blue-600" />
                     ) : (
                       <Stethoscope className="h-5 w-5 text-purple-600" />
@@ -296,7 +296,7 @@ export function AbstractsSettingsManager() {
               <Alert className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
                 <AlertCircle className="h-4 w-4 text-blue-600" />
                 <AlertDescription className="text-blue-800 dark:text-blue-200">
-                  Users will select either Arthroscopy or Sports Medicine when submitting their abstract. 
+                  Submitters choose one of these subspecialties when submitting an abstract. 
                   The available topics will change based on their selection.
                 </AlertDescription>
               </Alert>
@@ -349,101 +349,47 @@ export function AbstractsSettingsManager() {
         {/* Topics Tab */}
         <TabsContent value="topics">
           <div className="space-y-6">
-            {/* Arthroscopy Topics */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Brain className="h-5 w-5 text-blue-600" />
-                    <div>
-                      <CardTitle>Arthroscopy Topics</CardTitle>
-                      <CardDescription>Topics available when user selects Arthroscopy</CardDescription>
+            {(config.submittingForOptions || []).map((opt: any) => (
+              <Card key={opt.key}>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Brain className="h-5 w-5 text-[#b3122a]" />
+                      <div>
+                        <CardTitle>{opt.label} Topics</CardTitle>
+                        <CardDescription>Topics available when a submitter selects {opt.label}</CardDescription>
+                      </div>
                     </div>
-                  </div>
-                  <Button onClick={() => addTopic('arthroscopy')} size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Topic
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {config.topicsBySpecialty?.['arthroscopy']?.map((topic: string, index: number) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                      {index + 1}
-                    </Badge>
-                    <Input
-                      value={topic}
-                      onChange={(e) => updateTopic('arthroscopy', index, e.target.value)}
-                      placeholder="Enter topic name"
-                      className="flex-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeTopic('arthroscopy', index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4" />
+                    <Button onClick={() => addTopic(opt.key)} size="sm" className="bg-[#b3122a] hover:bg-[#8c0b20] text-white">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Topic
                     </Button>
                   </div>
-                ))}
-                {(!config.topicsBySpecialty?.['arthroscopy'] || config.topicsBySpecialty['arthroscopy'].length === 0) && (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>No topics configured for Arthroscopy. Add topics above.</AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Sports Medicine Topics */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Stethoscope className="h-5 w-5 text-purple-600" />
-                    <div>
-                      <CardTitle>Sports Medicine Topics</CardTitle>
-                      <CardDescription>Topics available when user selects Sports Medicine</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {(config.topicsBySpecialty?.[opt.key] || []).map((topic: string, index: number) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Badge variant="outline">{index + 1}</Badge>
+                      <Input
+                        value={topic}
+                        onChange={(e) => updateTopic(opt.key, index, e.target.value)}
+                        placeholder="Enter topic name"
+                        className="flex-1"
+                      />
+                      <Button variant="ghost" size="icon" onClick={() => removeTopic(opt.key, index)} className="text-red-600 hover:text-red-700 hover:bg-red-50">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
-                  </div>
-                  <Button onClick={() => addTopic('sports-medicine')} size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Topic
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {config.topicsBySpecialty?.['sports-medicine']?.map((topic: string, index: number) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-                      {index + 1}
-                    </Badge>
-                    <Input
-                      value={topic}
-                      onChange={(e) => updateTopic('sports-medicine', index, e.target.value)}
-                      placeholder="Enter topic name"
-                      className="flex-1 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeTopic('sports-medicine', index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                {(!config.topicsBySpecialty?.['sports-medicine'] || config.topicsBySpecialty['sports-medicine'].length === 0) && (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>No topics configured for Sports Medicine. Add topics above.</AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
+                  ))}
+                  {(!config.topicsBySpecialty?.[opt.key] || config.topicsBySpecialty[opt.key].length === 0) && (
+                    <Alert>
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>No topics configured for {opt.label}. Add topics above.</AlertDescription>
+                    </Alert>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </TabsContent>
 

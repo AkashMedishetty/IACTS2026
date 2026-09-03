@@ -1,4 +1,5 @@
 import { conferenceConfig } from '@/config/conference.config'
+import { SPECIALTY_OPTIONS, TOPICS_BY_SPECIALTY } from '@/lib/abstracts-taxonomy'
 export interface AbstractsSettings {
   // Conference Structure
   // Submitting For options
@@ -91,34 +92,13 @@ export interface AbstractsSettings {
 // This is only used when database config is not found (e.g., fresh installation)
 export const defaultAbstractsSettings: AbstractsSettings = {
   // Conference Structure
-  submittingForOptions: [
-    { key: 'arthroscopy', label: 'Arthroscopy', enabled: true },
-    { key: 'sports-medicine', label: 'Sports Medicine', enabled: true }
-  ],
+  submittingForOptions: SPECIALTY_OPTIONS.map((o) => ({ ...o })),
   submissionCategories: [
     { key: 'award-paper', label: 'Award Paper', enabled: true },
     { key: 'free-paper', label: 'Free Paper', enabled: true },
     { key: 'poster-presentation', label: 'Poster Presentation', enabled: true }
   ],
-  topicsBySpecialty: {
-    'arthroscopy': [
-      'Knee Arthroscopy',
-      'Shoulder Arthroscopy',
-      'Hip Arthroscopy',
-      'Elbow Arthroscopy',
-      'Wrist & Ankle Arthroscopy',
-      'Cartilage Repair',
-      'Miscellaneous'
-    ],
-    'sports-medicine': [
-      'ACL / PCL Reconstruction',
-      'Meniscal Surgery',
-      'Rotator Cuff & Shoulder Instability',
-      'Sports Injuries',
-      'Rehabilitation & Biomechanics',
-      'Miscellaneous'
-    ]
-  },
+  topicsBySpecialty: { ...TOPICS_BY_SPECIALTY },
   // Legacy fields (kept for backward compatibility)
   tracks: [
     { key: 'free-paper', label: 'Free Paper', enabled: true },

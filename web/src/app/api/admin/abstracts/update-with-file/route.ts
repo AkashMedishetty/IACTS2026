@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest) {
 
     if (submittingFor) {
       originalValues.submittingFor = abstract.submittingFor
-      abstract.submittingFor = submittingFor as 'arthroscopy' | 'sports-medicine'
+      abstract.submittingFor = submittingFor as string
       changedFields.push('submittingFor')
     }
 

@@ -19,6 +19,7 @@ import {
 import { toast } from 'sonner'
 import { conferenceConfig } from '@/config/conference.config'
 import { defaultAbstractsSettings } from '@/lib/config/abstracts'
+import { SPECIALTY_OPTIONS } from '@/lib/abstracts-taxonomy'
 
 // Types
 interface AbstractForReview {
@@ -531,9 +532,8 @@ export function ReviewerDashboard() {
 
   // Get available topics based on specialty (config-driven)
   const getAvailableTopics = useCallback(() => {
-    if (filterSpecialty === 'arthroscopy') return topicsBySpecialty['arthroscopy']
-    if (filterSpecialty === 'sports-medicine') return topicsBySpecialty['sports-medicine']
-    return [...new Set([...topicsBySpecialty['arthroscopy'], ...topicsBySpecialty['sports-medicine']])]
+    if (filterSpecialty && filterSpecialty !== 'all') return topicsBySpecialty[filterSpecialty] ?? []
+    return [...new Set(Object.values(topicsBySpecialty).flat())]
   }, [filterSpecialty, topicsBySpecialty])
 
   // Filter abstracts
@@ -858,8 +858,10 @@ export function ReviewerDashboard() {
 
   // Get specialty icon
   const getSpecialtyIcon = (specialty: string | undefined) => {
-    if (specialty === 'arthroscopy') return <Brain className="w-3.5 h-3.5" />
-    if (specialty === 'sports-medicine') return <Stethoscope className="w-3.5 h-3.5" />
+    // Icon varies by configured specialty position; no specialty is special-cased.
+    const index = SPECIALTY_OPTIONS.findIndex((o) => o.key === specialty)
+    if (index === 0) return <Brain className="w-3.5 h-3.5" />
+    if (index === 1) return <Stethoscope className="w-3.5 h-3.5" />
     return <FileText className="w-3.5 h-3.5" />
   }
 

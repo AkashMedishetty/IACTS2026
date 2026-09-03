@@ -9,6 +9,7 @@ import { generateAbstractId } from '@/lib/utils/generateId'
 import { put } from '@vercel/blob'
 import { BLOB_TOKEN } from '@/lib/blob'
 import { v4 as uuidv4 } from 'uuid'
+import { DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 export async function POST(request: NextRequest) {
   try {
@@ -98,10 +99,10 @@ export async function POST(request: NextRequest) {
       registrationId: user.registration?.registrationId || 'N/A',
       title,
       authors,
-      submittingFor: (submittingFor || 'arthroscopy') as 'arthroscopy' | 'sports-medicine',
+      submittingFor: (submittingFor || DEFAULT_SPECIALTY_KEY) as string,
       submissionCategory: (submissionCategory || 'free-paper') as 'award-paper' | 'free-paper' | 'poster-presentation',
       submissionTopic: submissionTopic || 'General',
-      track: submittingFor || 'arthroscopy',
+      track: submittingFor || DEFAULT_SPECIALTY_KEY,
       category: submissionCategory || 'free-paper',
       keywords: keywords ? keywords.split(',').map(k => k.trim()) : [],
       wordCount,

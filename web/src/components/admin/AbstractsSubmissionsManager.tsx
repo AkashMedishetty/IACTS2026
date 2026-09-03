@@ -32,6 +32,7 @@ import {
   Save
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { topicsForSpecialty, SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 // TASCON 2026 Abstract Categories and Topics
 const SUBMISSION_CATEGORY_OPTIONS = [
@@ -40,24 +41,7 @@ const SUBMISSION_CATEGORY_OPTIONS = [
   { value: 'poster-presentation', label: 'Poster Presentation' }
 ]
 
-const ARTHROSCOPY_TOPICS = [
-  'Knee Arthroscopy',
-  'Shoulder Arthroscopy',
-  'Hip Arthroscopy',
-  'Elbow Arthroscopy',
-  'Wrist & Ankle Arthroscopy',
-  'Cartilage Repair',
-  'Miscellaneous'
-]
 
-const SPORTS_MEDICINE_TOPICS = [
-  'ACL / PCL Reconstruction',
-  'Meniscal Surgery',
-  'Rotator Cuff & Shoulder Instability',
-  'Sports Injuries',
-  'Rehabilitation & Biomechanics',
-  'Miscellaneous'
-]
 
 interface Review {
   _id: string
@@ -240,7 +224,7 @@ TASCON 2026 Organizing Committee`
     userEmail: '',
     title: '',
     authors: '',
-    submittingFor: 'arthroscopy',
+    submittingFor: DEFAULT_SPECIALTY_KEY,
     submissionCategory: 'free-paper',
     submissionTopic: '',
     introduction: '',
@@ -330,7 +314,7 @@ TASCON 2026 Organizing Committee`
       )
     }
 
-    // Submitting For filter (Arthroscopy/Sports Medicine)
+    // Subspecialty filter
     if (submittingForFilter !== 'all') {
       filtered = filtered.filter(abstract => abstract.submittingFor === submittingForFilter)
     }
@@ -636,7 +620,7 @@ TASCON 2026 Organizing Committee`
           userEmail: '',
           title: '',
           authors: '',
-          submittingFor: 'arthroscopy',
+          submittingFor: DEFAULT_SPECIALTY_KEY,
           submissionCategory: 'free-paper',
           submissionTopic: '',
           introduction: '',
@@ -1008,8 +992,7 @@ TASCON 2026 Organizing Committee`
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Specialties</SelectItem>
-                  <SelectItem value="arthroscopy">Arthroscopy</SelectItem>
-                  <SelectItem value="sports-medicine">Sports Medicine</SelectItem>
+                  {SPECIALTY_OPTIONS.map((o) => (<SelectItem key={o.key} value={o.key}>{o.label}</SelectItem>))}
                 </SelectContent>
               </Select>
 
@@ -1143,9 +1126,9 @@ TASCON 2026 Organizing Committee`
                             <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                               {abstract.submittingFor && (
                                 <Badge variant="outline" className={`text-xs sm:text-sm ${
-                                  abstract.submittingFor === 'arthroscopy' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200'
+                                  'bg-[#f8e9ed] text-[#b3122a] border-[#b3122a]/20'
                                 }`}>
-                                  {abstract.submittingFor === 'arthroscopy' ? 'Arthroscopy' : 'Sports Medicine'}
+                                  {specialtyLabel(abstract.submittingFor)}
                                 </Badge>
                               )}
                               <Badge variant="outline" className="text-xs sm:text-sm">
@@ -1482,8 +1465,7 @@ TASCON 2026 Organizing Committee`
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="arthroscopy">Arthroscopy</SelectItem>
-                  <SelectItem value="sports-medicine">Sports Medicine</SelectItem>
+                  {SPECIALTY_OPTIONS.map((o) => (<SelectItem key={o.key} value={o.key}>{o.label}</SelectItem>))}
                 </SelectContent>
               </Select>
             </div>
@@ -1513,7 +1495,7 @@ TASCON 2026 Organizing Committee`
                   <SelectValue placeholder="Select a topic" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(onBehalfForm.submittingFor === 'arthroscopy' ? ARTHROSCOPY_TOPICS : SPORTS_MEDICINE_TOPICS).map(topic => (
+                  {topicsForSpecialty(onBehalfForm.submittingFor).map(topic => (
                     <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                   ))}
                 </SelectContent>
@@ -1698,8 +1680,7 @@ TASCON 2026 Organizing Committee`
                   <SelectValue placeholder="Select specialty" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="arthroscopy">Arthroscopy</SelectItem>
-                  <SelectItem value="sports-medicine">Sports Medicine</SelectItem>
+                  {SPECIALTY_OPTIONS.map((o) => (<SelectItem key={o.key} value={o.key}>{o.label}</SelectItem>))}
                 </SelectContent>
               </Select>
             </div>
@@ -1729,8 +1710,7 @@ TASCON 2026 Organizing Committee`
                   <SelectValue placeholder="Select topic" />
                 </SelectTrigger>
                 <SelectContent>
-                  {(editForm.submittingFor === 'arthroscopy' ? ARTHROSCOPY_TOPICS : 
-                    editForm.submittingFor === 'sports-medicine' ? SPORTS_MEDICINE_TOPICS : []).map(topic => (
+                  {topicsForSpecialty(editForm.submittingFor).map(topic => (
                     <SelectItem key={topic} value={topic}>{topic}</SelectItem>
                   ))}
                 </SelectContent>

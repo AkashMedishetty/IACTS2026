@@ -29,6 +29,7 @@ import { VerifiedImportDialog } from "./VerifiedImportDialog"
 import { SponsoredImportDialog } from "./SponsoredImportDialog"
 import { RegistrationDetailsModal } from "./RegistrationDetailsModal"
 import { conferenceConfig, getCategoryLabel } from "@/config/conference.config"
+import { SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 // Theme colors from config
 const theme = conferenceConfig.theme
@@ -1109,7 +1110,7 @@ export function RegistrationTable() {
                     <SelectContent>
                       <SelectItem value="all">All Specializations</SelectItem>
                       <SelectItem value="Orthopaedics">Orthopaedics</SelectItem>
-                      <SelectItem value="Sports Medicine">Sports Medicine</SelectItem>
+                      {SPECIALTY_OPTIONS.map((o) => (<SelectItem key={o.key} value={o.label}>{o.label}</SelectItem>))}
                     </SelectContent>
                   </Select>
                   
@@ -1626,7 +1627,7 @@ export function RegistrationTable() {
                 <SelectContent>
                   <SelectItem value="not-specified">Not specified</SelectItem>
                   <SelectItem value="Orthopaedics">Orthopaedics</SelectItem>
-                  <SelectItem value="Sports Medicine">Sports Medicine</SelectItem>
+                  {SPECIALTY_OPTIONS.map((o) => (<SelectItem key={o.key} value={o.label}>{o.label}</SelectItem>))}
                 </SelectContent>
               </Select>
             </div>

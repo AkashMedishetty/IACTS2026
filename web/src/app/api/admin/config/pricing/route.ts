@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import connectDB from '@/lib/mongodb'
 import User from '@/lib/models/User'
 import Configuration from '@/lib/models/Configuration'
+import { workshops as configuredWorkshops } from '@/config/pricing.config'
 
 export async function GET(request: NextRequest) {
   try {
@@ -72,12 +73,7 @@ export async function GET(request: NextRequest) {
         faculty: { amount: 12000, currency: 'INR', label: 'Faculty Member' },
         accompanying: { amount: 3000, currency: 'INR', label: 'Accompanying Person' }
       },
-      workshops: [
-        { id: 'joint-replacement', name: 'Advanced Joint Replacement', amount: 2000 },
-        { id: 'arthroscopic', name: 'Arthroscopic Surgery Masterclass', amount: 2500 },
-        { id: 'spine-surgery', name: 'Spine Surgery Innovations', amount: 2000 },
-        { id: 'trauma-management', name: 'Trauma Management', amount: 1500 }
-      ],
+      workshops: configuredWorkshops.map((w) => ({ id: w.id, name: w.name, amount: w.amount })),
       accompanying_person: {
         amount: 4720,
         currency: 'INR'

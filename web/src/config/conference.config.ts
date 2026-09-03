@@ -151,7 +151,18 @@ export interface ConferenceConfig {
       end: string
     }
     maxAbstractsPerUser: number
-    
+
+    /** Subspecialty the work is submitted under, and its topic list.
+     *  These defaults are standard cardiothoracic subspecialties and are
+     *  editable in Admin -> Abstracts Settings; the committee has not yet
+     *  published an official taxonomy. */
+    specialties: {
+      key: string
+      label: string
+      enabled: boolean
+      topics: string[]
+    }[]
+
     // Tracks (e.g., Free Paper, Poster, E-Poster)
     tracks: {
       key: string
@@ -357,6 +368,69 @@ export const conferenceConfig: ConferenceConfig = {
       end: ""
     },
     maxAbstractsPerUser: 3,
+
+    specialties: [
+      {
+        key: "adult-cardiac",
+        label: "Adult Cardiac Surgery",
+        enabled: true,
+        topics: [
+          "Coronary Artery Bypass Grafting",
+          "Valve Repair & Replacement",
+          "Aortic Surgery",
+          "Arrhythmia Surgery",
+          "Mechanical Circulatory Support",
+          "Miscellaneous",
+        ],
+      },
+      {
+        key: "paediatric-congenital",
+        label: "Paediatric & Congenital",
+        enabled: true,
+        topics: [
+          "Neonatal & Infant Repair",
+          "Single Ventricle Palliation",
+          "Congenital Valve Surgery",
+          "Adult Congenital Heart Disease",
+          "Miscellaneous",
+        ],
+      },
+      {
+        key: "thoracic",
+        label: "Thoracic Surgery",
+        enabled: true,
+        topics: [
+          "Lung Resection & Thoracic Oncology",
+          "Airway & Tracheal Surgery",
+          "Oesophageal Surgery",
+          "Chest Wall & Mediastinum",
+          "Minimally Invasive & VATS",
+          "Miscellaneous",
+        ],
+      },
+      {
+        key: "vascular",
+        label: "Vascular Surgery",
+        enabled: true,
+        topics: [
+          "Aortic Aneurysm & Dissection",
+          "Endovascular Intervention",
+          "Peripheral Vascular Surgery",
+          "Miscellaneous",
+        ],
+      },
+      {
+        key: "transplant",
+        label: "Heart & Lung Transplantation",
+        enabled: true,
+        topics: [
+          "Heart Transplantation",
+          "Lung Transplantation",
+          "ECMO & Bridge to Transplant",
+          "Miscellaneous",
+        ],
+      },
+    ],
 
     tracks: [
       {

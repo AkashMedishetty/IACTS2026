@@ -32,6 +32,7 @@ import {
   MessageSquare
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 interface Review {
   _id: string
@@ -147,9 +148,9 @@ export function AbstractDetailsModal({
               <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-2">
                 {abstract.submittingFor && (
                   <Badge variant="outline" className={`text-xs sm:text-sm ${
-                    abstract.submittingFor === 'arthroscopy' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-purple-50 text-purple-700 border-purple-200'
+                    'bg-[#f8e9ed] text-[#b3122a] border-[#b3122a]/20'
                   }`}>
-                    {abstract.submittingFor === 'arthroscopy' ? 'Arthroscopy' : 'Sports Medicine'}
+                    {specialtyLabel(abstract.submittingFor)}
                   </Badge>
                 )}
                 <Badge variant="outline" className="text-xs sm:text-sm">

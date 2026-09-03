@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema, Types } from 'mongoose'
+import { conferenceConfig } from '@/config/conference.config'
 
 export type AbstractStatus =
   | 'submitted' // initial submitted
@@ -13,25 +14,11 @@ export type SubmittingFor = string
 // Submission Category options
 export type SubmissionCategory = 'award-paper' | 'free-paper' | 'poster-presentation'
 
-// Default submission topics (admin-configurable via abstracts settings)
-export const ARTHROSCOPY_TOPICS = [
-  'Knee Arthroscopy',
-  'Shoulder Arthroscopy',
-  'Hip Arthroscopy',
-  'Elbow Arthroscopy',
-  'Wrist & Ankle Arthroscopy',
-  'Cartilage Repair',
-  'Miscellaneous'
-] as const
+// Default submission topics come from conference config (admin-configurable).
+export const SPECIALTY_TOPICS: Record<string, string[]> = Object.fromEntries(
+  conferenceConfig.abstracts.specialties.map((s) => [s.key, [...s.topics]]),
+)
 
-export const SPORTS_MEDICINE_TOPICS = [
-  'ACL / PCL Reconstruction',
-  'Meniscal Surgery',
-  'Rotator Cuff & Shoulder Instability',
-  'Sports Injuries',
-  'Rehabilitation & Biomechanics',
-  'Miscellaneous'
-] as const
 
 export interface IAbstractFile {
   originalName: string
@@ -49,7 +36,7 @@ export interface IAbstract extends Document {
   registrationId: string
 
   // the conference Classification
-  submittingFor: SubmittingFor // e.g. Arthroscopy or Sports Medicine
+  submittingFor: SubmittingFor // subspecialty key from conferenceConfig.abstracts.specialties
   submissionCategory: SubmissionCategory // Award Paper, Free Paper, Poster Presentation
   submissionTopic: string // Topic based on submittingFor selection
 

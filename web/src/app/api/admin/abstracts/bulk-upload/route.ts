@@ -6,6 +6,8 @@ import Abstract from '@/lib/models/Abstract'
 import User from '@/lib/models/User'
 import { logAction } from '@/lib/audit/service'
 import { generateAbstractId } from '@/lib/utils/generateId'
+import { DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
+import { TOPICS_BY_SPECIALTY } from '@/lib/abstracts-taxonomy'
 
 interface CSVRow {
   userEmail: string
@@ -130,10 +132,10 @@ export async function POST(request: NextRequest) {
           userId: user._id,
           title: row.title,
           authors,
-          submittingFor: row.submittingFor || 'arthroscopy',
+          submittingFor: row.submittingFor || DEFAULT_SPECIALTY_KEY,
           submissionCategory: row.submissionCategory || 'free-paper',
           submissionTopic: row.submissionTopic || '',
-          track: row.submittingFor || 'arthroscopy',
+          track: row.submittingFor || DEFAULT_SPECIALTY_KEY,
           category: row.submissionCategory || 'free-paper',
           content: {
             introduction: row.introduction || '',
@@ -201,7 +203,7 @@ export async function POST(request: NextRequest) {
 // GET - Download CSV template
 export async function GET() {
   const template = `userEmail,title,authors,submittingFor,submissionCategory,submissionTopic,introduction,methods,results,conclusion,keywords
-user@example.com,"Sample Abstract Title","Author One; Author Two",arthroscopy,free-paper,"Knee Arthroscopy","Introduction text here","Methods text here","Results text here","Conclusion text here","keyword1, keyword2, keyword3"
+user@example.com,"Sample Abstract Title","Author One; Author Two",${DEFAULT_SPECIALTY_KEY},free-paper,"${(TOPICS_BY_SPECIALTY[DEFAULT_SPECIALTY_KEY]||[])[0] || ''}","Introduction text here","Methods text here","Results text here","Conclusion text here","keyword1, keyword2, keyword3"
 `
 
   return new NextResponse(template, {

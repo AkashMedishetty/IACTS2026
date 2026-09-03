@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import connectDB from "@/lib/mongodb"
 import User from "@/lib/models/User"
+import { workshops as configuredWorkshops } from '@/config/pricing.config'
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
     const workshops = [
       {
         id: "joint-replacement",
-        name: "Advanced Joint Replacement Techniques",
+        name: configuredWorkshops[0]?.name || "Workshop",
         instructor: "Dr. Sarah Johnson",
         maxSeats: 30
       },
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
       },
       {
         id: "minimally-invasive",
-        name: "Advanced Arthroscopy Techniques",
+        name: configuredWorkshops[1]?.name || "Workshop",
         instructor: "Dr. James Wilson",
         maxSeats: 35
       },

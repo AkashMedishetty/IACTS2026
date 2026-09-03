@@ -18,14 +18,12 @@ import { conferenceConfig } from '@/config/conference.config'
 import { Navigation } from '@/components/Navigation'
 import Link from 'next/link'
 import { upload } from '@vercel/blob/client'
+import { topicsForSpecialty, SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
 const TITLES = ['Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.']
 const DESIGNATIONS = ['Consultant', 'PG/Student']
 
-const SUBMITTING_FOR_OPTIONS = [
-  { value: 'arthroscopy', label: 'Arthroscopy' },
-  { value: 'sports-medicine', label: 'Sports Medicine' }
-]
+const SUBMITTING_FOR_OPTIONS = SPECIALTY_OPTIONS.map((o) => ({ value: o.key, label: o.label }))
 
 const SUBMISSION_CATEGORY_OPTIONS = [
   { value: 'award-paper', label: 'Award Paper' },
@@ -33,15 +31,7 @@ const SUBMISSION_CATEGORY_OPTIONS = [
   { value: 'poster-presentation', label: 'Poster Presentation' }
 ]
 
-const ARTHROSCOPY_TOPICS = [
-  'Knee Arthroscopy', 'Shoulder Arthroscopy', 'Hip Arthroscopy', 'Elbow Arthroscopy',
-  'Wrist & Ankle Arthroscopy', 'Cartilage Repair', 'Miscellaneous'
-]
 
-const SPORTS_MEDICINE_TOPICS = [
-  'ACL / PCL Reconstruction', 'Meniscal Surgery', 'Rotator Cuff & Shoulder Instability',
-  'Sports Injuries', 'Rehabilitation & Biomechanics', 'Miscellaneous'
-]
 
 export default function SubmitUnregisteredAbstractPage() {
   const router = useRouter()
@@ -158,7 +148,7 @@ export default function SubmitUnregisteredAbstractPage() {
         if (!value) error = 'Please select registration type'
         break
       case 'submittingFor':
-        if (!value) error = 'Please select Arthroscopy or Sports Medicine'
+        if (!value) error = 'Please select a subspecialty'
         break
       case 'submissionCategory':
         if (!value) error = 'Please select category'
@@ -190,8 +180,7 @@ export default function SubmitUnregisteredAbstractPage() {
   }
 
   const getTopicsForSelection = () => {
-    if (formData.submittingFor === 'arthroscopy') return ARTHROSCOPY_TOPICS
-    if (formData.submittingFor === 'sports-medicine') return SPORTS_MEDICINE_TOPICS
+    return topicsForSpecialty(formData.submittingFor)
     return []
   }
 
@@ -367,7 +356,7 @@ export default function SubmitUnregisteredAbstractPage() {
         break
         
       case 3:
-        if (!formData.submittingFor) { errors.submittingFor = 'Please select Arthroscopy or Sports Medicine'; hasErrors = true }
+        if (!formData.submittingFor) { errors.submittingFor = 'Please select a subspecialty'; hasErrors = true }
         if (!formData.submissionCategory) { errors.submissionCategory = 'Please select category'; hasErrors = true }
         if (!formData.submissionTopic) { errors.submissionTopic = 'Please select topic'; hasErrors = true }
         if (!formData.abstractTitle.trim()) { errors.abstractTitle = 'Abstract title is required'; hasErrors = true }
@@ -1023,7 +1012,7 @@ export default function SubmitUnregisteredAbstractPage() {
                           }}
                         >
                           <SelectTrigger className={`mt-1 bg-white/70 border-gray-200 rounded-xl ${touchedFields.submittingFor && fieldErrors.submittingFor ? 'border-red-500' : ''}`}>
-                            <SelectValue placeholder="Select Arthroscopy or Sports Medicine" />
+                            <SelectValue placeholder="Select a subspecialty" />
                           </SelectTrigger>
                           <SelectContent>
                             {SUBMITTING_FOR_OPTIONS.map(opt => (
@@ -1072,7 +1061,7 @@ export default function SubmitUnregisteredAbstractPage() {
                         disabled={!formData.submittingFor}
                       >
                         <SelectTrigger className={`mt-1 bg-white/70 border-gray-200 rounded-xl ${touchedFields.submissionTopic && fieldErrors.submissionTopic ? 'border-red-500' : ''}`}>
-                          <SelectValue placeholder={formData.submittingFor ? "Select topic" : "First select Arthroscopy or Sports Medicine"} />
+                          <SelectValue placeholder={formData.submittingFor ? "Select topic" : "First select a subspecialty"} />
                         </SelectTrigger>
                         <SelectContent>
                           {getTopicsForSelection().map(topic => (
@@ -1085,7 +1074,7 @@ export default function SubmitUnregisteredAbstractPage() {
                       )}
                       {formData.submittingFor && !fieldErrors.submissionTopic && (
                         <p className="text-xs text-gray-500 mt-1">
-                          Topics for {formData.submittingFor === 'arthroscopy' ? 'Arthroscopy' : 'Sports Medicine'}
+                          Topics for {specialtyLabel(formData.submittingFor)}
                         </p>
                       )}
                     </div>
