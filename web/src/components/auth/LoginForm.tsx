@@ -177,7 +177,7 @@ export function LoginForm({ callbackUrl = "/dashboard" }: LoginFormProps) {
               placeholder="Enter your email"
               value={formData.email}
               onChange={(e) => handleInputChange("email", e.target.value)}
-              className="pl-10 h-12 bg-white/70 border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+              className="pl-10 h-12 bg-white/70 border-gray-200 focus:border-[#c51a38] focus:ring-[#c51a38]"
               disabled={isLoading}
               required
               autoComplete="username"
@@ -195,7 +195,7 @@ export function LoginForm({ callbackUrl = "/dashboard" }: LoginFormProps) {
               placeholder="Enter your password"
               value={formData.password}
               onChange={(e) => handleInputChange("password", e.target.value)}
-              className="pl-10 pr-10 h-12 bg-white/70 border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+              className="pl-10 pr-10 h-12 bg-white/70 border-gray-200 focus:border-[#c51a38] focus:ring-[#c51a38]"
               disabled={isLoading}
               required
               autoComplete="current-password"
@@ -222,7 +222,7 @@ export function LoginForm({ callbackUrl = "/dashboard" }: LoginFormProps) {
         <div className="flex items-center justify-end">
           <Link
             href="/auth/forgot-password"
-            className="text-sm font-semibold text-pink-600 hover:text-pink-700"
+            className="text-sm font-semibold text-[#b3122a] hover:text-[#8c0b20]"
           >
             Forgot password?
           </Link>
@@ -230,7 +230,7 @@ export function LoginForm({ callbackUrl = "/dashboard" }: LoginFormProps) {
 
         <Button
           type="submit"
-          className="w-full h-12 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-lg"
+          className="w-full h-12 bg-gradient-to-r from-[#b3122a] to-[#b3122a] hover:from-[#b3122a] hover:to-[#8c0b20] text-white font-bold rounded-xl shadow-lg"
           disabled={isLoading}
         >
           {isLoading ? (

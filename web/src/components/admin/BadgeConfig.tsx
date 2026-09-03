@@ -233,7 +233,7 @@ export function BadgeConfig() {
                     ...prev,
                     template: { ...prev.template, logoUrl: e.target.value }
                   }))}
-                  placeholder="/images/logo.png"
+                  placeholder="/logo/iacts-logo.png"
                 />
               </div>
             </div>

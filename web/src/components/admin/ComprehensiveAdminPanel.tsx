@@ -1057,8 +1057,8 @@ export function ComprehensiveAdminPanel() {
                   </CardContent>
                 </Card>
 
-                <Card className="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200/50 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <Card className="group relative overflow-hidden bg-gradient-to-br from-purple-50 to-[#f8e9ed] border-purple-200/50 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-[#b3122a]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <CardContent className="p-6 relative">
                     <div className="flex items-center justify-between">
                       <div className="space-y-2">
@@ -1106,8 +1106,8 @@ export function ComprehensiveAdminPanel() {
                     <CardContent className="space-y-4">
                       {dashboardStats.registrationsByCategory && Object.entries(dashboardStats.registrationsByCategory).map(([category, count], index) => {
                         const percentage = dashboardStats.totalRegistrations > 0 ? (count / dashboardStats.totalRegistrations * 100) : 0
-                        const colors = ['bg-[#f0f3f8]0', 'bg-emerald-500', 'bg-amber-500', 'bg-violet-500', 'bg-rose-500']
-                        const bgColors = ['bg-[#f0f3f8]', 'bg-emerald-50', 'bg-amber-50', 'bg-violet-50', 'bg-rose-50']
+                        const colors = ['bg-[#f0f3f8]0', 'bg-emerald-500', 'bg-amber-500', 'bg-violet-500', 'bg-[#b3122a]']
+                        const bgColors = ['bg-[#f0f3f8]', 'bg-emerald-50', 'bg-amber-50', 'bg-violet-50', 'bg-[#f8e9ed]']
                         
                         return (
                           <motion.div

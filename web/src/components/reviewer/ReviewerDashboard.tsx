@@ -906,7 +906,7 @@ export function ReviewerDashboard() {
                 variant="outline"
                 size={focusMode ? 'sm' : 'default'}
                 className={`rounded-xl border-white/40 backdrop-blur-sm transition-all ${focusMode
-                  ? 'bg-pink-500/20 hover:bg-pink-500/30 border-pink-300'
+                  ? 'bg-[#b3122a]/20 hover:bg-[#b3122a]/30 border-[#e0a9b5]'
                   : 'bg-white/30 hover:bg-white/50'
                   }`}
                 title={focusMode ? 'Exit focus mode' : 'Enter focus mode (fullscreen)'}
@@ -1159,7 +1159,7 @@ export function ReviewerDashboard() {
                     transition={{ delay: index * 0.03 }}
                     onClick={() => handleSelectAbstract(abstract, index)}
                     className={`rounded-xl p-4 cursor-pointer transition-all hover:scale-[1.01] ${selectedIndex === index
-                      ? 'ring-2 ring-pink-400 bg-white/50'
+                      ? 'ring-2 ring-[#c51a38] bg-white/50'
                       : 'hover:bg-white/40'
                       }`}
                     style={glassCardLight}
@@ -1203,7 +1203,7 @@ export function ReviewerDashboard() {
           {selectedAbstract && !focusMode && (
             <div
               onMouseDown={handleMouseDown}
-              className="w-2 cursor-col-resize flex items-center justify-center hover:bg-pink-200/50 transition-colors z-10 mx-1"
+              className="w-2 cursor-col-resize flex items-center justify-center hover:bg-[#efd3da]/50 transition-colors z-10 mx-1"
               style={{ touchAction: 'none' }}
             >
               <GripVertical className="w-4 h-4 text-gray-400" />

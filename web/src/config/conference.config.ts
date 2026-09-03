@@ -459,7 +459,7 @@ export const conferenceConfig: ConferenceConfig = {
     fromName: "IACTS Technocollege CME 2026",
     replyTo: "contact@iactstechnocollegecme2026.com",
     footerText: "© 2026 IACTS Technocollege CME — Department of CTVS, NIMS Hyderabad.",
-    logoUrl: "/images/logo.png"
+    logoUrl: "/logo/iacts-logo.png"
   },
 
   social: {

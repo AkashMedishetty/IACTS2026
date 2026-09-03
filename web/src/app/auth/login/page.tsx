@@ -108,7 +108,7 @@ export default function LoginPage() {
           {/* Register link */}
           <p className="text-center mt-6 text-sm font-semibold text-gray-600">
             Don't have an account?{' '}
-            <a href="/register" className="text-pink-600 font-bold hover:text-pink-700 transition-colors">
+            <a href="/register" className="text-[#b3122a] font-bold hover:text-[#8c0b20] transition-colors">
               Register here
             </a>
           </p>

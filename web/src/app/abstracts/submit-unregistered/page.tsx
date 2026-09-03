@@ -492,7 +492,7 @@ export default function SubmitUnregisteredAbstractPage() {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #e8eef5 0%, #f0f4f8 25%, #f8f0f5 50%, #f0f4f8 75%, #e8eef5 100%)' }}>
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-pink-600" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#b3122a]" />
           <p className="text-gray-600 font-medium">Loading...</p>
         </div>
       </div>
@@ -550,7 +550,7 @@ export default function SubmitUnregisteredAbstractPage() {
                 
                 <div className="space-y-3">
                   <Link href="/login" className="block">
-                    <Button className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 rounded-xl shadow-lg">
+                    <Button className="w-full bg-gradient-to-r from-[#b3122a] to-[#b3122a] hover:from-[#b3122a] hover:to-[#8c0b20] text-white font-semibold py-3 rounded-xl shadow-lg">
                       Login to Check Status & Pay
                     </Button>
                   </Link>
@@ -585,7 +585,7 @@ export default function SubmitUnregisteredAbstractPage() {
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <Badge className="mb-4 bg-pink-100 text-pink-700 border-pink-200">
+            <Badge className="mb-4 bg-[#f8e9ed] text-[#8c0b20] border-[#efd3da]">
               <Sparkles className="w-3 h-3 mr-1" />
               New Registration
             </Badge>
@@ -620,7 +620,7 @@ export default function SubmitUnregisteredAbstractPage() {
                 {step === 1 && (
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 mb-6">
-                      <div className="w-10 h-10 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#b3122a] to-[#b3122a] rounded-xl flex items-center justify-center">
                         <User className="w-5 h-5 text-white" />
                       </div>
                       <div>
@@ -1143,7 +1143,7 @@ export default function SubmitUnregisteredAbstractPage() {
                       <div className="mt-2">
                         <label 
                           htmlFor="file-upload" 
-                          className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer bg-white/50 hover:bg-white/70 hover:border-pink-400 transition-all ${touchedFields.file && fieldErrors.file ? 'border-red-500' : 'border-gray-300'}`}
+                          className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer bg-white/50 hover:bg-white/70 hover:border-[#c51a38] transition-all ${touchedFields.file && fieldErrors.file ? 'border-red-500' : 'border-gray-300'}`}
                         >
                           <input
                             type="file"
@@ -1185,11 +1185,11 @@ export default function SubmitUnregisteredAbstractPage() {
                         />
                         <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer leading-relaxed">
                           I agree to the{' '}
-                          <Link href="/terms-conditions" className="text-pink-600 hover:underline font-medium" target="_blank">
+                          <Link href="/terms-conditions" className="text-[#b3122a] hover:underline font-medium" target="_blank">
                             Terms and Conditions
                           </Link>
                           {' '}and{' '}
-                          <Link href="/privacy-policy" className="text-pink-600 hover:underline font-medium" target="_blank">
+                          <Link href="/privacy-policy" className="text-[#b3122a] hover:underline font-medium" target="_blank">
                             Privacy Policy
                           </Link>
                           . I understand that my registration will be pending until payment is completed.
@@ -1236,7 +1236,7 @@ export default function SubmitUnregisteredAbstractPage() {
                     <Button 
                       type="button" 
                       onClick={handleNext}
-                      className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold rounded-xl shadow-lg"
+                      className="bg-gradient-to-r from-[#b3122a] to-[#b3122a] hover:from-[#b3122a] hover:to-[#8c0b20] text-white font-semibold rounded-xl shadow-lg"
                     >
                       Next
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -1245,7 +1245,7 @@ export default function SubmitUnregisteredAbstractPage() {
                     <Button 
                       type="submit" 
                       disabled={loading}
-                      className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold rounded-xl shadow-lg min-w-[180px]"
+                      className="bg-gradient-to-r from-[#b3122a] to-[#b3122a] hover:from-[#b3122a] hover:to-[#8c0b20] text-white font-semibold rounded-xl shadow-lg min-w-[180px]"
                     >
                       {loading ? (
                         <>

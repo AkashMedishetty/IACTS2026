@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* The ported admin UI carries ~700 `dark:` utilities. Tailwind 4 resolves that
+   variant from prefers-color-scheme by default, so the whole back office went
+   dark on any machine set to dark mode. Bind it to an explicit .dark class
+   instead — the site is a light system and never sets one. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ============================================================
    IACTS TECHNOCOLLEGE CME 2026
    LIGHT house system — crisp clinical white, NOT the cream/bone
@@ -79,7 +85,7 @@
 }
 
 * { box-sizing: border-box; min-width: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; color-scheme: light; }
 
 body {
   margin: 0;

@@ -55,7 +55,7 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/tascon-logo.png" alt={theme.config.shortName} className="h-11 w-11 object-contain" />
+            <img src="/logo/iacts-mark.png" alt={theme.config.shortName} className="h-11 w-11 object-contain" />
             <span className="text-xl font-bold" style={{ color: theme.primary }}>
               {theme.config.shortName}
             </span>

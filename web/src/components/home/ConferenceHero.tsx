@@ -39,12 +39,14 @@ function Arrow() {
 
 function Seal() {
   return (
-    <span className="grid size-8 shrink-0 place-items-center rounded-full border border-[#b3122a] bg-white" aria-hidden="true">
-      <svg viewBox="0 0 24 24" className="size-4 fill-[#b3122a]">
-        <path d="M12 21.3S2.2 14 2.2 8.4A5.9 5.9 0 0 1 12 3.9a5.9 5.9 0 0 1 9.8 4.5c0 5.6-9.8 12.9-9.8 12.9Z" />
-        <path d="M6.5 10.8h3l1.2-3.1 2.1 7.4 1.4-4.3h3.3" fill="none" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
+    <img
+      src="/logo/iacts-mark.png"
+      alt=""
+      aria-hidden="true"
+      width={36}
+      height={36}
+      className="size-9 shrink-0 object-contain"
+    />
   );
 }
 

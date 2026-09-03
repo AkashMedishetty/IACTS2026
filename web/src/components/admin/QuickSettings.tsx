@@ -135,8 +135,8 @@ export function QuickSettings() {
       label: 'Accompanying Persons',
       description: 'Allow registration of accompanying persons',
       icon: Settings,
-      color: 'text-pink-600 dark:text-pink-400',
-      bgColor: 'bg-pink-50 dark:bg-pink-900/20'
+      color: 'text-[#b3122a] dark:text-[#c51a38]',
+      bgColor: 'bg-[#f8e9ed] dark:bg-[#5f0717]/20'
     },
     {
       key: 'certificateGeneration' as keyof FeatureSettings,

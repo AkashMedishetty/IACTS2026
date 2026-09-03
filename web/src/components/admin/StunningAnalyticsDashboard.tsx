@@ -278,7 +278,7 @@ export function StunningAnalyticsDashboard() {
         </motion.div>
 
         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.3 }}>
-          <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500 text-white border-0 shadow-xl hover:shadow-2xl transition-all">
+          <Card className="relative overflow-hidden bg-gradient-to-br from-purple-500 to-[#b3122a] text-white border-0 shadow-xl hover:shadow-2xl transition-all">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between mb-4">
@@ -714,7 +714,7 @@ export function StunningAnalyticsDashboard() {
         <Card className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-pink-500" />
+              <Activity className="h-5 w-5 text-[#b3122a]" />
               Membership Status
             </CardTitle>
             <CardDescription>Member vs Non-Member breakdown</CardDescription>
@@ -796,7 +796,7 @@ export function StunningAnalyticsDashboard() {
       </div>
 
       {/* Quick Actions Panel */}
-      <Card className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20 border-2 border-blue-200 dark:border-blue-800">
+      <Card className="bg-gradient-to-r from-blue-50 via-purple-50 to-[#f8e9ed] dark:from-blue-900/20 dark:via-purple-900/20 dark:to-[#5f0717]/20 border-2 border-blue-200 dark:border-blue-800">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileSpreadsheet className="h-5 w-5 text-blue-500" />
@@ -832,7 +832,7 @@ export function StunningAnalyticsDashboard() {
             </Button>
             <Button 
               variant="outline" 
-              className="gap-2 bg-white dark:bg-slate-900 hover:bg-pink-50 dark:hover:bg-slate-800"
+              className="gap-2 bg-white dark:bg-slate-900 hover:bg-[#f8e9ed] dark:hover:bg-slate-800"
               onClick={() => exportToCSV(analyticsData.topInstitutions, 'institutions')}
             >
               <Building className="h-4 w-4" />
