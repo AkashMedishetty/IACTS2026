@@ -92,6 +92,13 @@ export interface IUser extends Document {
       attemptedAt?: Date
       error?: string
     }
+    /** Delivery state of the "payment received" pass, with the entry QR. */
+    paymentConfirmationEmail?: {
+      sent: boolean
+      sentAt?: Date
+      attemptedAt?: Date
+      error?: string
+    }
     confirmedDate?: Date
     paymentDate?: Date
     paymentType?: 'regular' | 'pending' | 'online' | 'bank-transfer' | 'complementary' | 'sponsored' | 'complimentary'
@@ -271,6 +278,12 @@ const UserSchema = new Schema<IUser>({
       default: Date.now
     },
     confirmationEmail: {
+      sent: { type: Boolean, default: false },
+      sentAt: { type: Date },
+      attemptedAt: { type: Date },
+      error: { type: String }
+    },
+    paymentConfirmationEmail: {
       sent: { type: Boolean, default: false },
       sentAt: { type: Date },
       attemptedAt: { type: Date },

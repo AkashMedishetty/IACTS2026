@@ -61,10 +61,36 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const [screenshot, setScreenshot] = useState<{ url: string; name: string } | null>(null);
+  const [emailTaken, setEmailTaken] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<null | { registrationId: string; name: string; amount: number; emailDelivered: boolean }>(null);
 
   const set = (k: string, val: any) => setV((p) => ({ ...p, [k]: val }));
+
+  /* Tell people the address is already registered while they are still on the
+     field, rather than after they have filled the whole form and submitted. */
+  async function checkEmailAvailable(value: string) {
+    const email = value.trim().toLowerCase();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email)) { setEmailTaken(false); return; }
+    setCheckingEmail(true);
+    try {
+      const res = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      // The endpoint reports availability; treat anything unclear as available
+      // so a network blip never blocks a legitimate registration.
+      const taken = data?.exists === true || data?.available === false || data?.data?.exists === true;
+      setEmailTaken(Boolean(taken));
+    } catch {
+      setEmailTaken(false);
+    } finally {
+      setCheckingEmail(false);
+    }
+  }
 
   async function uploadScreenshot(file: File) {
     setUploading(true);
@@ -116,6 +142,7 @@ export default function RegisterForm() {
     // Browser-only concerns the API cannot check
     if (v.password && v.password !== v.confirmPassword) e.push("Passwords do not match");
     if (!v.consent) e.push("Please accept the terms to continue");
+    if (emailTaken) e.push("That email is already registered — please sign in instead");
     return e;
   }
 
@@ -255,7 +282,20 @@ export default function RegisterForm() {
         ) : null}
 
         <Section n="01" title="Account">
-          <Field label="Email" required><input type="email" autoComplete="email" className={inputCls} value={v.email || ""} onChange={(e) => set("email", e.target.value)} /></Field>
+          <Field
+            label="Email"
+            required
+            hint={checkingEmail ? "Checking…" : emailTaken ? "This email is already registered — sign in instead." : undefined}
+          >
+            <input
+              type="email"
+              autoComplete="email"
+              className={`${inputCls} ${emailTaken ? "border-[#b3122a]" : ""}`}
+              value={v.email || ""}
+              onChange={(e) => { set("email", e.target.value); if (emailTaken) setEmailTaken(false); }}
+              onBlur={(e) => checkEmailAvailable(e.target.value)}
+            />
+          </Field>
           <Field label="Phone" required><input type="tel" autoComplete="tel" className={inputCls} value={v.phone || ""} onChange={(e) => set("phone", e.target.value)} /></Field>
           <Field label="Password" required hint="At least 8 characters."><input type="password" autoComplete="new-password" className={inputCls} value={v.password || ""} onChange={(e) => set("password", e.target.value)} /></Field>
           <Field label="Confirm password" required><input type="password" autoComplete="new-password" className={inputCls} value={v.confirmPassword || ""} onChange={(e) => set("confirmPassword", e.target.value)} /></Field>
