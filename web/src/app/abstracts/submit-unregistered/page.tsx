@@ -549,7 +549,7 @@ export default function SubmitUnregisteredAbstractPage() {
                 </Alert>
                 
                 <div className="space-y-3">
-                  <Link href="/login" className="block">
+                  <Link href="/auth/login" className="block">
                     <Button className="w-full bg-gradient-to-r from-[#b3122a] to-[#b3122a] hover:from-[#b3122a] hover:to-[#8c0b20] text-white font-semibold py-3 rounded-xl shadow-lg">
                       Login to Check Status & Pay
                     </Button>

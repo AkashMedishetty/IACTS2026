@@ -142,20 +142,20 @@ export class InvoiceGenerator {
         }
         
         .invoice-info h2 {
-            color: #0A3A6B;
+            color: #5f0717;
             font-size: 20px;
             margin-bottom: 8px;
         }
         
         .invoice-details {
-            background: #FCEFDF;
+            background: #fffdfc;
             padding: 14px;
             border-radius: 8px;
             margin-bottom: 18px;
         }
         
         .invoice-details h3 {
-            color: #0A3A6B;
+            color: #5f0717;
             margin-bottom: 10px;
             font-size: 16px;
         }
@@ -177,7 +177,7 @@ export class InvoiceGenerator {
         }
         
         .detail-value {
-            color: #0A3A6B;
+            color: #5f0717;
             font-size: 12px;
             margin-top: 2px;
         }
@@ -187,7 +187,7 @@ export class InvoiceGenerator {
         }
         
         .items-section h3 {
-            color: #0A3A6B;
+            color: #5f0717;
             margin-bottom: 12px;
             font-size: 16px;
         }
@@ -221,7 +221,7 @@ export class InvoiceGenerator {
         }
         
         .items-table tr:nth-child(even) {
-            background: #FCEFDF;
+            background: #fffdfc;
         }
         
         .text-right {
@@ -233,7 +233,7 @@ export class InvoiceGenerator {
         }
         
         .total-section {
-            background: #FCEFDF;
+            background: #fffdfc;
             padding: 12px;
             border-radius: 8px;
             margin-top: 12px;
@@ -249,7 +249,7 @@ export class InvoiceGenerator {
         .total-row.final {
             font-weight: 700;
             font-size: 14px;
-            color: #0A3A6B;
+            color: #5f0717;
             border-top: 2px solid #2563eb;
             padding-top: 8px;
             margin-top: 8px;

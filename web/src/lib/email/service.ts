@@ -377,7 +377,7 @@ export class EmailService {
 
         ${qrCodeBuffer ? `
         <div style="text-align: center; margin: 24px 0;">
-          <div style="display: inline-block; padding: 16px; background: #ffffff; border: 2px solid #C98500; border-radius: 10px;">
+          <div style="display: inline-block; padding: 16px; background: #ffffff; border: 2px solid #b3122a; border-radius: 10px;">
             <img src="cid:qr-code-embedded" alt="Registration QR Code" style="width: 180px; height: 180px; display: block;" />
             <p style="margin: 10px 0 0 0; font-size: 14px; font-weight: bold; color: #A56C00; font-family: 'Courier New', monospace;">${data.registrationId}</p>
           </div>
@@ -1048,7 +1048,7 @@ export class EmailService {
           
           <div style="text-align: center; margin: 30px 0;">
             <a href="${process.env.APP_URL || conferenceConfig.contact.website}/abstracts"
-               style="background-color: #C98500; color: #002552; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+               style="background-color: #b3122a; color: #b3122a; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
               📤 Submit Your Final Presentation
             </a>
             <p style="margin: 12px 0 0 0; color: #6b7280; font-size: 13px;">Visit the page and sign in with your registered email to upload the final file.</p>

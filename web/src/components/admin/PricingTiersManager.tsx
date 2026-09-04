@@ -497,7 +497,7 @@ export function PricingTiersManager() {
             
             {nextTier && (
               <div className="space-y-2">
-                <Label className="text-sm font-medium text-[#002552]">Next Tier</Label>
+                <Label className="text-sm font-medium text-[#160a0d]">Next Tier</Label>
                 <div className="p-4 bg-[#f0f3f8] border border-[#b0c1db] rounded-lg">
                   <h3 className="font-semibold">{nextTier.tier.name}</h3>
                   <p className="text-sm text-muted-foreground">{nextTier.tier.description}</p>

@@ -248,7 +248,7 @@ export function AdminAbstractsManager() {
                   <p className="text-sm font-medium text-midnight-600 dark:text-midnight-400">Free Papers</p>
                   <p className="text-2xl font-bold text-midnight-800 dark:text-midnight-100">{stats.freePaper}</p>
                 </div>
-                <Award className="w-8 h-8 text-[#002552]" />
+                <Award className="w-8 h-8 text-[#160a0d]" />
               </div>
             </CardContent>
           </Card>

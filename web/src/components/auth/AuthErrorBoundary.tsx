@@ -164,7 +164,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
             {this.state.isJWTError && this.state.retryCount < 3 && (
               <div className="flex items-center justify-center mb-4">
                 <RefreshCw className="w-4 h-4 animate-spin text-[#f0f3f8]0 mr-2" />
-                <span className="text-sm text-[#002552]">
+                <span className="text-sm text-[#160a0d]">
                   Attempting automatic recovery... ({this.state.retryCount + 1}/3)
                 </span>
               </div>
@@ -173,7 +173,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
             <div className="space-y-3">
               <button
                 onClick={this.handleManualRetry}
-                className="w-full bg-[#002552] text-white py-2 px-4 rounded-md hover:bg-[#002552] transition-colors"
+                className="w-full bg-[#b3122a] text-white py-2 px-4 rounded-md hover:bg-[#b3122a] transition-colors"
               >
                 Try Again
               </button>

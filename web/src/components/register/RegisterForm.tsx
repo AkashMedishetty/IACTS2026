@@ -5,6 +5,7 @@ import { conferenceConfig } from "@/config/conference.config";
 import { workshops as allWorkshops } from "@/config/pricing.config";
 import { computeRegistrationAmount, getCurrentTierKey, tierLabel } from "@/lib/registration";
 import { Arrow } from "@/components/site/SiteHeader";
+import { validateRegistration } from "@/lib/validation/registration";
 
 type Values = Record<string, any>;
 
@@ -92,19 +93,28 @@ export default function RegisterForm() {
   );
 
   function validate(): string[] {
-    const e: string[] = [];
-    if (!v.email?.trim()) e.push("Email is required");
-    else if (!/^\S+@\S+\.\S+$/.test(v.email)) e.push("Email looks invalid");
-    if (!v.password || v.password.length < 8) e.push("Password must be at least 8 characters");
-    if (v.password !== v.confirmPassword) e.push("Passwords do not match");
-    if (!v.firstName?.trim()) e.push("First name is required");
-    if (!v.lastName?.trim()) e.push("Last name is required");
-    if (!v.phone?.trim()) e.push("Phone number is required");
-    if (!v.institution?.trim()) e.push("Institution is required");
-    if (!v.designation) e.push("Designation is required");
-    if (!v.mciNumber?.trim()) e.push("Medical registration (MCI/NMC) number is required");
-    if (selectedCategory?.requiresMembership && !v.membershipNumber?.trim())
-      e.push(`${selectedCategory.label} requires a membership number`);
+    // Same contract the server enforces, so the two can never disagree.
+    const e = validateRegistration({
+      email: v.email,
+      password: v.password,
+      profile: {
+        firstName: v.firstName,
+        lastName: v.lastName,
+        phone: v.phone,
+        designation: v.designation,
+        institution: v.institution,
+        mciNumber: v.mciNumber,
+        address: { pincode: v.pincode },
+      },
+      registration: { type: v.type, membershipNumber: v.membershipNumber },
+      payment: {
+        method: v.paymentMethod,
+        bankTransferUTR: v.utr,
+        screenshotUrl: screenshot?.url,
+      },
+    });
+    // Browser-only concerns the API cannot check
+    if (v.password && v.password !== v.confirmPassword) e.push("Passwords do not match");
     if (!v.consent) e.push("Please accept the terms to continue");
     return e;
   }
@@ -343,9 +353,9 @@ export default function RegisterForm() {
             {v.paymentMethod === "bank-transfer" ? (
               <div className="grid gap-4 border border-[#b3122a]/15 bg-white p-4 sm:grid-cols-2">
                 <p className="sm:col-span-2 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">
-                  Proof of payment — optional now, required before your place is confirmed
+                  Proof of payment
                 </p>
-                <Field label="UTR / Transaction reference" hint="The reference from your NEFT, IMPS or UPI payment.">
+                <Field label="UTR / Transaction reference" required hint="The reference from your NEFT, IMPS or UPI payment.">
                   <input className={inputCls} value={v.utr || ""} onChange={(e) => set("utr", e.target.value)} placeholder="e.g. UTR123456789" />
                 </Field>
                 <div>
@@ -361,8 +371,8 @@ export default function RegisterForm() {
                   </span>
                 </div>
                 <p className="sm:col-span-2 text-[11px] leading-[1.6] text-[#7d656c]">
-                  If you have not paid yet, leave these blank — you will receive the account details and can send the
-                  reference to the secretariat afterwards.
+                  Complete the transfer first, then enter its reference here. Attaching a screenshot helps the
+                  secretariat match your payment faster.
                 </p>
               </div>
             ) : null}

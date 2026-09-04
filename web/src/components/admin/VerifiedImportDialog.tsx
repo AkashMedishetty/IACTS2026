@@ -378,10 +378,10 @@ export function VerifiedImportDialog({ onImportComplete }: { onImportComplete?: 
                     {importResults.testMode ? 'ðŸ§ª Test Results:' : 'Import Results:'}
                   </p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
-                    <li className={importResults.testMode ? "text-[#002552]" : "text-green-600"}>
+                    <li className={importResults.testMode ? "text-[#160a0d]" : "text-green-600"}>
                       {importResults.testMode ? 'ðŸ§ª' : 'âœ“'} {importResults.imported} registrations {importResults.testMode ? 'would be imported' : 'imported'}
                     </li>
-                    <li className={importResults.testMode ? "text-[#002552]" : "text-green-600"}>
+                    <li className={importResults.testMode ? "text-[#160a0d]" : "text-green-600"}>
                       {importResults.testMode ? 'ðŸ§ª' : 'âœ“'} {importResults.emailsSent} acceptance emails {importResults.testMode ? 'would be sent' : 'sent'}
                     </li>
                     {importResults.emailErrors > 0 && (
@@ -392,7 +392,7 @@ export function VerifiedImportDialog({ onImportComplete }: { onImportComplete?: 
                   {importResults.testMode && (
                     <div className="mt-3 p-3 bg-[#f0f3f8] rounded border border-[#b0c1db]">
                       <p className="font-semibold text-blue-800 mb-2">ðŸ§ª Test Mode - No Changes Made</p>
-                      <p className="text-sm text-[#002552]">This was a dry run. No users were created, no emails were sent, and no database changes were made.</p>
+                      <p className="text-sm text-[#160a0d]">This was a dry run. No users were created, no emails were sent, and no database changes were made.</p>
                     </div>
                   )}
                   

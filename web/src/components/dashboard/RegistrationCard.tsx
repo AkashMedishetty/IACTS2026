@@ -234,7 +234,7 @@ export function RegistrationCard({ userData, onUpdate }: RegistrationCardProps) 
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5 text-[#002552]" />
+                <FileText className="h-5 w-5 text-[#160a0d]" />
                 Registration Details
               </CardTitle>
               <CardDescription>
@@ -348,7 +348,7 @@ export function RegistrationCard({ userData, onUpdate }: RegistrationCardProps) 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {(isEditing ? editData.workshopSelections : userData.registration.workshopSelections).map((workshop) => (
                   <div key={workshop} className="flex items-center space-x-2">
-                    <span className="inline-flex items-center rounded-md bg-[#f0f3f8] px-2 py-1 text-xs font-medium text-[#002552] ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/20 dark:text-blue-200">
+                    <span className="inline-flex items-center rounded-md bg-[#f0f3f8] px-2 py-1 text-xs font-medium text-[#160a0d] ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900/20 dark:text-blue-200">
                       {workshop}
                     </span>
                     {isEditing && canEdit && (
@@ -528,7 +528,7 @@ export function RegistrationCard({ userData, onUpdate }: RegistrationCardProps) 
               <Button
                 onClick={handleSave}
                 disabled={isLoading}
-                className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800"
               >
                 <Save className="h-4 w-4 mr-1" />
                 {isLoading ? "Saving..." : "Save Changes"}

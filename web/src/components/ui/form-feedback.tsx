@@ -42,7 +42,7 @@ export function FormFeedback({
     success: "text-emerald-600",
     error: "text-red-600",
     warning: "text-amber-600",
-    info: "text-[#002552]",
+    info: "text-[#160a0d]",
   }
 
   const Icon = icons[type]
@@ -141,7 +141,7 @@ export function LoadingFeedback({
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="h-5 w-5 border-2 border-[#002552] border-t-transparent rounded-full"
+            className="h-5 w-5 border-2 border-[#b3122a] border-t-transparent rounded-full"
           />
           <p className="text-sm font-medium">{message}</p>
         </motion.div>
@@ -179,13 +179,13 @@ export function ProgressFeedback({
           )}
           <div className="w-full bg-[#b0c1db] rounded-full h-2">
             <motion.div
-              className="bg-gradient-to-r from-[#f0f3f8]0 to-[#002552] h-2 rounded-full"
+              className="bg-gradient-to-r from-[#f0f3f8]0 to-[#b3122a] h-2 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             />
           </div>
-          <p className="text-xs text-[#002552] mt-2 text-right">
+          <p className="text-xs text-[#160a0d] mt-2 text-right">
             {Math.round(progress)}%
           </p>
         </motion.div>

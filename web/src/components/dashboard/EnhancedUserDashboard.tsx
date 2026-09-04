@@ -322,7 +322,7 @@ export function EnhancedUserDashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center space-y-4">
-          <RefreshCw className="h-8 w-8 animate-spin text-[#002552]" />
+          <RefreshCw className="h-8 w-8 animate-spin text-[#160a0d]" />
           <p className="text-muted-foreground">Loading your dashboard...</p>
         </div>
       </div>
@@ -548,7 +548,7 @@ export function EnhancedUserDashboard() {
                         </div>
                         <div className="flex space-x-4">
                           <Button variant="default" size="lg" asChild>
-                            <Link href="/program">
+                            <Link href="/programme">
                               <BookOpen className="w-5 h-5 mr-2" />
                               View Program
                             </Link>
@@ -658,7 +658,7 @@ export function EnhancedUserDashboard() {
                           </Link>
                         </Button>
                         <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-                          <Link href="/program">
+                          <Link href="/programme">
                             <BookOpen className="w-4 h-4 mr-2" />
                             Conference Program
                           </Link>
@@ -729,7 +729,7 @@ export function EnhancedUserDashboard() {
         <Card className="border-2 border-[#b0c1db] dark:border-blue-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-[#002552]" />
+              <Award className="h-5 w-5 text-[#160a0d]" />
               Registration Progress
             </CardTitle>
             <CardDescription>
@@ -756,7 +756,7 @@ export function EnhancedUserDashboard() {
                   {isRegistrationComplete ? (
                     <CheckCircle className="h-4 w-4 text-green-500" />
                   ) : (
-                    <Clock className="h-4 w-4 text-[#002552]" />
+                    <Clock className="h-4 w-4 text-[#160a0d]" />
                   )}
                   <span className="text-sm">
                     {isRegistrationComplete ? 'Payment Complete' : 'Payment Pending'}
@@ -863,7 +863,7 @@ export function EnhancedUserDashboard() {
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-950" />
                 <CardHeader className="relative">
                   <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-[#002552]" />
+                    <Star className="h-5 w-5 text-[#160a0d]" />
                     Quick Actions
                   </CardTitle>
                 </CardHeader>
@@ -912,7 +912,7 @@ export function EnhancedUserDashboard() {
                       Edit Profile
                     </Button>
                   </Link>
-                  <Link href="/program">
+                  <Link href="/programme">
                     <Button variant="outline" size="sm" className="w-full">
                       <BookOpen className="h-4 w-4 mr-2" />
                       View Program
@@ -926,7 +926,7 @@ export function EnhancedUserDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-[#002552]" />
+                  <Calendar className="h-5 w-5 text-[#160a0d]" />
                   Conference Information
                 </CardTitle>
                 <CardDescription>
@@ -936,21 +936,21 @@ export function EnhancedUserDashboard() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex items-center gap-3">
-                    <Calendar className="h-8 w-8 text-[#002552]" />
+                    <Calendar className="h-8 w-8 text-[#160a0d]" />
                     <div>
                       <p className="font-semibold">Dates</p>
                       <p className="text-sm text-muted-foreground">{conferenceConfig.eventDate?.start} - {conferenceConfig.eventDate?.end}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <MapPin className="h-8 w-8 text-[#002552]" />
+                    <MapPin className="h-8 w-8 text-[#160a0d]" />
                     <div>
                       <p className="font-semibold">Location</p>
                       <p className="text-sm text-muted-foreground">{conferenceConfig.venue?.city}, {conferenceConfig.venue?.state}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Users className="h-8 w-8 text-[#002552]" />
+                    <Users className="h-8 w-8 text-[#160a0d]" />
                     <div>
                       <p className="font-semibold">Conference Theme</p>
                       <p className="text-sm text-muted-foreground">{conferenceConfig.tagline || 'Join Us'}</p>
@@ -1014,7 +1014,7 @@ export function EnhancedUserDashboard() {
                     <div className="mt-2 space-y-2">
                       {userData.registration.workshopSelections.map((workshop, index) => (
                         <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
-                          <BookOpen className="h-4 w-4 text-[#002552]" />
+                          <BookOpen className="h-4 w-4 text-[#160a0d]" />
                           <span>{workshop}</span>
                         </div>
                       ))}
@@ -1041,7 +1041,7 @@ export function EnhancedUserDashboard() {
                     <div className="mt-2 space-y-2">
                       {userData.registration.accompanyingPersons.map((person, index) => (
                         <div key={index} className="flex items-center gap-2 p-2 bg-muted rounded">
-                          <User className="h-4 w-4 text-[#002552]" />
+                          <User className="h-4 w-4 text-[#160a0d]" />
                           <span>{person.name} ({person.relationship})</span>
                         </div>
                       ))}
@@ -1179,7 +1179,7 @@ export function EnhancedUserDashboard() {
                           <Button
                             onClick={() => handleDownloadInvoice(payment._id, userData.registration.registrationId)}
                             disabled={isDownloading}
-                            className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#002552] hover:to-blue-800"
+                            className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#b3122a] hover:to-blue-800"
                           >
                             <Download className="h-4 w-4 mr-2" />
                             {isDownloading ? 'Opening...' : 'View Invoice'}

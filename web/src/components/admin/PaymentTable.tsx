@@ -337,7 +337,7 @@ export function PaymentTable({
                 <div className="text-xs text-gray-600">Pending</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-[#002552]">
+                <div className="text-2xl font-bold text-[#160a0d]">
                   {formatCurrency(getTotalRevenue(), filteredPayments[0]?.amount.currency || 'INR')}
                 </div>
                 <div className="text-xs text-gray-600">Total Revenue</div>

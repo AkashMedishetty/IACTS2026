@@ -1,6 +1,6 @@
 ﻿"use client"
 
-import { useState, useEffect, useCallback, memo } from "react"
+import { useState, useEffect, useCallback, memo, useMemo } from 'react'
 import { useSession, signIn } from "next-auth/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "../../components/ui/button"
@@ -80,7 +80,7 @@ const LoginModal = memo(function LoginModal({ show, onClose, onSuccess }: LoginM
         >
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
-              <Lock className="w-5 h-5 text-[#002552]" />
+              <Lock className="w-5 h-5 text-[#160a0d]" />
               Login to Submit
             </h3>
             <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -111,7 +111,7 @@ const LoginModal = memo(function LoginModal({ show, onClose, onSuccess }: LoginM
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-[#002552] hover:bg-[#002552]" disabled={loading}>
+            <Button type="submit" className="w-full bg-[#b3122a] hover:bg-[#b3122a]" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : (
                 <>
                   <LogIn className="w-4 h-4 mr-2" />
@@ -122,7 +122,7 @@ const LoginModal = memo(function LoginModal({ show, onClose, onSuccess }: LoginM
           </form>
           
           <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-            <Link href="/auth/forgot-password" className="text-[#002552] hover:underline">
+            <Link href="/auth/forgot-password" className="text-[#160a0d] hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -255,7 +255,7 @@ const RegisteredAbstractForm = memo(function RegisteredAbstractForm({ session, o
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
-              <FileText className="w-5 h-5 text-[#002552]" />
+              <FileText className="w-5 h-5 text-[#160a0d]" />
               Submit Your Abstract
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={onClose}><X className="w-4 h-4" /></Button>
@@ -264,7 +264,7 @@ const RegisteredAbstractForm = memo(function RegisteredAbstractForm({ session, o
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-[#002552]/5 border border-[#002552]/15">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-[#b3122a]/5 border border-[#b3122a]/15">
               <div>
                 <Label>Registered Email <span className="text-red-500">*</span></Label>
                 <Input type="email" placeholder="email used during registration" value={formData.email} onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))} className="mt-1" />
@@ -321,7 +321,7 @@ const RegisteredAbstractForm = memo(function RegisteredAbstractForm({ session, o
             
             <div>
               <Label>Abstract File <span className="text-red-500">*</span></Label>
-              <div className="mt-1 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-[#002552] transition-colors">
+              <div className="mt-1 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-[#b3122a] transition-colors">
                 <input type="file" id="registered-file" accept=".doc,.docx" onChange={handleFileChange} className="hidden" />
                 <label htmlFor="registered-file" className="cursor-pointer">
                   <Upload className="w-10 h-10 mx-auto text-gray-400 mb-2" />
@@ -341,7 +341,7 @@ const RegisteredAbstractForm = memo(function RegisteredAbstractForm({ session, o
             </div>
             
             <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1 bg-[#002552] hover:bg-[#002552]" disabled={isLoading}>
+              <Button type="submit" className="flex-1 bg-[#b3122a] hover:bg-[#b3122a]" disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Upload className="w-4 h-4 mr-2" />Submit Abstract</>}
               </Button>
               <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
@@ -531,7 +531,7 @@ const UnregisteredForm = memo(function UnregisteredForm({ registrationTypes, onC
         <CardHeader>
           <div className="flex justify-between items-center">
             <CardTitle className="flex items-center gap-2">
-              <UserPlus className="w-5 h-5 text-[#C98500]" />
+              <UserPlus className="w-5 h-5 text-[#b3122a]" />
               Register & Submit Abstract
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={onClose}><X className="w-4 h-4" /></Button>
@@ -543,7 +543,7 @@ const UnregisteredForm = memo(function UnregisteredForm({ registrationTypes, onC
               <div key={idx} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
                   step > idx + 1 ? 'bg-green-500 border-green-500 text-white' :
-                  step === idx + 1 ? 'bg-[#002552] border-[#002552] text-white' :
+                  step === idx + 1 ? 'bg-[#b3122a] border-[#b3122a] text-white' :
                   'border-gray-300 text-gray-400'
                 }`}>
                   {step > idx + 1 ? <CheckCircle className="w-5 h-5" /> : <s.icon className="w-5 h-5" />}
@@ -741,7 +741,7 @@ const UnregisteredForm = memo(function UnregisteredForm({ registrationTypes, onC
                 
                 <div>
                   <Label>Upload Abstract <span className="text-red-500">*</span></Label>
-                  <div className={`mt-1 border-2 border-dashed rounded-lg p-6 text-center hover:border-[#002552] transition-colors ${fieldErrors.file ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
+                  <div className={`mt-1 border-2 border-dashed rounded-lg p-6 text-center hover:border-[#b3122a] transition-colors ${fieldErrors.file ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
                     <input type="file" id="unregistered-file" accept=".doc,.docx" onChange={handleFileChange} className="hidden" />
                     <label htmlFor="unregistered-file" className="cursor-pointer">
                       <Upload className="w-10 h-10 mx-auto text-gray-400 mb-2" />
@@ -763,7 +763,7 @@ const UnregisteredForm = memo(function UnregisteredForm({ registrationTypes, onC
                 <div className="flex items-start gap-3 pt-4 border-t">
                   <Checkbox id="terms" checked={formData.agreeTerms} onCheckedChange={(checked) => updateField('agreeTerms', checked as boolean)} />
                   <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                    I agree to the <Link href="/terms-conditions" className="text-[#002552] hover:underline" target="_blank">Terms</Link> and <Link href="/privacy-policy" className="text-[#002552] hover:underline" target="_blank">Privacy Policy</Link>
+                    I agree to the <Link href="/terms-conditions" className="text-[#160a0d] hover:underline" target="_blank">Terms</Link> and <Link href="/privacy-policy" className="text-[#160a0d] hover:underline" target="_blank">Privacy Policy</Link>
                   </label>
                 </div>
               </div>
@@ -774,7 +774,7 @@ const UnregisteredForm = memo(function UnregisteredForm({ registrationTypes, onC
               {step > 1 && <Button type="button" variant="outline" onClick={() => setStep(step - 1)}><ArrowLeft className="w-4 h-4 mr-2" />Back</Button>}
               <div className="flex-1" />
               {step < 3 ? (
-                <Button type="button" onClick={() => { if (validateStep(step)) { setStep(step + 1); toast.success(`Step ${step} completed!`) } }} className="bg-[#002552] hover:bg-[#002552]">
+                <Button type="button" onClick={() => { if (validateStep(step)) { setStep(step + 1); toast.success(`Step ${step} completed!`) } }} className="bg-[#b3122a] hover:bg-[#b3122a]">
                   Next<ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
@@ -797,6 +797,18 @@ export default function AbstractsPage() {
   
   // Config state
   const [abstractsConfig, setAbstractsConfig] = useState<any>(null)
+
+  /* Final submission is for accepted authors and only opens when the committee
+     sets a window. Until then the call-to-action must not appear at all. */
+  const finalSubmissionOpen = useMemo(() => {
+    const open = abstractsConfig?.finalSubmissionOpenDate
+    const close = abstractsConfig?.finalSubmissionCloseDate
+    if (!open) return false
+    const now = Date.now()
+    if (now < new Date(open).getTime()) return false
+    if (close && now > new Date(close).getTime()) return false
+    return true
+  }, [abstractsConfig])
   const [configLoading, setConfigLoading] = useState(true)
   const [registrationTypes, setRegistrationTypes] = useState<Array<{ value: string; label: string; price: number }>>([])
 
@@ -938,7 +950,7 @@ export default function AbstractsPage() {
           
           <div className="flex flex-col gap-3">
             {activeFlow === 'unregistered' ? (
-              <Link href="/login" className="w-full"><Button className="w-full bg-green-600 hover:bg-green-700"><LogIn className="w-4 h-4 mr-2" />Login to Check Status & Pay</Button></Link>
+              <Link href="/auth/login" className="w-full"><Button className="w-full bg-green-600 hover:bg-green-700"><LogIn className="w-4 h-4 mr-2" />Login to Check Status & Pay</Button></Link>
             ) : (
               <Link href="/dashboard/abstracts" className="w-full"><Button className="w-full bg-green-600 hover:bg-green-700"><FileText className="w-4 h-4 mr-2" />View My Abstracts</Button></Link>
             )}
@@ -961,27 +973,11 @@ export default function AbstractsPage() {
         {/* Prize highlight — sits in the white gap above the header */}
         {activeFlow === 'none' && !submissionsDisabled && (
           <section className="container mx-auto px-4 pt-2 pb-8">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="max-w-4xl mx-auto"
-            >
-              <div className="rounded-2xl bg-gradient-to-r from-[#E0A52A] to-[#C98500] text-[#2A1C00] shadow-xl px-6 py-5 text-center border border-[#C98500]/60">
-                <p className="text-xl md:text-2xl font-extrabold tracking-tight flex items-center justify-center gap-2">
-                  <Award className="w-6 h-6" />
-                  Exciting Prizes for the Winners!
-                </p>
-                <p className="text-base md:text-lg font-bold mt-1">
-                  Don&apos;t miss your chance to shine at {conferenceConfig.shortName}
-                </p>
-              </div>
-            </motion.div>
           </section>
         )}
 
         {/* Header */}
-        <section className="py-12 md:py-16 bg-gradient-to-r from-[#002552] to-[#001B3D] text-white">
+        <section className="py-12 md:py-16 bg-gradient-to-r from-[#b3122a] to-[#001B3D] text-white">
           <div className="container mx-auto px-4 text-center">
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6">Abstract Submission</h1>
@@ -998,11 +994,11 @@ export default function AbstractsPage() {
               </div>
 
               {/* Final Submission — accepted authors upload their final paper / presentation */}
-              {activeFlow === 'none' && (
+              {activeFlow === 'none' && finalSubmissionOpen && (
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="mt-8 flex flex-col items-center gap-2">
                   <p className="text-white/70 text-sm">Abstract accepted? Upload your final paper / presentation.</p>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button onClick={handleFinalSubmission} className="px-8 py-6 text-lg bg-[#C98500] hover:bg-[#E0A52A] text-[#002552] rounded-2xl shadow-2xl font-bold">
+                    <Button onClick={handleFinalSubmission} className="px-8 py-6 text-lg bg-[#b3122a] hover:bg-[#c51a38] text-[#160a0d] rounded-2xl shadow-2xl font-bold">
                       <CheckCircle className="w-5 h-5 mr-2" />Final Submission
                     </Button>
                   </motion.div>
@@ -1028,10 +1024,10 @@ export default function AbstractsPage() {
               <div className="max-w-md mx-auto text-center">
                 <Card className="bg-white dark:bg-gray-800 shadow-xl">
                   <CardContent className="pt-6">
-                    <Lock className="w-12 h-12 mx-auto mb-4 text-[#002552]" />
+                    <Lock className="w-12 h-12 mx-auto mb-4 text-[#160a0d]" />
                     <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2">Login Required</h3>
                     <p className="text-gray-600 dark:text-gray-400 mb-4">Please login to submit your abstract</p>
-                    <Button onClick={() => setShowLoginModal(true)} className="w-full bg-[#002552] hover:bg-[#002552]"><LogIn className="w-4 h-4 mr-2" />Login Now</Button>
+                    <Button onClick={() => setShowLoginModal(true)} className="w-full bg-[#b3122a] hover:bg-[#b3122a]"><LogIn className="w-4 h-4 mr-2" />Login Now</Button>
                     <Button variant="link" onClick={() => setActiveFlow('none')} className="mt-2">Go Back</Button>
                   </CardContent>
                 </Card>
@@ -1046,12 +1042,12 @@ export default function AbstractsPage() {
               <div className="max-w-xl mx-auto">
                 <Card className="bg-white/10 backdrop-blur-md border-white/20">
                   <CardContent className="pt-6">
-                    <Bell className="w-12 h-12 mx-auto mb-4 text-[#002552]" />
+                    <Bell className="w-12 h-12 mx-auto mb-4 text-[#160a0d]" />
                     <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 text-center">Get Notified When Submissions Open</h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-4 text-center">Enter your email to receive a notification</p>
                     <form onSubmit={handleReminderSignup} className="flex flex-col sm:flex-row gap-3">
                       <Input type="email" placeholder="your.email@example.com" value={reminderEmail} onChange={(e) => setReminderEmail(e.target.value)} className="flex-1" required />
-                      <Button type="submit" disabled={reminderLoading} className="bg-[#002552] hover:bg-[#002552]">
+                      <Button type="submit" disabled={reminderLoading} className="bg-[#b3122a] hover:bg-[#b3122a]">
                         {reminderLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Mail className="w-4 h-4 mr-2" />Notify Me</>}
                       </Button>
                     </form>
@@ -1071,7 +1067,7 @@ export default function AbstractsPage() {
 
                 {/* Important Dates */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
-                  <Card className="bg-gradient-to-r from-[#002552] to-[#001B3D] text-white border-0 shadow-xl">
+                  <Card className="bg-gradient-to-r from-[#b3122a] to-[#001B3D] text-white border-0 shadow-xl">
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -1097,7 +1093,7 @@ export default function AbstractsPage() {
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
                   <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
                     <CardContent className="p-6">
-                      <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-[#002552]" />Presentation Categories</h3>
+                      <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-[#160a0d]" />Presentation Categories</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {[
                           { t: 'Postgraduate', d: 'PG students — given priority' },
@@ -1110,7 +1106,6 @@ export default function AbstractsPage() {
                           </div>
                         ))}
                       </div>
-                      <p className="text-sm font-semibold text-[#002552] dark:text-[#E0A52A] mt-4">There will be exciting prizes in all categories!</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -1121,7 +1116,7 @@ export default function AbstractsPage() {
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div className="flex items-center gap-3">
-                          <Download className="w-8 h-8 text-[#E0A52A] flex-shrink-0" />
+                          <Download className="w-8 h-8 text-[#b3122a] flex-shrink-0" />
                           <div>
                             <h3 className="text-xl font-bold">Presentation Templates</h3>
                             <p className="text-white/80 text-sm">Download the official templates and prepare your paper / poster.</p>
@@ -1131,7 +1126,7 @@ export default function AbstractsPage() {
                           <a href="/templates/paper-template.pptx" download className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-[#25406b] font-bold text-sm hover:bg-[#FFF6E4] transition-colors">
                             <FileText className="w-4 h-4" /> Paper Template
                           </a>
-                          <a href="/templates/poster-template.pptx" download className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#C98500] text-[#25406b] font-bold text-sm hover:bg-[#E0A52A] transition-colors">
+                          <a href="/templates/poster-template.pptx" download className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#b3122a] text-[#25406b] font-bold text-sm hover:bg-[#c51a38] transition-colors">
                             <FileText className="w-4 h-4" /> Poster Template
                           </a>
                         </div>
@@ -1208,12 +1203,12 @@ export default function AbstractsPage() {
                 {/* CTA */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
                   <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                    <Button onClick={() => { setActiveFlow('registered'); if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="px-10 py-6 text-lg bg-[#002552] hover:bg-[#002552] text-white rounded-full shadow-xl font-bold">
+                    <Button onClick={() => { setActiveFlow('registered'); if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="px-10 py-6 text-lg bg-[#b3122a] hover:bg-[#b3122a] text-white rounded-full shadow-xl font-bold">
                       <Upload className="w-5 h-5 mr-2" />Submit Your Abstract
                     </Button>
                     
                     {!session && abstractsConfig?.enableAbstractsWithoutRegistration && (
-                      <Button onClick={() => setActiveFlow('unregistered')} variant="outline" className="px-10 py-6 text-lg border-[#E0A52A] text-[#C98500] hover:bg-[#E0A52A]/10 rounded-full shadow-xl font-bold">
+                      <Button onClick={() => setActiveFlow('unregistered')} variant="outline" className="px-10 py-6 text-lg border-[#b3122a] text-[#b3122a] hover:bg-[#c51a38]/10 rounded-full shadow-xl font-bold">
                         <UserPlus className="w-5 h-5 mr-2" />Register & Submit
                       </Button>
                     )}

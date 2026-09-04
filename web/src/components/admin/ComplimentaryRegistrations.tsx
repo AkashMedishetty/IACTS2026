@@ -104,10 +104,10 @@ export function ComplimentaryRegistrations() {
   }
 
   return (
-    <Card className="border-2 border-[#002552]/20">
+    <Card className="border-2 border-[#b3122a]/20">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-[#002552] dark:text-white">
-          <Gift className="w-5 h-5 text-[#C98500]" />
+        <CardTitle className="flex items-center gap-2 text-[#160a0d] dark:text-white">
+          <Gift className="w-5 h-5 text-[#b3122a]" />
           Complimentary Registrations (Excel → email + QR ZIP)
         </CardTitle>
       </CardHeader>
@@ -123,20 +123,20 @@ export function ComplimentaryRegistrations() {
           type="file"
           accept=".xlsx,.xls"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
-          className="block text-sm text-gray-600 dark:text-gray-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#002552] file:text-white file:font-semibold hover:file:bg-[#001B3D]"
+          className="block text-sm text-gray-600 dark:text-gray-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#b3122a] file:text-white file:font-semibold hover:file:bg-[#001B3D]"
         />
-        {file && <p className="text-xs text-[#002552] dark:text-gray-300 flex items-center gap-1.5"><FileSpreadsheet className="w-4 h-4" />{file.name}</p>}
+        {file && <p className="text-xs text-[#160a0d] dark:text-gray-300 flex items-center gap-1.5"><FileSpreadsheet className="w-4 h-4" />{file.name}</p>}
 
-        <Button onClick={process} disabled={loading || !file} className="gap-2 bg-[#C98500] hover:bg-[#E0A52A] text-[#002552] font-bold">
+        <Button onClick={process} disabled={loading || !file} className="gap-2 bg-[#b3122a] hover:bg-[#c51a38] text-[#160a0d] font-bold">
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
           Process &amp; Download ZIP
         </Button>
 
-        {summary && <p className="text-sm font-semibold text-[#002552] dark:text-gray-200">{summary}</p>}
+        {summary && <p className="text-sm font-semibold text-[#160a0d] dark:text-gray-200">{summary}</p>}
 
-        <div className="mt-2 rounded-lg border border-[#002552]/15 bg-[#002552]/[0.03] p-4 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-[#002552] dark:text-gray-100">
-            <RefreshCw className="w-4 h-4 text-[#C98500]" />
+        <div className="mt-2 rounded-lg border border-[#b3122a]/15 bg-[#b3122a]/[0.03] p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#160a0d] dark:text-gray-100">
+            <RefreshCw className="w-4 h-4 text-[#b3122a]" />
             Re-send confirmation + QR (corrected links)
           </div>
           <p className="text-xs text-gray-600 dark:text-gray-300">
@@ -144,15 +144,15 @@ export function ComplimentaryRegistrations() {
             (the no-email/WhatsApp ones are skipped). Use this to fix emails that went out with the wrong website link.
           </p>
           <div className="flex flex-wrap items-center gap-2">
-            <Button onClick={previewResend} disabled={resendLoading} variant="outline" className="gap-2 border-[#002552] text-[#002552]">
+            <Button onClick={previewResend} disabled={resendLoading} variant="outline" className="gap-2 border-[#b3122a] text-[#160a0d]">
               {resendLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               Preview recipients
             </Button>
-            <Button onClick={doResend} disabled={resendLoading} className="gap-2 bg-[#002552] hover:bg-[#001B3D] text-white font-bold">
+            <Button onClick={doResend} disabled={resendLoading} className="gap-2 bg-[#b3122a] hover:bg-[#001B3D] text-white font-bold">
               {resendLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
               Re-send now
             </Button>
-            {resendCount !== null && <span className="text-xs text-[#002552] dark:text-gray-300">{resendCount} recipient(s)</span>}
+            {resendCount !== null && <span className="text-xs text-[#160a0d] dark:text-gray-300">{resendCount} recipient(s)</span>}
           </div>
           {resendMsg && <p className="text-sm font-semibold text-green-700 dark:text-green-400">{resendMsg}</p>}
         </div>

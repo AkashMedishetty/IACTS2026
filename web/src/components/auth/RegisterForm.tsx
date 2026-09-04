@@ -460,7 +460,7 @@ export function RegisterForm() {
           />
           <label htmlFor="agreeTerms" className="text-sm leading-relaxed">
             I agree to the{" "}
-            <Link href="/terms-conditions" className="text-[#002552] hover:underline">
+            <Link href="/terms-conditions" className="text-[#160a0d] hover:underline">
               Terms and Conditions
             </Link>{" "}
             of the ${conferenceConfig.shortName} Conference
@@ -476,7 +476,7 @@ export function RegisterForm() {
           />
           <label htmlFor="agreePrivacy" className="text-sm leading-relaxed">
             I agree to the{" "}
-            <Link href="/privacy-policy" className="text-[#002552] hover:underline">
+            <Link href="/privacy-policy" className="text-[#160a0d] hover:underline">
               Privacy Policy
             </Link>{" "}
             and consent to the processing of my personal data
@@ -517,7 +517,7 @@ export function RegisterForm() {
           {/* Progress Bar */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
             <div 
-              className="bg-gradient-to-r from-[#002552] to-blue-700 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-[#b3122a] to-blue-700 h-2 rounded-full transition-all duration-300"
               style={{ width: `${(step / 3) * 100}%` }}
             />
           </div>
@@ -547,14 +547,14 @@ export function RegisterForm() {
                 <Button
                   type="button"
                   onClick={handleNext}
-                  className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                  className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800"
                 >
                   Next
                 </Button>
               ) : (
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                  className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -574,7 +574,7 @@ export function RegisterForm() {
             Already have an account?{" "}
             <Link 
               href="/auth/login"
-              className="font-medium text-[#002552] hover:text-[#002552] hover:underline"
+              className="font-medium text-[#160a0d] hover:text-[#160a0d] hover:underline"
             >
               Sign in here
             </Link>

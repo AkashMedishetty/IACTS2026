@@ -53,7 +53,7 @@ export function AbstractsManager() {
         <h2 className="text-xl font-semibold">Tracks / Categories</h2>
         <div className="space-x-2">
           <button onClick={addTrack} className="px-3 py-1 border rounded">Add Track</button>
-          <button onClick={save} className="px-3 py-1 bg-[#002552] text-white rounded">Save</button>
+          <button onClick={save} className="px-3 py-1 bg-[#b3122a] text-white rounded">Save</button>
         </div>
       </div>
 

@@ -93,7 +93,7 @@ export function DesignSystemTester({
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-[#002552]" />
+                    <Zap className="h-5 w-5 text-[#160a0d]" />
                     Design System Tester
                   </CardTitle>
                   <CardDescription className="text-slate-600">

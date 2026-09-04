@@ -52,10 +52,10 @@ export function ResendRegistrationDetails() {
   }
 
   return (
-    <Card className="border-2 border-[#C98500]/30">
+    <Card className="border-2 border-[#b3122a]/30">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-[#002552] dark:text-white">
-          <QrCode className="w-5 h-5 text-[#C98500]" />
+        <CardTitle className="flex items-center gap-2 text-[#160a0d] dark:text-white">
+          <QrCode className="w-5 h-5 text-[#b3122a]" />
           Re-send Registration Details to All
         </CardTitle>
       </CardHeader>
@@ -86,7 +86,7 @@ export function ResendRegistrationDetails() {
           </Button>
         </div>
 
-        <Button onClick={sendAll} disabled={!!loading} className="gap-2 bg-[#002552] hover:bg-[#001B3D] text-white">
+        <Button onClick={sendAll} disabled={!!loading} className="gap-2 bg-[#b3122a] hover:bg-[#001B3D] text-white">
           {loading === "all" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           Send to all registrants
         </Button>

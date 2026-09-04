@@ -295,7 +295,7 @@ export default function FacultyRegisterPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800">
       <Navigation />
       <div className="pt-24 pb-12">
-        <section className="py-12 bg-gradient-to-r from-[#002552] to-[#001B3D] text-white">
+        <section className="py-12 bg-gradient-to-r from-[#b3122a] to-[#001B3D] text-white">
           <div className="container mx-auto px-4 text-center">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
               <div className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full mb-4">
@@ -314,11 +314,11 @@ export default function FacultyRegisterPage() {
         {needsPayment && (
           <div className="container mx-auto px-4 mt-6">
             <div className="max-w-3xl mx-auto flex items-center justify-center gap-4">
-              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${step === 1 ? 'bg-[#002552] text-white' : 'bg-green-100 text-green-800'}`}>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${step === 1 ? 'bg-[#b3122a] text-white' : 'bg-green-100 text-green-800'}`}>
                 {step > 1 ? <CheckCircle className="w-4 h-4" /> : <span>1</span>} Registration Details
               </div>
               <div className="w-8 h-0.5 bg-gray-300" />
-              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${step === 2 ? 'bg-[#002552] text-white' : 'bg-gray-100 text-gray-500'}`}>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${step === 2 ? 'bg-[#b3122a] text-white' : 'bg-gray-100 text-gray-500'}`}>
                 <span>2</span> Payment
               </div>
             </div>
@@ -333,7 +333,7 @@ export default function FacultyRegisterPage() {
               {step === 1 && (
               <Card className="bg-white dark:bg-gray-800 shadow-xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><UserPlus className="w-5 h-5 text-[#002552]" /> Faculty Registration Form</CardTitle>
+                  <CardTitle className="flex items-center gap-2"><UserPlus className="w-5 h-5 text-[#160a0d]" /> Faculty Registration Form</CardTitle>
                   <Alert className="bg-blue-50 border-blue-200">
                     <CheckCircle className="h-4 w-4 text-blue-600" />
                     <AlertDescription className="text-blue-800">
@@ -448,11 +448,11 @@ export default function FacultyRegisterPage() {
                     <div className="flex items-start gap-3 pt-4 border-t">
                       <Checkbox id="terms" checked={formData.agreeTerms} onCheckedChange={(checked) => updateField("agreeTerms", checked as boolean)} />
                       <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-400 cursor-pointer">
-                        I agree to the <Link href="/terms-conditions" className="text-[#002552] hover:underline" target="_blank">Terms</Link> and <Link href="/privacy-policy" className="text-[#002552] hover:underline" target="_blank">Privacy Policy</Link>
+                        I agree to the <Link href="/terms-conditions" className="text-[#160a0d] hover:underline" target="_blank">Terms</Link> and <Link href="/privacy-policy" className="text-[#160a0d] hover:underline" target="_blank">Privacy Policy</Link>
                       </label>
                     </div>
 
-                    <Button type="submit" className="w-full bg-[#002552] hover:bg-[#002552] py-6 text-lg" disabled={isLoading}>
+                    <Button type="submit" className="w-full bg-[#b3122a] hover:bg-[#b3122a] py-6 text-lg" disabled={isLoading}>
                       {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : needsPayment ? <>Proceed to Payment →</> : <><GraduationCap className="w-5 h-5 mr-2" />Complete Faculty Registration</>}
                     </Button>
                   </form>
@@ -464,7 +464,7 @@ export default function FacultyRegisterPage() {
               {step === 2 && (
               <Card className="bg-white dark:bg-gray-800 shadow-xl">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-[#002552]" /> Payment</CardTitle>
+                  <CardTitle className="flex items-center gap-2"><CreditCard className="w-5 h-5 text-[#160a0d]" /> Payment</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
@@ -487,7 +487,7 @@ export default function FacultyRegisterPage() {
                           </div>
                         )}
                         <div className="border-t pt-2 mt-2">
-                          <div className="flex justify-between font-bold text-lg"><span>Total (incl. GST):</span><span className="text-[#002552]">₹{totalAmount.toLocaleString('en-IN')}</span></div>
+                          <div className="flex justify-between font-bold text-lg"><span>Total (incl. GST):</span><span className="text-[#160a0d]">₹{totalAmount.toLocaleString('en-IN')}</span></div>
                           <p className="text-xs text-gray-500 mt-1">All prices are inclusive of GST.</p>
                         </div>
                       </div>
@@ -506,7 +506,7 @@ export default function FacultyRegisterPage() {
 
                     <div className="flex gap-3 justify-between pt-4 border-t">
                       <Button type="button" variant="outline" onClick={() => { setStep(1); window.scrollTo(0, 0) }} disabled={isLoading}>← Back to Details</Button>
-                      <Button type="button" onClick={handlePayNow} className="bg-[#002552] hover:bg-[#001B3D] py-6 text-lg px-8" disabled={isLoading || !priceCalculation || totalAmount <= 0}>
+                      <Button type="button" onClick={handlePayNow} className="bg-[#b3122a] hover:bg-[#001B3D] py-6 text-lg px-8" disabled={isLoading || !priceCalculation || totalAmount <= 0}>
                         {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><CreditCard className="w-5 h-5 mr-2" />Pay ₹{totalAmount.toLocaleString('en-IN')} &amp; Register</>}
                       </Button>
                     </div>

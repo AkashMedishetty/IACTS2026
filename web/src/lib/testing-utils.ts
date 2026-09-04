@@ -315,7 +315,7 @@ export function createTestSuite(): ComponentTest[] {
     },
     {
       name: 'Color Contrast - Text on Background',
-      test: () => testColorContrast('#0A3A6B', '#FCEFDF')
+      test: () => testColorContrast('#5f0717', '#fffdfc')
     },
     {
       name: 'Responsive Breakpoints',

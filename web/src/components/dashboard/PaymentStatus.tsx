@@ -145,7 +145,7 @@ export function PaymentStatus({ registrationStatus, paymentData, detailed = fals
             </Badge>
           </div>
           <Link href="/dashboard/payment">
-            <Button size="sm" className="w-full bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+            <Button size="sm" className="w-full bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
               Complete Payment
             </Button>
           </Link>
@@ -254,7 +254,7 @@ export function PaymentStatus({ registrationStatus, paymentData, detailed = fals
           <AlertDescription className="flex items-center justify-between">
             <span>Payment is required to complete your registration.</span>
             <Link href="/dashboard/payment">
-              <Button size="sm" className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+              <Button size="sm" className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
                 Pay Now
               </Button>
             </Link>
@@ -275,7 +275,7 @@ export function PaymentStatus({ registrationStatus, paymentData, detailed = fals
             </p>
             {registrationStatus === "pending" && (
               <Link href="/dashboard/payment">
-                <Button className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                <Button className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
                   Make Payment
                 </Button>
               </Link>

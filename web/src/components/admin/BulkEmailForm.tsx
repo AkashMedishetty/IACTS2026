@@ -375,7 +375,7 @@ export function BulkEmailForm() {
               <Button
                 onClick={handleSendEmail}
                 disabled={!subject.trim() || !content.trim() || selectedRecipients.length === 0 || isSending}
-                className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#002552] hover:to-blue-800 flex items-center gap-2"
+                className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#b3122a] hover:to-blue-800 flex items-center gap-2"
               >
                 {isSending ? (
                   <>
@@ -633,7 +633,7 @@ export function BulkEmailForm() {
                 </Button>
                 <Button
                   onClick={handleSendEmail}
-                  className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#002552] hover:to-blue-800"
+                  className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#b3122a] hover:to-blue-800"
                 >
                   <Send className="h-4 w-4 mr-2" />
                   Send Email

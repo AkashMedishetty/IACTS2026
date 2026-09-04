@@ -335,11 +335,11 @@ export function EmailDialog({ isOpen, onClose, registration, onEmailSent }: Emai
 
                 {selectedTemplate === "registrationConfirmation" && (
                   <div className="p-3 bg-[#f0f3f8] dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center gap-2 text-[#002552] dark:text-blue-300">
+                    <div className="flex items-center gap-2 text-[#160a0d] dark:text-blue-300">
                       <AlertCircle className="h-4 w-4" />
                       <span className="text-sm font-medium">Automatic Template</span>
                     </div>
-                    <p className="text-xs text-[#002552] dark:text-blue-400 mt-1">
+                    <p className="text-xs text-[#160a0d] dark:text-blue-400 mt-1">
                       This template will automatically include registration details, workshop selections, and conference information.
                     </p>
                   </div>

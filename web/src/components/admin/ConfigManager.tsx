@@ -333,7 +333,7 @@ export function ConfigManager() {
       <div className="bg-white/60 backdrop-blur-xl rounded-2xl border border-slate-200/50 shadow-lg p-6">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-[#f0f3f8]0/10 rounded-xl">
-            <Settings className="h-6 w-6 text-[#002552]" />
+            <Settings className="h-6 w-6 text-[#160a0d]" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-slate-900">System Configuration</h2>
@@ -609,7 +609,7 @@ export function ConfigManager() {
                   <Button
                     onClick={() => saveConfiguration('pricing', pricingConfig)}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-[#f0f3f8]0 to-[#002552] hover:from-[#002552] hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-gradient-to-r from-[#f0f3f8]0 to-[#b3122a] hover:from-[#b3122a] hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     {isSaving ? (
                       <>
@@ -772,7 +772,7 @@ export function ConfigManager() {
                   <Button
                     onClick={() => saveConfiguration('discounts', discountConfig)}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#002552] hover:to-blue-800"
+                    className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#b3122a] hover:to-blue-800"
                   >
                     {isSaving ? (
                       <>
@@ -906,7 +906,7 @@ export function ConfigManager() {
                   <Button
                     onClick={() => saveConfiguration('email', emailConfig)}
                     disabled={isSaving}
-                    className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#002552] hover:to-blue-800"
+                    className="bg-gradient-to-r from-[#f0f3f8]0 to-blue-700 hover:from-[#b3122a] hover:to-blue-800"
                   >
                     {isSaving ? (
                       <>

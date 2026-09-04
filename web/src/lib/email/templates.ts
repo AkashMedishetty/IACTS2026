@@ -35,7 +35,7 @@ export function getBaseTemplate(content: string) {
         .logo {
           font-size: 28px;
           font-weight: bold;
-          background: linear-gradient(45deg, #A56C00, #C98500);
+          background: linear-gradient(45deg, #A56C00, #b3122a);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           margin-bottom: 10px;
@@ -50,7 +50,7 @@ export function getBaseTemplate(content: string) {
         .button {
           display: inline-block;
           padding: 12px 24px;
-          background: linear-gradient(45deg, #A56C00, #C98500);
+          background: linear-gradient(45deg, #A56C00, #b3122a);
           color: white;
           text-decoration: none;
           border-radius: 5px;
@@ -491,14 +491,14 @@ export function getRegistrationAcceptanceTemplate(userData: {
     </div>
 
     ${userData.brochureUrl ? `
-    <div style="background-color: #fffbeb; border-left: 4px solid #C98500; padding: 16px 18px; margin: 20px 0; border-radius: 8px;">
-      <h4 style="margin: 0 0 6px 0; color: #002552; font-weight: bold;">📄 Conference Brochure & Schedule</h4>
+    <div style="background-color: #fffbeb; border-left: 4px solid #b3122a; padding: 16px 18px; margin: 20px 0; border-radius: 8px;">
+      <h4 style="margin: 0 0 6px 0; color: #b3122a; font-weight: bold;">📄 Conference Brochure & Schedule</h4>
       <p style="margin: 0 0 12px 0; color: #333; font-size: 14px;">Download the official brochure and scientific programme schedule to view session details and faculty information.</p>
-      <a href="${userData.brochureUrl}" target="_blank" rel="noopener" style="display: inline-block; background-color: #C98500; color: #002552; text-decoration: none; font-weight: bold; padding: 10px 22px; border-radius: 6px; font-size: 14px;">Download Brochure</a>
+      <a href="${userData.brochureUrl}" target="_blank" rel="noopener" style="display: inline-block; background-color: #b3122a; color: #b3122a; text-decoration: none; font-weight: bold; padding: 10px 22px; border-radius: 6px; font-size: 14px;">Download Brochure</a>
     </div>
     ` : ''}
     
-    <div style="background-color: #FCEFDF; padding: 15px; border-left: 4px solid #A56C00; margin: 20px 0;">
+    <div style="background-color: #fffdfc; padding: 15px; border-left: 4px solid #A56C00; margin: 20px 0;">
       <h4 style="margin-top: 0; color: #001B3D;">What's Next?</h4>
       <ul style="margin-bottom: 0;">
         ${userData.hasBadgeAttached ? '<li>Your entry badge PDF has been attached to this email</li>' : ''}

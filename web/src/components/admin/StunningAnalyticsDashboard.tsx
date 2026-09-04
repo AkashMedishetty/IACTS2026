@@ -63,11 +63,11 @@ const COLORS = {
   purple: '#8b5cf6',
   pink: '#ec4899',
   indigo: '#6366f1',
-  teal: '#C98500',
+  teal: '#b3122a',
   orange: '#A56C00'
 }
 
-const CHART_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#C98500']
+const CHART_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#b3122a']
 
 export function StunningAnalyticsDashboard() {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)

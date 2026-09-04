@@ -7,6 +7,7 @@ import { EmailService } from '@/lib/email/service'
 import Razorpay from 'razorpay'
 import { sanitizeAccommodation } from '@/lib/accommodation'
 import { getCurrentTierKey, computeRegistrationAmount, tierLabel } from '@/lib/registration'
+import { validateRegistration, normalisePhone } from '@/lib/validation/registration'
 
 // Initialize Razorpay only if credentials are available
 let razorpay: Razorpay | null = null
@@ -55,25 +56,15 @@ export async function POST(request: NextRequest) {
     console.log('📝 Registration:', JSON.stringify(registration, null, 2))
     console.log('💳 Payment method:', payment?.method)
 
-    // Validate required fields
-    if (!email || !password || !profile?.firstName || !profile?.lastName || !profile?.mciNumber) {
-      console.log('❌ Missing required fields:', {
-        email: !!email,
-        password: !!password,
-        firstName: !!profile?.firstName,
-        lastName: !!profile?.lastName,
-        mciNumber: !!profile?.mciNumber
-      })
+    // Validate with the SAME rules the form uses. The browser can send
+    // anything, so this is the check that actually decides.
+    const validationErrors = validateRegistration(body)
+    if (validationErrors.length) {
+      console.log('❌ Validation failed:', validationErrors)
       return NextResponse.json({
         success: false,
-        message: 'Missing required fields',
-        details: {
-          email: !email ? 'missing' : 'ok',
-          password: !password ? 'missing' : 'ok',
-          firstName: !profile?.firstName ? 'missing' : 'ok',
-          lastName: !profile?.lastName ? 'missing' : 'ok',
-          mciNumber: !profile?.mciNumber ? 'missing' : 'ok'
-        }
+        message: validationErrors[0],
+        errors: validationErrors,
       }, { status: 400 })
     }
 
@@ -128,7 +119,7 @@ export async function POST(request: NextRequest) {
           title: profile.title,
           firstName: profile.firstName,
           lastName: profile.lastName,
-          phone: profile.phone,
+          phone: normalisePhone(profile.phone),
           age: profile.age ? parseInt(profile.age) : undefined,
           designation: profile.designation,
           specialization: profile.specialization || '',
@@ -288,7 +279,7 @@ export async function POST(request: NextRequest) {
         title: profile.title,
         firstName: profile.firstName,
         lastName: profile.lastName,
-        phone: profile.phone,
+        phone: normalisePhone(profile.phone),
         age: profile.age ? parseInt(profile.age) : undefined,
         designation: profile.designation,
         specialization: profile.specialization || '',

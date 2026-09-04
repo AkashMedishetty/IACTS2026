@@ -249,7 +249,7 @@ export function UserDashboard() {
             <AlertDescription className="flex items-center justify-between">
               <span>Complete your registration by making the payment.</span>
               <Link href="/dashboard/payment">
-                <Button size="sm" className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                <Button size="sm" className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
                   Pay Now
                 </Button>
               </Link>
@@ -278,7 +278,7 @@ export function UserDashboard() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-[#002552]" />
+                    <FileText className="h-5 w-5 text-[#160a0d]" />
                     Registration Status
                   </CardTitle>
                 </CardHeader>
@@ -366,7 +366,7 @@ export function UserDashboard() {
               
               {userData.registration.status === "pending" && (
                 <Link href="/dashboard/payment">
-                  <Button className="w-full flex items-center gap-2 bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                  <Button className="w-full flex items-center gap-2 bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
                     <CreditCard className="h-4 w-4" />
                     Complete Payment
                   </Button>
@@ -380,7 +380,7 @@ export function UserDashboard() {
                 </Button>
               )}
               
-              <Link href="/program">
+              <Link href="/programme">
                 <Button variant="outline" className="w-full flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
                   View Program
@@ -470,7 +470,7 @@ export function UserDashboard() {
 
                 <div className="flex justify-end">
                   <Link href="/dashboard/profile">
-                    <Button className="bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800">
+                    <Button className="bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800">
                       Edit Profile
                     </Button>
                   </Link>

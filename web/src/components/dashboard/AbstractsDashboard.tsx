@@ -557,7 +557,7 @@ export function AbstractsDashboard() {
                       <div className="mt-4 space-y-2">
                         {abstract.initial.file && (
                           <div className="flex items-center gap-2 text-sm">
-                            <Download className="w-4 h-4 text-[#002552]" />
+                            <Download className="w-4 h-4 text-[#160a0d]" />
                             <span className="text-midnight-600 dark:text-midnight-400">
                               <strong>Initial File:</strong> {abstract.initial.file.originalName}
                             </span>
@@ -679,7 +679,7 @@ export function AbstractsDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-[#002552]" />
+            <AlertCircle className="w-5 h-5 text-[#160a0d]" />
             Submission Workflow
           </CardTitle>
         </CardHeader>
@@ -687,7 +687,7 @@ export function AbstractsDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-[#d8e0ed] rounded-full flex items-center justify-center mx-auto mb-2">
-                <Upload className="w-6 h-6 text-[#002552]" />
+                <Upload className="w-6 h-6 text-[#160a0d]" />
               </div>
               <h4 className="font-semibold text-midnight-800 dark:text-midnight-100">1. Submit Initial</h4>
               <p className="text-sm text-midnight-600 dark:text-midnight-400">Upload your abstract document</p>
@@ -1010,11 +1010,11 @@ export function AbstractsDashboard() {
             <div className="bg-[#f0f3f8] border border-[#b0c1db] rounded-lg p-4">
               <h4 className="font-semibold text-blue-800 mb-2">ðŸ“‹ Submission Guidelines</h4>
               {abstractsConfig?.guidelines?.finalSubmission?.instructions ? (
-                <div className="text-sm text-[#002552] whitespace-pre-wrap">
+                <div className="text-sm text-[#160a0d] whitespace-pre-wrap">
                   {abstractsConfig.guidelines.finalSubmission.instructions}
                 </div>
               ) : (
-                <ul className="text-sm text-[#002552] space-y-1">
+                <ul className="text-sm text-[#160a0d] space-y-1">
                   <li>â€¢ Ensure your presentation follows the conference format guidelines</li>
                   <li>â€¢ Include all necessary references and citations</li>
                   <li>â€¢ File size should not exceed 50MB</li>
@@ -1024,7 +1024,7 @@ export function AbstractsDashboard() {
               {abstractsConfig?.guidelines?.finalSubmission?.requirements?.length > 0 && (
                 <div className="mt-3 pt-3 border-t border-[#b0c1db]">
                   <p className="font-medium text-[#001B3D] mb-1">Requirements:</p>
-                  <ul className="text-sm text-[#002552] space-y-1">
+                  <ul className="text-sm text-[#160a0d] space-y-1">
                     {abstractsConfig.guidelines.finalSubmission.requirements.map((req: string, idx: number) => (
                       <li key={idx}>â€¢ {req}</li>
                     ))}

@@ -252,7 +252,7 @@ export function AccessibleAlertDialog({
               "transition-colors",
               variant === "destructive"
                 ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
-                : "bg-[#002552] hover:bg-[#002552] focus:ring-blue-500"
+                : "bg-[#b3122a] hover:bg-[#b3122a] focus:ring-blue-500"
             )}
           >
             {confirmText}

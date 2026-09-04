@@ -855,10 +855,10 @@ TASCON 2026 Organizing Committee`
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-[#002552]">Submitted</p>
+                <p className="text-sm font-medium text-[#160a0d]">Submitted</p>
                 <p className="text-2xl font-bold text-blue-900">{stats.submitted}</p>
               </div>
-              <Clock className="w-8 h-8 text-[#002552]" />
+              <Clock className="w-8 h-8 text-[#160a0d]" />
             </div>
           </CardContent>
         </Card>
@@ -1210,7 +1210,7 @@ TASCON 2026 Organizing Committee`
                       <div className="space-y-2">
                         {abstract.initial.file && (
                           <div className="flex items-center gap-2 text-sm">
-                            <Download className="w-4 h-4 text-[#002552]" />
+                            <Download className="w-4 h-4 text-[#160a0d]" />
                             <span className="text-gray-600">
                               <strong>Initial File:</strong> {abstract.initial.file.originalName}
                             </span>

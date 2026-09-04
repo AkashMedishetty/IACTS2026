@@ -63,7 +63,7 @@ export function ProtectedRoute({
     return (
       <div className="fixed top-4 right-4 z-50">
         <div className="bg-white rounded-lg shadow-lg p-3 flex items-center space-x-2">
-          <Loader2 className="h-4 w-4 animate-spin text-[#002552]" />
+          <Loader2 className="h-4 w-4 animate-spin text-[#160a0d]" />
           <span className="text-sm text-gray-600">Loading...</span>
         </div>
       </div>
@@ -75,7 +75,7 @@ export function ProtectedRoute({
     return (
       <div className="fixed top-4 right-4 z-50">
         <div className="bg-white rounded-lg shadow-lg p-3 flex items-center space-x-2">
-          <Loader2 className="h-4 w-4 animate-spin text-[#002552]" />
+          <Loader2 className="h-4 w-4 animate-spin text-[#160a0d]" />
           <span className="text-sm text-gray-600">Redirecting...</span>
         </div>
       </div>

@@ -103,6 +103,8 @@ export interface ConferenceConfig {
     currencySymbol: string
     
     // Payment Methods
+    /** Require a payment screenshot, not just a UTR. Needs Blob configured. */
+    requirePaymentProof?: boolean
     methods: {
       razorpay: boolean
       bankTransfer: boolean
@@ -319,6 +321,9 @@ export const conferenceConfig: ConferenceConfig = {
     enabled: true,
     currency: "INR",
     currencySymbol: "₹",
+
+    // Screenshot upload needs Vercel Blob connected; UTR is always required.
+    requirePaymentProof: false,
 
     methods: {
       razorpay: false,        // enable once gateway credentials are issued

@@ -34,7 +34,7 @@ export const designTokens = {
       950: '#172554',
     },
     midnight: {
-      50: '#FCEFDF',
+      50: '#fffdfc',
       100: '#f1f5f9',
       200: '#e2e8f0',
       300: '#cbd5e1',
@@ -42,8 +42,8 @@ export const designTokens = {
       500: '#64748b',
       600: '#475569',
       700: '#334155',
-      800: '#0A3A6B',
-      900: '#002552',
+      800: '#5f0717',
+      900: '#b3122a',
       950: '#020617',
     },
     // Accent Colors

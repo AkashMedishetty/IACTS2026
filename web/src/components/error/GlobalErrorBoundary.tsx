@@ -146,7 +146,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   onClick={this.handleRetry}
-                  className="flex-1 bg-gradient-to-r from-[#002552] to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                  className="flex-1 bg-gradient-to-r from-[#b3122a] to-blue-700 hover:from-blue-700 hover:to-blue-800"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
@@ -164,7 +164,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
                 <p className="mt-1">
                   <a 
                     href={`mailto:${conferenceConfig.contact.email}`} 
-                    className="text-[#002552] hover:underline"
+                    className="text-[#160a0d] hover:underline"
                   >
                     {conferenceConfig.contact.email}
                   </a>

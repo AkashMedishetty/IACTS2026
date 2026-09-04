@@ -63,7 +63,7 @@ export function Notification({
     success: "text-emerald-600",
     error: "text-red-600",
     warning: "text-amber-600",
-    info: "text-[#002552]",
+    info: "text-[#160a0d]",
   }
 
   const Icon = icons[type]
