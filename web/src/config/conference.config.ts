@@ -322,8 +322,8 @@ export const conferenceConfig: ConferenceConfig = {
     currency: "INR",
     currencySymbol: "₹",
 
-    // Screenshot upload needs Vercel Blob connected; UTR is always required.
-    requirePaymentProof: false,
+    // Blob store is connected, so proof of payment is enforced.
+    requirePaymentProof: true,
 
     methods: {
       razorpay: false,        // enable once gateway credentials are issued

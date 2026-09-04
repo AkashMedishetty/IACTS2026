@@ -290,7 +290,7 @@ export default function RegisterForm() {
             <input
               type="email"
               autoComplete="email"
-              className={`${inputCls} ${emailTaken ? "border-[#b3122a]" : ""}`}
+              className={emailTaken ? inputCls.replace("border-[#b3122a]/20", "border-[#b3122a]") : inputCls}
               value={v.email || ""}
               onChange={(e) => { set("email", e.target.value); if (emailTaken) setEmailTaken(false); }}
               onBlur={(e) => checkEmailAvailable(e.target.value)}
