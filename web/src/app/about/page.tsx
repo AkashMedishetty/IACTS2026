@@ -6,7 +6,7 @@ import { conference } from "@/data/conference";
 export const metadata: Metadata = { title: `About — ${conference.name}` };
 export default function Page() {
   return (
-    <PageShell title="About the" accent="conference" lede={conference.positioning}>
+    <PageShell title="About" lede={conference.positioning}>
       <About /><Capabilities variant="instrument" />
     </PageShell>
   );

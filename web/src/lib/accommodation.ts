@@ -88,7 +88,10 @@ export function sanitizeAccommodation(
       roomType === cfg.complimentaryRoomType,
   )
 
-  // No paid accommodation rate has been published, so the charge stays 0 and
-  // is never taken from the client. Admin can adjust per booking.
-  return { required: true, roomType, checkIn, checkOut, nights, totalAmount: 0, complimentary }
+  // Twin sharing is complimentary for the eligible tiers; single occupancy is
+  // chargeable per night. The amount is computed here, never taken from the client.
+  const perNight = roomType === cfg.complimentaryRoomType ? 0 : (cfg.singleRoomPerNight || 0)
+  const totalAmount = perNight * nights
+
+  return { required: true, roomType, checkIn, checkOut, nights, totalAmount, complimentary }
 }

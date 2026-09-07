@@ -99,7 +99,6 @@ export const workshops: Workshop[] = [
   { id: 'robotic-sim', name: 'Robotic Simulation Training', description: 'Simulator', amount: 0, currency: 'INR', duration: 'October 23, 2026' },
   { id: 'suturing',   name: 'Suturing & Anastomosis Lab',  description: 'Bench',     amount: 0, currency: 'INR', duration: 'October 23, 2026' },
   { id: 'endovascular', name: 'Endovascular Skills Workshop', description: 'Cath lab', amount: 0, currency: 'INR', duration: 'October 23, 2026' },
-  { id: 'perfusion',  name: 'Perfusion & ECMO Basics',     description: 'Circuit',   amount: 0, currency: 'INR', duration: 'October 23, 2026' }
 ]
 
 export const accompanyingPersonFee = {

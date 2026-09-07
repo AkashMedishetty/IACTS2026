@@ -119,6 +119,14 @@ export interface ConferenceConfig {
       ifscCode: string
       branchName?: string
     }
+
+    gst?: {
+      enabled: boolean
+      ratePercent: number
+      /** true = published prices already contain GST */
+      inclusive: boolean
+      label: string
+    }
     
     // Pricing Tiers
     tiers: {
@@ -152,6 +160,9 @@ export interface ConferenceConfig {
       start: string
       end: string
     }
+    submitterChoosesFormat?: boolean
+    submissionRules?: string[]
+    wordLimit?: number
     maxAbstractsPerUser: number
 
     /** Subspecialty the work is submitted under, and its topic list.
@@ -212,6 +223,7 @@ export interface ConferenceConfig {
     /** Early Bird delegates receive complimentary twin-sharing at the venue. */
     complimentaryForTiers: string[]
     complimentaryRoomType: string
+    singleRoomPerNight: number
     note: string
   }
 
@@ -334,11 +346,19 @@ export const conferenceConfig: ConferenceConfig = {
     // Set from the admin panel (Settings → Payment Methods). Never hardcode
     // real account details in the repo.
     bankDetails: {
-      accountName: "",
-      accountNumber: "",
-      bankName: "",
-      ifscCode: "",
-      branchName: ""
+      accountName: "Indian Association of Cardiovascular-Thoracic Surgeons",
+      accountNumber: "1026896747",
+      bankName: "Central Bank of India",
+      ifscCode: "CBIN0280601",
+      branchName: "Mumbai Central Branch, Mumbai 400008"
+    },
+
+    /** Published fees are GST-inclusive; the invoice back-calculates the split. */
+    gst: {
+      enabled: true,
+      ratePercent: 18,
+      inclusive: true,
+      label: "GST @ 18% (included)"
     },
 
     tiers: {
@@ -368,11 +388,28 @@ export const conferenceConfig: ConferenceConfig = {
     enableAbstractsWithoutRegistration: false,
     // Deadline not yet announced — window gate stays off until the committee confirms.
     submissionWindow: {
-      enabled: false,
-      start: "",
-      end: ""
+      enabled: true,
+      start: "2026-01-01",
+      end: "2026-10-11"
     },
+    /** The scientific committee assigns paper vs poster after review, so the
+     *  submitter is never asked to choose a presentation format. */
+    submitterChoosesFormat: false,
+    /** Verbatim from the committee's guidelines document. */
+    submissionRules: [
+      "Conference registration is mandatory for abstract submission.",
+      "The first name in each abstract should be that of the presenting author.",
+      "All abstracts/case reports must be submitted in English.",
+      "Abstract in brief includes aim, materials and methods, results, conclusion & clinical significance.",
+      "For case reports, introduction, case presentation, discussion & conclusion should be included.",
+      "Abstract in comprehensible English typed in Microsoft Word, Calibri font, size 14, not more than 500 words.",
+      "The abstracts should not have been presented or published in any other conference.",
+      "Only the presenting author will be entitled to get a certificate.",
+      "Abstracts/case reports submitted will be sent to the scientific committee for review and acceptance.",
+      "Final date for submission is 11 October 2026.",
+    ],
     maxAbstractsPerUser: 3,
+    wordLimit: 500,
 
     specialties: [
       {
@@ -479,13 +516,16 @@ export const conferenceConfig: ConferenceConfig = {
   accommodation: {
     enabled: true,
     optIn: true,
-    checkInFrom: "2026-10-23",
-    checkOutBy: "2026-10-25",
+    checkInFrom: "2026-10-22",
+    checkOutBy: "2026-10-26",
     roomTypes: ["sharing", "single"],
     defaultRoomType: "sharing",
     availableForTiers: ["earlyBird"],
     complimentaryForTiers: ["earlyBird"],
     complimentaryRoomType: "sharing",
+    /** Single occupancy is chargeable per night, even for tiers whose
+     *  twin-sharing is complimentary. */
+    singleRoomPerNight: 1000,
     note: "All Early Bird registrations include complimentary twin-sharing accommodation at the venue."
   },
 

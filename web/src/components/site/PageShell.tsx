@@ -19,7 +19,7 @@ export default function PageShell({
   return (
     <div className="conference-site relative isolate min-h-svh">
       <SiteHeader />
-      <main id="main" className="relative z-10 pb-20 pt-[92px]">
+      <main id="main" className="relative z-10 pb-20 pt-[104px]">
         <header className="px-[var(--gutter)]">
           <div className="mx-auto w-full max-w-[1180px] border-b border-[var(--hair)] pb-8">
             <p className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.24em] text-[#7d656c]">

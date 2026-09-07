@@ -297,10 +297,10 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
       />
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#b3122a]/15 bg-[#fffdfc] shadow-[0_1px_12px_rgba(95,7,23,.06)]">
-        <div className="mx-auto flex h-[58px] max-w-[1720px] items-center justify-between gap-5 px-[var(--gutter)]">
+        <div className="mx-auto flex h-[70px] max-w-[1720px] items-center justify-between gap-5 px-[var(--gutter)]">
           <a href="#hero" className="flex items-center gap-3 no-underline" aria-label="IACTS Technocollege CME home">
             <Seal />
-            <span className="text-[10px] font-semibold uppercase leading-[1.25] tracking-[.08em] text-[#160a0d] sm:text-[11px]">
+            <span className="text-[12px] font-bold uppercase leading-[1.25] tracking-[.06em] text-[#160a0d] sm:text-[14px]">
               Indian Association of
               <span className="block font-normal text-[#735b62]">Cardiovascular-Thoracic Surgeons</span>
             </span>
@@ -308,14 +308,14 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
 
           <nav aria-label="Primary navigation" className="hidden items-center gap-[clamp(1rem,2vw,2rem)] xl:flex">
             {navigation.map(([label, href]) => (
-              <a key={href} href={href} className="font-mono text-[9px] font-medium uppercase tracking-[.16em] text-[#614d53] no-underline transition-colors hover:text-[#b3122a]">
+              <a key={href} href={href} className="font-mono text-[13px] font-semibold uppercase tracking-[.1em] text-[#3d2b30] no-underline transition-colors hover:text-[#b3122a]">
                 {label}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-2">
-            <a href="/register" className="hidden min-h-9 items-center gap-2 rounded-full bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.16em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
+            <a href="/register" className="hidden min-h-10 items-center gap-2 rounded-full bg-[#b3122a] px-6 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
               Register <Arrow />
             </a>
             <button

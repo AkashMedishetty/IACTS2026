@@ -6,7 +6,7 @@ import { conference } from "@/data/conference";
 export const metadata: Metadata = { title: `Registration fees — ${conference.name}` };
 export default function Page() {
   return (
-    <PageShell title="Registration" accent="fees" lede="Fees are charged at the tier active on the date payment is received.">
+    <PageShell title="Registration Fees" lede="Fees are charged at the tier active on the date payment is received.">
       <RegisterCta /><Faq />
     </PageShell>
   );

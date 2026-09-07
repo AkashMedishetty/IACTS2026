@@ -208,8 +208,8 @@ export const pending = {
   /* Published — see config/pricing.config.ts for the authoritative matrix. */
   registrationFees: "published",
   delegateCategories: "published",
-  abstractDeadline: null,
-  abstractRules: null,
+  abstractDeadline: "2026-10-11",
+  abstractRules: "published",
   cmeCreditHours: null,
   accreditingCouncil: null,
   sponsorshipTiers: null,

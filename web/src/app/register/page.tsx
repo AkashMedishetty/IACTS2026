@@ -18,7 +18,7 @@ export default function RegisterPage() {
   return (
     <div className="conference-site relative isolate min-h-svh">
       <SiteHeader cta={false} />
-      <main id="main" className="relative z-10 px-[var(--gutter)] pb-24 pt-[92px]">
+      <main id="main" className="relative z-10 px-[var(--gutter)] pb-24 pt-[104px]">
         <div className="mx-auto w-full max-w-[1180px]">
           <header className="border-b border-[var(--hair)] pb-8">
             <p className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.24em] text-[#7d656c]">

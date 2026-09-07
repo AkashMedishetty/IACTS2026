@@ -5,7 +5,7 @@ import { conference } from "@/data/conference";
 export const metadata: Metadata = { title: `Organising Committee — ${conference.name}` };
 export default function Page() {
   return (
-    <PageShell title="Organising" accent="committee" lede="The patrons, leadership and executive committee convening the conference.">
+    <PageShell title="Organising Committee" lede="The patrons, leadership and executive committee convening the conference.">
       <Committee />
     </PageShell>
   );

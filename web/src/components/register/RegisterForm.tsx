@@ -2,16 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { conferenceConfig } from "@/config/conference.config";
-import { workshops as allWorkshops } from "@/config/pricing.config";
-import { computeRegistrationAmount, getCurrentTierKey, tierLabel } from "@/lib/registration";
+import { computeRegistrationAmount, getCurrentTierKey, tierLabel, gstBreakdown } from "@/lib/registration";
 import { Arrow } from "@/components/site/SiteHeader";
 import { validateRegistration } from "@/lib/validation/registration";
 
 type Values = Record<string, any>;
 
 const inputCls =
-  "mt-1.5 w-full border border-[#b3122a]/20 bg-white px-3 py-2.5 text-[14px] text-[#160a0d] outline-none transition-colors placeholder:text-[#a08d92] focus:border-[#b3122a]";
-const labelCls = "font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]";
+  "mt-2 w-full border border-[#b3122a]/25 bg-white px-3.5 py-3 text-[15px] text-[#160a0d] outline-none transition-colors placeholder:text-[#a08d92] focus:border-[#b3122a]";
+const labelCls = "font-mono text-[11px] font-semibold uppercase tracking-[.14em] text-[#5f0717]";
 
 function Field({ label, required, children, hint }: { label: string; required?: boolean; children: React.ReactNode; hint?: string }) {
   return (
@@ -52,7 +51,7 @@ export default function RegisterForm() {
     country: "India",
     type: categories[0]?.key,
     paymentMethod: "bank-transfer",
-    workshop: "",
+    workshopOptIn: false,
     accommodationRequired: false,
     roomType: acc.defaultRoomType,
     checkIn: acc.checkInFrom,
@@ -113,10 +112,22 @@ export default function RegisterForm() {
   }
 
   const selectedCategory = categories.find((c) => c.key === v.type);
+  const singleRate = acc.singleRoomPerNight || 0;
+  const nights = useMemo(() => {
+    if (!v.accommodationRequired || !v.checkIn || !v.checkOut) return 0;
+    const ms = Date.parse(`${v.checkOut}T00:00:00Z`) - Date.parse(`${v.checkIn}T00:00:00Z`);
+    return Math.max(0, Math.round(ms / 86_400_000));
+  }, [v.accommodationRequired, v.checkIn, v.checkOut]);
+
+  const roomCharge =
+    v.accommodationRequired && v.roomType !== acc.complimentaryRoomType ? nights * singleRate : 0;
+
   const price = useMemo(
-    () => computeRegistrationAmount({ categoryKey: v.type, workshopSelections: v.workshop ? [v.workshop] : [] }),
-    [v.type, v.workshop],
+    () => computeRegistrationAmount({ categoryKey: v.type }),
+    [v.type],
   );
+  const payable = price.total + roomCharge;
+  const tax = gstBreakdown(payable);
 
   function validate(): string[] {
     // Same contract the server enforces, so the two can never disagree.
@@ -181,7 +192,9 @@ export default function RegisterForm() {
           registration: {
             type: v.type,
             membershipNumber: v.membershipNumber || "",
-            workshopSelections: v.workshop ? [v.workshop] : [],
+            // The committee has not published tracks yet, so this records
+            // interest only; allocation happens later.
+            workshopSelections: v.workshopOptIn ? ["pre-conference-workshop"] : [],
             accommodation: accommodationOffered && v.accommodationRequired
               ? { required: true, roomType: v.roomType, checkIn: v.checkIn, checkOut: v.checkOut }
               : { required: false },
@@ -202,7 +215,7 @@ export default function RegisterForm() {
       setDone({
         registrationId: data.data.registrationId,
         name: data.data.name,
-        amount: price.total,
+        amount: payable,
         emailDelivered: data.data.emailDelivered !== false,
       });
     } catch {
@@ -335,14 +348,23 @@ export default function RegisterForm() {
             <Field label="IACTS membership number" required><input className={inputCls} value={v.membershipNumber || ""} onChange={(e) => set("membershipNumber", e.target.value)} /></Field>
           ) : <div className="hidden sm:block" />}
           <div className="sm:col-span-2">
-            <Field label={`Pre-conference workshop — ${conferenceConfig.eventDate.start.split("-").reverse().join("/")}`} hint="Five parallel hands-on tracks, limited capacity. Optional.">
-              <select className={inputCls} value={v.workshop} onChange={(e) => set("workshop", e.target.value)}>
-                <option value="">No workshop</option>
-                {allWorkshops.map((w) => (
-                  <option key={w.id} value={w.id}>{w.name}{w.amount ? ` — ₹${w.amount.toLocaleString("en-IN")}` : ""}</option>
-                ))}
-              </select>
-            </Field>
+            <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/25 bg-white p-4">
+              <input
+                type="checkbox"
+                className="mt-0.5 size-4 accent-[#b3122a]"
+                checked={!!v.workshopOptIn}
+                onChange={(e) => set("workshopOptIn", e.target.checked)}
+              />
+              <span>
+                <span className="block text-[15px] font-semibold text-[#160a0d]">
+                  I want to attend the pre-conference workshop (23 October)
+                </span>
+                <span className="mt-1 block text-[13px] leading-[1.6] text-[#614d53]">
+                  Seats are limited. The programme is being finalised — we will write to you with the tracks and any
+                  applicable charge once it is confirmed. You can change this later from your account.
+                </span>
+              </span>
+            </label>
           </div>
         </Section>
 
@@ -365,10 +387,17 @@ export default function RegisterForm() {
                 <Field label="Check-out" hint={`Not after ${acc.checkOutBy}`}>
                   <input type="date" className={inputCls} min={acc.checkInFrom} max={acc.checkOutBy} value={v.checkOut} onChange={(e) => set("checkOut", e.target.value)} />
                 </Field>
-                <Field label="Room type">
+                <Field label="Room type" hint={singleRate ? `Single occupancy is ₹${singleRate.toLocaleString("en-IN")} per night extra.` : undefined}>
                   <select className={inputCls} value={v.roomType} onChange={(e) => set("roomType", e.target.value)}>
                     {acc.roomTypes.map((r) => (
-                      <option key={r} value={r}>{r === "sharing" ? "Twin sharing" : "Single"}{complimentaryStay && r === acc.complimentaryRoomType ? " — complimentary" : ""}</option>
+                      <option key={r} value={r}>
+                        {r === "sharing" ? "Twin sharing" : "Single"}
+                        {complimentaryStay && r === acc.complimentaryRoomType
+                          ? " — complimentary"
+                          : r !== acc.complimentaryRoomType && singleRate
+                            ? ` — ₹${singleRate.toLocaleString("en-IN")}/night`
+                            : ""}
+                      </option>
                     ))}
                   </select>
                 </Field>
@@ -443,11 +472,23 @@ export default function RegisterForm() {
               </li>
             ))}
           </ul>
+          {roomCharge > 0 ? (
+            <div className="mt-2 flex items-baseline justify-between gap-3 border-b border-[var(--hair)] pb-2 text-[13px]">
+              <span className="text-[#614d53]">Single room · {nights} night{nights === 1 ? "" : "s"}</span>
+              <span className="font-semibold tabular-nums text-[#160a0d]">₹{roomCharge.toLocaleString("en-IN")}</span>
+            </div>
+          ) : null}
+
           <div className="mt-4 flex items-baseline justify-between">
-            <span className="font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">Total</span>
-            <span className="text-[clamp(1.5rem,3vw,2rem)] font-black tabular-nums text-[#b3122a]">₹{price.total.toLocaleString("en-IN")}</span>
+            <span className="font-mono text-[10px] uppercase tracking-[.16em] text-[#5f0717]">Total payable</span>
+            <span className="text-[clamp(1.6rem,3.2vw,2.2rem)] font-black tabular-nums text-[#b3122a]">₹{payable.toLocaleString("en-IN")}</span>
           </div>
-          {complimentaryStay && v.accommodationRequired ? (
+          {tax.enabled ? (
+            <p className="mt-1.5 text-right font-mono text-[10px] uppercase tracking-[.12em] text-[#7d656c]">
+              incl. {tax.label.replace(" (included)", "")} · ₹{tax.gst.toLocaleString("en-IN")}
+            </p>
+          ) : null}
+          {complimentaryStay && v.accommodationRequired && v.roomType === acc.complimentaryRoomType ? (
             <p className="mt-3 border-t border-[var(--hair)] pt-3 text-[12px] leading-[1.6] text-[#614d53]">
               Includes complimentary twin-sharing accommodation.
             </p>

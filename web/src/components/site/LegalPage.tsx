@@ -16,7 +16,7 @@ export default function LegalPage({
   return (
     <div className="conference-site relative isolate min-h-svh">
       <SiteHeader />
-      <main id="main" className="relative z-10 px-[var(--gutter)] pb-24 pt-[92px]">
+      <main id="main" className="relative z-10 px-[var(--gutter)] pb-24 pt-[104px]">
         <article className="mx-auto w-full max-w-[760px]">
           <p className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.24em] text-[#7d656c]">
             <span aria-hidden className="h-px w-8 bg-[#b3122a]" /> {conference.name}

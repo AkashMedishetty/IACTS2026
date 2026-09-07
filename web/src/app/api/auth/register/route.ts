@@ -266,6 +266,11 @@ export async function POST(request: NextRequest) {
     let emailFailureReason: string | null = null
 
     // Authoritative pricing — never trust an amount sent by the browser.
+    // Accommodation is priced server-side too; single occupancy is chargeable.
+    const serverAccommodation = sanitizeAccommodation(registration?.accommodation, {
+      tierKey: getCurrentTierKey(),
+    })
+
     const serverAmount = computeRegistrationAmount({
       categoryKey: registration?.type,
       workshopSelections: registration?.workshopSelections || [],
@@ -309,16 +314,14 @@ export async function POST(request: NextRequest) {
           dietaryRequirements: p.dietaryRequirements || '',
           age: p.age ?? 18
         })),
-        accommodation: sanitizeAccommodation(registration?.accommodation, {
-          tierKey: getCurrentTierKey(),
-        }),
+        accommodation: serverAccommodation,
         registrationDate: new Date()
       },
       payment: payment ? {
         method: payment.method || 'bank-transfer',
         status: 'pending' as const,
         // Amount is recomputed server-side; a client-supplied value is ignored.
-        amount: serverAmount.total,
+        amount: serverAmount.total + (serverAccommodation.totalAmount || 0),
         bankTransferUTR: payment.bankTransferUTR,
         screenshotUrl: payment.screenshotUrl,
         paymentDate: new Date()

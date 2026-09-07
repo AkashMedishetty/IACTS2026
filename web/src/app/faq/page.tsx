@@ -5,7 +5,7 @@ import { conference } from "@/data/conference";
 export const metadata: Metadata = { title: `FAQ — ${conference.name}` };
 export default function Page() {
   return (
-    <PageShell title="Frequently asked" accent="questions" lede="Registration, fees, abstracts, venues and what is still to be announced.">
+    <PageShell title="FAQ" lede="Registration, fees, abstracts, venues and what is still to be announced.">
       <Faq />
     </PageShell>
   );

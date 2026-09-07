@@ -1,86 +1,60 @@
-import { days } from "@/data/conference";
+import { conferenceConfig } from "@/config/conference.config";
 
 /**
- * Abstract submission.
- *
- * `pending.abstractDeadline` and `pending.abstractRules` are BOTH null, so no
- * date, word limit or file spec is stated. What IS real comes from the
- * programme: the presentation formats the scientific days actually carry. The
- * frame is therefore honest — these are the routes your work can take, the
- * rules for taking them are not published yet.
+ * Abstract submission. The committee has now published the rules and the
+ * deadline, so this states them plainly instead of listing what is unknown.
+ * Submitters do NOT choose paper vs poster — the scientific committee assigns
+ * the format after review.
  */
-const SUBMITTABLE = ["Paper & Video Presentations", "Young Surgeons Forum"];
-
-const UNPUBLISHED = [
-  ["Submission window", "Opening and closing dates"],
-  ["Format", "Structured-abstract sections and word limit"],
-  ["Categories", "Topic categories and subspecialty routing"],
-  ["E-poster spec", "Dimensions, file format and upload route"],
-  ["Video spec", "Duration, codec and narration requirements"],
-  ["Review", "Notification date and presenting-author rules"],
-];
-
 export default function Abstracts() {
-  const formats = days[1].items.map((i) => i.title);
+  const rules = conferenceConfig.abstracts.submissionRules || [];
+  const deadline = conferenceConfig.abstracts.submissionWindow?.end;
 
   return (
-    <section id="abstracts" className="border-t border-[var(--hair)] u-shell py-[clamp(4rem,10vh,9rem)]">
+    <section id="abstracts" className="border-t border-[var(--hair)] u-shell py-[clamp(3rem,8vh,6rem)]">
       <header className="max-w-3xl">
         <p className="u-eyebrow flex items-center gap-3" data-r>
           <span className="text-gold">05</span> Abstracts
         </p>
-        <h2
-          className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
-          data-r
-        >
-          Abstract <span className="u-serif">submission</span>
+        <h2 className="mt-5 text-[clamp(1.6rem,3.6vw,2.8rem)] font-extrabold leading-[1.05] tracking-[-0.025em]" data-r>
+          Abstract submission
         </h2>
-        <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
-          Two of the scientific programme&apos;s seven formats take submitted
-          work. Submission itself opens with registration.
+        <p className="mt-4 text-[clamp(.95rem,1.1vw,1.1rem)] leading-[1.72] text-muted-foreground" data-r>
+          Submit your work for the scientific programme. You do not choose the presentation format — the scientific
+          committee reviews each submission and decides whether it is presented as a paper or a poster.
         </p>
       </header>
 
-      <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(2rem,4vw,4rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <div>
-          <p className="u-eyebrow text-gold-lift" data-r>Routes for submitted work</p>
-          <ul className="mt-4 list-none border-t border-[var(--hair)] p-0">
-            {formats.map((f) => {
-              const open = SUBMITTABLE.includes(f);
-              return (
-                <li
-                  key={f}
-                  data-r
-                  className="grid grid-cols-[1fr_auto] items-baseline gap-4 border-b border-[var(--hair)] py-3"
-                >
-                  <span className={`text-[0.95rem] ${open ? "" : "text-faint"}`}>{f}</span>
-                  <span
-                    className={`font-mono text-[0.6rem] uppercase tracking-[0.16em] ${
-                      open ? "text-crimson-lift" : "text-faint"
-                    }`}
-                  >
-                    {open ? "Accepts abstracts" : "Invited"}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-          <p className="mt-5 font-mono text-[0.66rem] uppercase leading-[1.8] tracking-[0.14em] text-crimson-lift">
-            Submission portal opens with registration
-          </p>
+      {deadline ? (
+        <div className="mt-7 inline-flex items-baseline gap-3 border-l-2 border-[#b3122a] bg-white px-5 py-4" data-r>
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-[.14em] text-[#7d656c]">
+            Last date for submission
+          </span>
+          <span className="text-[clamp(1.2rem,2.4vw,1.8rem)] font-black tracking-[-.02em] text-[#b3122a]">
+            {deadline.split("-").reverse().join("/")}
+          </span>
         </div>
+      ) : null}
 
-        <div>
-          <p className="u-eyebrow text-gold-lift" data-r>To be published</p>
-          <ul className="mt-4 list-none border-t border-[var(--hair)] p-0">
-            {UNPUBLISHED.map(([t, d]) => (
-              <li key={t} data-r className="border-b border-[var(--hair)] py-3">
-                <p className="text-[0.92rem] font-semibold">{t}</p>
-                <p className="mt-0.5 text-[0.8rem] text-muted-foreground">{d}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <ol className="mt-8 grid list-none grid-cols-1 gap-x-[clamp(1.5rem,3vw,3rem)] gap-y-0 p-0 md:grid-cols-2" data-r>
+        {rules.map((rule, i) => (
+          <li key={rule} className="flex gap-4 border-b border-[var(--hair)] py-3.5">
+            <span className="font-mono text-[12px] font-semibold text-[#b3122a]">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-[14px] leading-[1.65] text-[#3d2b30]">{rule}</span>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-8 flex flex-wrap items-center gap-3" data-r>
+        <a
+          href="/abstracts"
+          className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#b3122a] px-7 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5"
+        >
+          Submit an abstract
+        </a>
+        <span className="font-mono text-[12px] uppercase tracking-[.1em] text-[#7d656c]">
+          Registration is required before submitting
+        </span>
       </div>
     </section>
   );

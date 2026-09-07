@@ -160,3 +160,33 @@ export function computeRegistrationAmount(params: {
 
   return { currency, tier, tierKey, base, workshops: workshopTotal, total: base + workshopTotal, lines }
 }
+
+export interface GstBreakdown {
+  enabled: boolean
+  ratePercent: number
+  inclusive: boolean
+  /** Amount before tax */
+  base: number
+  gst: number
+  /** What the delegate actually pays */
+  total: number
+  label: string
+}
+
+/**
+ * Published fees are GST-inclusive, so the tax is back-calculated out of the
+ * headline figure rather than added to it. Rounded to whole rupees.
+ */
+export function gstBreakdown(total: number): GstBreakdown {
+  const g = conferenceConfig.payment.gst
+  if (!g?.enabled) {
+    return { enabled: false, ratePercent: 0, inclusive: false, base: total, gst: 0, total, label: '' }
+  }
+  const rate = g.ratePercent / 100
+  if (g.inclusive) {
+    const base = Math.round(total / (1 + rate))
+    return { enabled: true, ratePercent: g.ratePercent, inclusive: true, base, gst: total - base, total, label: g.label }
+  }
+  const gst = Math.round(total * rate)
+  return { enabled: true, ratePercent: g.ratePercent, inclusive: false, base: total, gst, total: total + gst, label: g.label }
+}

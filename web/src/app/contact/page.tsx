@@ -5,7 +5,7 @@ import { conferenceConfig } from "@/config/conference.config";
 export const metadata: Metadata = { title: `Contact — ${conference.name}` };
 export default function Page() {
   return (
-    <PageShell title="Contact the" accent="secretariat" lede="For registration, abstracts, sponsorship and any question about the conference.">
+    <PageShell title="Contact" lede="For registration, abstracts, sponsorship and any question about the conference.">
       <section id="contact">
         <div className="u-shell grid gap-8 py-2 sm:grid-cols-2">
           <div className="border-l-2 border-[#b3122a] bg-white px-5 py-4">
