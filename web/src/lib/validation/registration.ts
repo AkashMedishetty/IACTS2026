@@ -61,8 +61,9 @@ export function validateRegistration(input: RegistrationInput): string[] {
   if (!p.institution?.trim()) e.push('Institution is required')
   else if (p.institution.trim().length < 3) e.push('Institution name looks too short')
 
-  if (!p.mciNumber?.trim()) e.push('Medical registration (MCI/NMC) number is required')
-  else if (!MCI_RE.test(p.mciNumber.trim())) e.push('Medical registration number looks invalid')
+  // Optional — validated only when provided.
+  if (p.mciNumber?.trim() && !MCI_RE.test(p.mciNumber.trim()))
+    e.push('Medical registration number looks invalid')
 
   if (p.address?.pincode && !PINCODE_RE.test(p.address.pincode.trim()))
     e.push('Enter a valid 6-digit PIN code')

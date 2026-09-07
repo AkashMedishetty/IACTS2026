@@ -97,11 +97,6 @@ export function getBaseTemplate(content: string) {
         <div class="content">
           ${content}
         </div>
-        <div style="background-color: #e7f9ee; border-left: 4px solid #25D366; padding: 16px 18px; margin: 24px 0 0; border-radius: 8px;">
-          <h4 style="margin: 0 0 6px 0; color: #128C7E;">📱 Join our WhatsApp Group</h4>
-          <p style="margin: 0 0 12px 0; color: #333;">Join the official ${conferenceConfig.shortName} WhatsApp group for regular updates, programme announcements and important alerts.</p>
-          <a href="https://chat.whatsapp.com/DsWnMo9im44GKOti4XkPYC" target="_blank" rel="noopener" style="display: inline-block; background-color: #25D366; color: #ffffff; text-decoration: none; font-weight: bold; padding: 10px 22px; border-radius: 6px;">Join the WhatsApp Group</a>
-        </div>
         <div class="footer">
           <p>
             <strong>${conferenceConfig.shortName}</strong><br>

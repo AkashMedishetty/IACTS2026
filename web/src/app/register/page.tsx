@@ -30,7 +30,7 @@ export default function RegisterPage() {
             <p className="mt-4 max-w-[54ch] text-[15px] leading-[1.7] text-[#614d53]">
               {conference.name} — {conference.organisedBy}. Complete the form below to reserve your place.
             </p>
-            <p className="mt-4 inline-flex items-center gap-2 border border-[#b3122a]/20 bg-white px-3 py-1.5 font-mono text-[9px] uppercase tracking-[.16em] text-[#b3122a]">
+            <p className="mt-5 inline-flex items-center gap-2 border-l-4 border-[#b3122a] bg-[#f8e9ed] px-5 py-3 text-[clamp(1rem,1.8vw,1.35rem)] font-black uppercase tracking-[-.01em] text-[#b3122a]">
               {tier} rate active{window?.endDate ? ` · until ${window.endDate.split("-").reverse().join("/")}` : ""}
             </p>
           </header>

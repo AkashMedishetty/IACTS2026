@@ -178,7 +178,8 @@ export const venues = [
     name: "NIMS Hyderabad",
     full: "Nizam's Institute of Medical Sciences",
     hosts: "Pre-Conference Workshop — October 23",
-    address: null,
+    address: "Punjagutta, Hyderabad, Telangana 500082",
+    mapQuery: "Nizam's Institute of Medical Sciences, Punjagutta, Hyderabad",
     image: "/venues/nims.jpg",
   },
   {
@@ -186,7 +187,8 @@ export const venues = [
     name: "Dr. MCR HRD Institute",
     full: "Dr. MCR HRD Institute Auditorium",
     hosts: "Scientific Programme — October 24 & 25",
-    address: null,
+    address: "Road No. 25, Jubilee Hills, Hyderabad, Telangana 500033",
+    mapQuery: "Dr. MCR HRD Institute of Telangana, Jubilee Hills, Hyderabad",
     image: "/venues/mcr.jpg",
   },
 ] as const;

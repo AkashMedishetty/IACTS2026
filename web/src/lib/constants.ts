@@ -65,7 +65,6 @@ export const NAV_ITEMS = [
   { label: "Awards", href: "#awards", path: "/awards" },
   { label: "Industry", href: "#sponsors", path: "/sponsors" },
   { label: "Venue", href: "#venue", path: "/venue" },
-  { label: "FAQ", href: "#faq", path: "/faq" },
 ] as const;
 
 /** Surfaces read this to render honest "announced soon" states. */

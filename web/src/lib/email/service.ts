@@ -384,13 +384,9 @@ export class EmailService {
           <p style="margin: 8px 0 0 0; font-size: 12px; color: #6b7280;">Present this QR at the registration desk</p>
         </div>` : ''}
 
-        <div style="text-align: center; margin: 24px 0;">
-          <a href="${site}/brochure.pdf" class="button">📄 Download Conference Brochure</a>
-        </div>
-
         <p><strong>Useful links:</strong></p>
         <ul>
-          <li>Programme &amp; schedule: <a href="${site}/program-schedule">${site}/program-schedule</a></li>
+          <li>Programme: <a href="${site}/programme">${site}/programme</a></li>
           <li>Venue &amp; travel: <a href="${site}/venue">${site}/venue</a></li>
           <li>Your dashboard: <a href="${site}/dashboard">${site}/dashboard</a></li>
         </ul>
@@ -409,7 +405,7 @@ export class EmailService {
         to: data.email,
         subject: `Your ${conferenceConfig.shortName} Registration Details & QR Code`,
         html: getBaseTemplate(content),
-        text: `Your ${conferenceConfig.shortName} registration ID is ${data.registrationId}. Brochure: ${site}/brochure.pdf`,
+        text: `Your ${conferenceConfig.shortName} registration ID is ${data.registrationId}. Details: ${site}`,
         attachments,
         userId: data.userId,
         userName: data.name,
@@ -632,7 +628,7 @@ export class EmailService {
             <strong>Rejection Date:</strong> ${rejectionData.rejectionDate.toLocaleDateString()}<br>
             <strong>Reason:</strong> ${rejectionData.reason}
           </div>
-          <p>Please contact our team at <a href="mailto:contact@gmail.com">contact@gmail.com</a> if you believe this is an error or need assistance.</p>
+          <p>Please contact our team at <a href="mailto:${conferenceConfig.contact.email}">${conferenceConfig.contact.email}</a> if you believe this is an error or need assistance.</p>
           <p>Best regards,<br>${conferenceConfig.shortName} Team</p>
         </div>
       `;

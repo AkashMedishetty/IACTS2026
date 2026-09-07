@@ -202,7 +202,7 @@ export default function ConceptTheatre() {
         <div className="mx-auto mt-8 grid w-full max-w-[1240px] gap-8 px-5 lg:grid-cols-[1.3fr_1fr]">
           <div className="grid gap-4 text-[.92rem] leading-[1.75]" style={{ color: MUTED }}>
             <p>
-              Convened by {conference.organisedBy} under the {conference.association},
+              Convened by {conference.organisedBy} under the aegis of the {conference.association},
               pairing hands-on surgical training with a scientific meeting across two
               venues in {conference.city}.
             </p>
@@ -399,7 +399,7 @@ export default function ConceptTheatre() {
           {[
             ["When and where is it held?", `${conference.dates.label}, in ${conference.city}, across ${venues.length} venues.`],
             ["Which venue on which day?", `${venues[0].name} hosts the workshop on October 23. ${venues[1].name} hosts the scientific programme on October 24 and 25.`],
-            ["Who is organising it?", `${conference.organisedBy}, under the ${conference.association}.`],
+            ["Who is organising it?", `${conference.organisedBy}, under the aegis of the ${conference.association}.`],
             ["Is there hands-on training?", `Yes — ${days[0].items.length} skills stations run on October 23.`],
             ["Can I present my own work?", "Yes. Two of the scientific formats accept submitted work; the rules are not yet published."],
             ["Is registration open?", "Not yet. Registration is opening soon."],

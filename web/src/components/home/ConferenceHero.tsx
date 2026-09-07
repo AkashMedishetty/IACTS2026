@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { conference, days, secretariat } from "@/data/conference";
-import { STATS, NAV_ITEMS } from "@/lib/constants";
+import { NAV_ITEMS } from "@/lib/constants";
 import type { InteractionState } from "@/components/anatomy/AnatomyParticles";
 
 const AnatomyScene = dynamic(() => import("@/components/anatomy/AnatomyScene"), {
@@ -96,8 +96,6 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
       reducedMotion || !wideLayout ? 170 : 20 + Math.min(1, value / 0.55) ** 0.85 * 150;
     return `radial-gradient(circle at 50% 47%, transparent ${radius}vmax, #000 calc(${radius}vmax + 1.5px))`;
   });
-  const displayedStage = reducedMotion ? chapters.length - 1 : activeStage;
-
   // ONE clock. Page scroll fraction drives the model directly — no remapping,
   // no station index, no second timeline that can drift out of step with this.
   useMotionValueEvent(pageProgress, "change", (value) => {
@@ -306,9 +304,9 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
             </span>
           </a>
 
-          <nav aria-label="Primary navigation" className="hidden items-center gap-[clamp(1rem,2vw,2rem)] xl:flex">
+          <nav aria-label="Primary navigation" className="hidden items-center gap-[clamp(1.1rem,2vw,2.1rem)] xl:flex">
             {navigation.map(([label, href]) => (
-              <a key={href} href={href} className="font-mono text-[13px] font-semibold uppercase tracking-[.1em] text-[#3d2b30] no-underline transition-colors hover:text-[#b3122a]">
+              <a key={href} href={href} className="text-[17px] font-bold uppercase tracking-[.02em] text-[#160a0d] no-underline transition-colors hover:text-[#b3122a]">
                 {label}
               </a>
             ))}
@@ -351,18 +349,6 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
         </div>
       ) : null}
 
-      <aside className="pointer-events-none fixed bottom-6 left-6 z-40 hidden items-end gap-3 2xl:flex" aria-label={`Model state: ${chapters[displayedStage].label}`}>
-        <span className="font-mono text-[8px] uppercase tracking-[.18em] text-[#7d656c] [writing-mode:vertical-rl] rotate-180">Living operative field</span>
-        <ol className="flex list-none flex-col gap-1 p-0">
-          {chapters.map((stage, index) => (
-            <li key={stage.label} className="flex items-center gap-2">
-              <span className={`h-px transition-all ${displayedStage === index ? "w-7 bg-[#b3122a]" : "w-3 bg-[#b3122a]/25"}`} />
-              <span className={`font-mono text-[8px] uppercase tracking-[.14em] ${displayedStage === index ? "text-[#b3122a]" : "text-[#947e84]"}`}>{stage.short}</span>
-            </li>
-          ))}
-        </ol>
-      </aside>
-
       <section ref={heroRef} id="hero" className="relative z-10 flex min-h-svh scroll-mt-16 flex-col overflow-hidden px-[var(--gutter)] pb-7 pt-16 sm:pt-20">
         <div className="mx-auto grid w-full max-w-[1720px] flex-1 items-center gap-[clamp(1.25rem,2vw,2.5rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)_minmax(0,.92fr)]">
           <div className="relative z-10 order-2 grid gap-2.5 xl:order-none">
@@ -376,33 +362,20 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
                   Technocollege CME <span className="text-[#b3122a]">2026</span>
                 </span>
               </h1>
-              <p className="mt-4 font-display text-[clamp(1.35rem,2.4vw,2.5rem)] italic leading-[1.04] tracking-[-.03em] text-[#160a0d]">
-                The future is <span className="text-[#b3122a]">now.</span>
+              <p className="mt-5 font-display text-[clamp(1.7rem,3vw,3rem)] font-semibold italic leading-[1] tracking-[-.02em] text-[#b3122a]">
+                The Future Is Now !
               </p>
             </div>
 
             <div className="border-l-2 border-[#b3122a] bg-white/[0.93] p-[clamp(1rem,1.4vw,1.4rem)] backdrop-blur-sm">
-              <p className="max-w-[48ch] text-[clamp(.82rem,.95vw,.98rem)] leading-[1.7] text-[#614d53]">
-                A three-day Technocollege CME convened by the Department of CTVS, NIMS Hyderabad — hands-on surgical
-                training, next-generation technology and scientific exchange for cardiovascular and thoracic surgeons.
+              <p className="max-w-[48ch] text-[clamp(.88rem,1vw,1.02rem)] leading-[1.7] text-[#614d53]">
+                A three-day cardiothoracic surgery CME convened by the Department of CTVS, NIMS Hyderabad.
               </p>
-              <ul className="mt-4 flex list-none flex-wrap gap-x-5 gap-y-1 p-0">
-                {conference.pillars.map((pillar) => (
-                  <li key={pillar} className="font-mono text-[9px] uppercase tracking-[.18em] text-[#b3122a]">
-                    {pillar}
-                  </li>
-                ))}
-              </ul>
             </div>
 
-            <div className="grid gap-2.5 sm:grid-cols-2">
-              <a href="#programme" className="flex min-h-12 items-center justify-between gap-3 bg-[#b3122a] px-5 font-mono text-[9px] font-medium uppercase tracking-[.15em] text-white no-underline transition-transform hover:-translate-y-0.5">
-                Scientific programme <Arrow />
-              </a>
-              <a href="/register" className="flex min-h-12 items-center justify-between gap-3 border border-[#b3122a]/30 bg-white/[0.93] px-5 font-mono text-[9px] font-medium uppercase tracking-[.15em] text-[#b3122a] no-underline backdrop-blur-sm transition-colors hover:bg-[#f8e9ed]">
-                Delegate registration <Arrow />
-              </a>
-            </div>
+            <a href="/register" className="flex min-h-14 items-center justify-center gap-3 bg-[#b3122a] px-6 text-[15px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
+              Register Now <Arrow />
+            </a>
           </div>
 
           <div className="relative z-10 order-first flex items-center justify-center py-[clamp(.5rem,3vh,3rem)] xl:order-none">
@@ -413,9 +386,6 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               <span aria-hidden="true" className="absolute bottom-0 left-1/2 h-3 w-px -translate-x-1/2 hidden bg-[#b3122a]/40 xl:block" />
               <span aria-hidden="true" className="absolute left-0 top-1/2 h-px w-3 -translate-y-1/2 hidden bg-[#b3122a]/40 xl:block" />
               <span aria-hidden="true" className="absolute right-0 top-1/2 h-px w-3 -translate-y-1/2 hidden bg-[#b3122a]/40 xl:block" />
-              <p className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[8px] uppercase tracking-[.2em] text-[#7d656c]">
-                Anatomical heart · 70,000 point samples
-              </p>
             </div>
           </div>
 
@@ -437,18 +407,10 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               ))}
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5">
-              {STATS.map((stat) => (
-                <div key={stat.label} className="border border-[#b3122a]/15 bg-white/[0.9] px-3 py-3 backdrop-blur-sm">
-                  <span className="block text-xl font-black text-[#b3122a]">{stat.value}</span>
-                  <span className="mt-0.5 block font-mono text-[7px] uppercase tracking-[.15em] text-[#614d53]">{stat.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="border border-[#b3122a]/15 bg-white/[0.9] px-3 py-3 backdrop-blur-sm">
-              <p className="font-mono text-[8px] uppercase tracking-[.16em] text-[#7d656c]">
-                Registration<br /><span className="text-[#b3122a]">Open now · Early Bird until 27/09/2026</span>
+            <div className="border-l-2 border-[#b3122a] bg-white/[0.93] px-4 py-4 backdrop-blur-sm">
+              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#7d656c]">Registration open</p>
+              <p className="mt-1.5 text-[clamp(1rem,1.6vw,1.4rem)] font-black uppercase leading-tight tracking-[-.02em] text-[#b3122a]">
+                Early Bird until 27 Sept 2026
               </p>
             </div>
           </div>

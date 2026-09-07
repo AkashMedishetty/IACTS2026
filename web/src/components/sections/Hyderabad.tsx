@@ -76,10 +76,6 @@ export default function Hyderabad() {
             </li>
           ))}
         </ul>
-
-        <p className="mt-8 border-t border-[var(--hair)] pt-5 font-mono text-[0.66rem] uppercase leading-[1.8] tracking-[0.14em] text-[#7d656c]" data-r>
-          Rajiv Gandhi International Airport serves both venues · City transport guidance to be published
-        </p>
       </div>
     </section>
   );

@@ -41,9 +41,9 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
             </span>
           </a>
 
-          <nav aria-label="Primary" className="hidden items-center gap-[clamp(1rem,2vw,2rem)] xl:flex">
+          <nav aria-label="Primary" className="hidden items-center gap-[clamp(1.1rem,2vw,2.1rem)] xl:flex">
             {nav.map((n) => (
-              <a key={n.path} href={n.path} className="font-mono text-[13px] font-semibold uppercase tracking-[.1em] text-[#3d2b30] no-underline transition-colors hover:text-[#b3122a]">
+              <a key={n.path} href={n.path} className="text-[17px] font-bold uppercase tracking-[.02em] text-[#160a0d] no-underline transition-colors hover:text-[#b3122a]">
                 {n.label}
               </a>
             ))}

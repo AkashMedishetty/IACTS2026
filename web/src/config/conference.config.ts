@@ -308,14 +308,14 @@ export const conferenceConfig: ConferenceConfig = {
 
     formFields: {
       titles: ['Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.'],
-      designations: ['Consultant', 'Faculty', 'Senior Resident', 'Junior Resident', 'Fellow', 'PG/Student', 'Other'],
+      designations: ['Consultant', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
       relationshipTypes: ['Spouse', 'Child', 'Parent', 'Friend', 'Colleague', 'Other'],
       paymentMethods: ['bank-transfer', 'online', 'pay-now', 'cash']
     },
 
     categories: [
       { key: "resident", label: "Resident / Trainee" },
-      { key: "iacts-member", label: "IACTS Member", requiresMembership: true, membershipField: "membershipNumber" },
+      { key: "iacts-member", label: "IACTS Member" },
       { key: "non-member", label: "Non-Member" },
       { key: "complimentary", label: "Complimentary Registration" },
       { key: "sponsored", label: "Sponsored Registration" }
@@ -335,7 +335,7 @@ export const conferenceConfig: ConferenceConfig = {
     currencySymbol: "₹",
 
     // Blob store is connected, so proof of payment is enforced.
-    requirePaymentProof: true,
+    requirePaymentProof: false,
 
     methods: {
       razorpay: false,        // enable once gateway credentials are issued

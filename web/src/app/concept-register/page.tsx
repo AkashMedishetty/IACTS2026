@@ -177,7 +177,7 @@ export default function ConceptPlate() {
         <div className="mt-9 grid gap-10 lg:grid-cols-[1.5fr_1fr]">
           <div className="columns-1 gap-8 text-[1.02rem] leading-[1.72] sm:columns-2 [&>p]:mb-4" style={{ fontFamily: "var(--pl-d),Georgia,serif" }}>
             <p>
-              Convened by {conference.organisedBy} under the {conference.association},
+              Convened by {conference.organisedBy} under the aegis of the {conference.association},
               pairing hands-on surgical training with a scientific meeting across two
               seats in {conference.city}.
             </p>
@@ -365,7 +365,7 @@ export default function ConceptPlate() {
           {[
             ["When and where is it held?", `${conference.dates.label}, in ${conference.city}, across ${venues.length} seats.`],
             ["Which seat on which day?", `${venues[0].name} hosts the workshop on 23 October. ${venues[1].name} hosts the scientific programme on 24 and 25 October.`],
-            ["Who is convening it?", `${conference.organisedBy}, under the ${conference.association}.`],
+            ["Who is convening it?", `${conference.organisedBy}, under the aegis of the ${conference.association}.`],
             ["Is there hands-on training?", `Yes — ${days[0].items.length} skills stations run on 23 October.`],
             ["Can I present my own work?", "Yes. Two of the scientific formats accept submitted work; the rules are not yet published."],
             ["Is registration open?", "Not yet. Registration is opening soon."],

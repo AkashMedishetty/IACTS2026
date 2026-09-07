@@ -37,7 +37,7 @@ export default function Faq() {
       "Which venue on which day?",
       `${venues[0].full} hosts the ${venues[0].hosts.toLowerCase()}. ${venues[1].full} hosts the ${venues[1].hosts.toLowerCase()}.`,
     ],
-    ["Who is organising it?", `${conference.organisedBy}, under the ${conference.association}.`],
+    ["Who is organising it?", `${conference.organisedBy}, under the aegis of the ${conference.association}.`],
     [
       "Is there hands-on training?",
       `Yes — day one is a pre-conference workshop with ${days[0].items.length} stations: ${days[0].items
