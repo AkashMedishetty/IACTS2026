@@ -22,6 +22,17 @@
   margin: 0;
 }
 
+/* The site paints a global grain overlay via body::after — a FIXED element
+   holding a base64 SVG feTurbulence filter. On screen that is one cheap layer,
+   but Chromium rasterises a fixed filtered layer once PER PAGE at device
+   resolution, which took this 13-page PDF to 41MB. A print document does not
+   want it at all. Same reasoning for any fixed site chrome. */
+body::after,
+body::before {
+  display: none !important;
+  content: none !important;
+}
+
 .bro {
   --ink: #160a0d;
   --crimson: #b3122a;
