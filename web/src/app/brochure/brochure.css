@@ -1,20 +1,23 @@
 /* ============================================================================
-   IACTS TechnoCollege CME 2026 — DELEGATE BROCHURE, print stylesheet.
+   IACTS TechnoCollege CME 2026 — DELEGATE BROCHURE
+   Editorial-minimalist print system.
 
-   This route exists to be PRINTED, not browsed: it is rendered to PDF by
-   Chromium. Two consequences drive everything below.
+   WHY IT LOOKS LIKE THIS. The first pass was a grid of bordered cards — every
+   block boxed, every size similar, so nothing led the eye and the whole thing
+   read flat. This replaces boxes with three devices that carry an editorial
+   page: an ASYMMETRIC GRID (a narrow left rail for metadata, a wide right
+   column for content), EXTREME SCALE CONTRAST (a 46pt serif headline against
+   8pt mono labels), and HAIRLINES instead of outlines. Colour is one crimson,
+   spent sparingly. Space is the main material — margins are wide and are not
+   an accident to be filled.
 
-   1. Every page is a fixed A4 box (210x297mm) with `break-after: page`, so a
-      page can never reflow into the next one the way a web section would. Any
-      content that outgrows its box is a LAYOUT BUG, and the render script
-      measures for exactly that rather than trusting it.
-   2. Colour must be forced with print-color-adjust, or Chromium strips the
-      crimson and the tinted panels and prints a white page with black text.
-
-   The design language is deliberately the same as the client's own trade
-   brochure (V5): letterspaced running header, dot-separated eyebrow, tight
-   uppercase display headline, footer with the event name left and the page
-   number right.
+   PRINT CONSTRAINTS.
+   - Every page is a fixed A4 box. Content that outgrows it is CLIPPED, so
+     scripts/render-brochure.mjs measures each page and refuses to write the PDF
+     if any page overflows.
+   - Colour must be forced with print-color-adjust or Chromium prints white.
+   - The site's global body::after grain is a FIXED filtered SVG layer, which
+     Chromium rasterises once PER PAGE — it took this PDF to 41MB. Killed below.
    ========================================================================= */
 
 @page {
@@ -22,11 +25,6 @@
   margin: 0;
 }
 
-/* The site paints a global grain overlay via body::after — a FIXED element
-   holding a base64 SVG feTurbulence filter. On screen that is one cheap layer,
-   but Chromium rasterises a fixed filtered layer once PER PAGE at device
-   resolution, which took this 13-page PDF to 41MB. A print document does not
-   want it at all. Same reasoning for any fixed site chrome. */
 body::after,
 body::before {
   display: none !important;
@@ -34,309 +32,409 @@ body::before {
 }
 
 .bro {
-  --ink: #160a0d;
+  --ink: #14090c;
+  --ink-soft: #4a3a3f;
   --crimson: #b3122a;
-  --crimson-deep: #8c0b20;
-  --maroon: #5f0717;
+  --crimson-deep: #7d0a1c;
   --muted: #5c4a4f;
-  --faint: #8a757b;
-  --tint: #fdf3f5;
-  --tint-2: #f8e9ed;
-  --hair: rgba(95, 7, 23, 0.16);
-  --pad: 16mm;
+  --faint: #948186;
+  --tint: #fbf4f6;
+  --paper: #fffefd;
+  --hair: rgba(20, 9, 12, 0.14);
+  --hair-strong: rgba(20, 9, 12, 0.3);
+
+  /* One rhythm value drives every vertical gap on the page. */
+  --pad-x: 18mm;
+  --pad-y: 15mm;
+  --rail: 34mm;
+  --gut: 9mm;
 
   font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  font-feature-settings: "kern" 1, "liga" 1;
   color: var(--ink);
-  background: #fff;
+  background: var(--paper);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
-/* --- the page box ------------------------------------------------------- */
+/* --- page box ----------------------------------------------------------- */
 .bro-page {
   position: relative;
   box-sizing: border-box;
   width: 210mm;
   height: 297mm;
-  padding: var(--pad);
-  overflow: hidden; /* a bug should clip visibly, not silently reflow */
-  background: #fff;
+  padding: var(--pad-y) var(--pad-x);
+  overflow: hidden;
+  background: var(--paper);
   break-after: page;
   page-break-after: always;
   display: flex;
   flex-direction: column;
 }
-.bro-page:last-child {
-  break-after: auto;
-  page-break-after: auto;
-}
+.bro-page:last-child { break-after: auto; page-break-after: auto; }
 
-/* On screen only, show the page edges so the route is reviewable in a browser.
-   `@media screen` keeps this out of the PDF entirely. */
 @media screen {
-  .bro {
-    background: #e9e4e5;
-    padding: 24px 0;
-  }
-  .bro-page {
-    margin: 0 auto 24px;
-    box-shadow: 0 10px 40px -12px rgba(95, 7, 23, 0.35);
-  }
+  .bro { background: #d9d3d5; padding: 26px 0; }
+  .bro-page { margin: 0 auto 26px; box-shadow: 0 14px 50px -16px rgba(20, 9, 12, 0.45); }
 }
 
-/* --- running header / footer -------------------------------------------- */
-.bro-rule {
-  height: 2px;
-  background: var(--crimson);
-  flex: none;
-}
+/* --- running head / foot ------------------------------------------------ */
 .bro-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 8mm;
-  padding-bottom: 3mm;
+  gap: 10mm;
   flex: none;
+  padding-bottom: 2.5mm;
+  border-bottom: 0.5pt solid var(--hair);
 }
-.bro-head-mark {
+.bro-head-mark,
+.bro-head-sec {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6.4pt;
-  letter-spacing: 0.3em;
+  font-size: 6pt;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--faint);
+  margin: 0;
 }
+.bro-head-sec { color: var(--crimson); }
+
 .bro-foot {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 8mm;
-  border-top: 1px solid var(--hair);
+  gap: 10mm;
+  border-top: 0.5pt solid var(--hair);
   padding-top: 2.5mm;
   margin-top: auto;
   flex: none;
 }
-.bro-foot-name,
-.bro-foot-num {
+.bro-foot-name {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6.6pt;
-  letter-spacing: 0.2em;
+  font-size: 5.8pt;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--faint);
+  margin: 0;
 }
+/* The folio is a designed element, not an afterthought. */
 .bro-foot-num {
-  color: var(--crimson);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 15pt;
+  line-height: 1;
   font-weight: 700;
+  color: var(--crimson);
+  margin: 0;
 }
-.bro-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  padding-top: 5mm;
-}
+.bro-body { flex: 1 1 auto; min-height: 0; padding-top: 9mm; }
 
-/* --- type -------------------------------------------------------------- */
-.bro-eyebrow {
+/* --- the asymmetric grid ------------------------------------------------ */
+.bro-split {
+  display: grid;
+  grid-template-columns: var(--rail) 1fr;
+  gap: 0 var(--gut);
+  align-items: start;
+}
+.bro-split-wide { grid-template-columns: 52mm 1fr; }
+.bro-rail > * + * { margin-top: 3mm; }
+
+/* --- type scale --------------------------------------------------------- */
+.bro-kicker {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 7pt;
-  letter-spacing: 0.26em;
+  font-size: 6.4pt;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--crimson);
-  margin: 0 0 4mm;
+  margin: 0 0 6mm;
 }
-.bro-h1 {
-  font-size: 30pt;
+/* Display headline: serif, large, tight. This is the page's single loud voice. */
+.bro-display {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 40pt;
   line-height: 0.94;
-  letter-spacing: -0.03em;
-  font-weight: 800;
-  text-transform: uppercase;
-  margin: 0 0 5mm;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+  margin: 0 0 7mm;
   color: var(--ink);
+  text-wrap: balance;
 }
+.bro-display-sm { font-size: 29pt; line-height: 0.98; }
+.bro-em { font-style: italic; color: var(--crimson); }
+
 .bro-h2 {
-  font-size: 17pt;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-weight: 800;
-  margin: 0 0 3mm;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 15pt;
+  line-height: 1.14;
+  letter-spacing: -0.012em;
+  font-weight: 700;
+  margin: 0 0 2.5mm;
 }
 .bro-h3 {
-  font-size: 10.5pt;
-  line-height: 1.25;
-  font-weight: 700;
-  margin: 0 0 1.5mm;
-}
-.bro-serif {
-  font-family: var(--font-display, Georgia, serif);
-  font-style: italic;
-  font-weight: 700;
-  text-transform: none;
-  color: var(--crimson);
-}
-.bro-p {
-  font-size: 9.4pt;
-  line-height: 1.62;
-  color: var(--muted);
-  margin: 0 0 3mm;
-}
-.bro-p strong { color: var(--ink); }
-.bro-lead {
-  font-size: 10.6pt;
-  line-height: 1.6;
+  font-size: 9.6pt;
+  line-height: 1.28;
+  font-weight: 650;
+  letter-spacing: -0.004em;
+  margin: 0;
   color: var(--ink);
 }
-.bro-small {
-  font-size: 8pt;
-  line-height: 1.55;
+.bro-lede {
+  font-size: 11.4pt;
+  line-height: 1.52;
+  letter-spacing: -0.008em;
+  color: var(--ink-soft);
+  margin: 0 0 5mm;
+  max-width: 118mm;
+}
+.bro-p {
+  font-size: 8.9pt;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 0 0 3mm;
+  max-width: 118mm;
+}
+.bro-p strong { color: var(--ink); font-weight: 650; }
+.bro-p:last-child { margin-bottom: 0; }
+.bro-note {
+  font-size: 7.8pt;
+  line-height: 1.6;
   color: var(--faint);
   margin: 0;
 }
 .bro-label {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6.6pt;
-  letter-spacing: 0.2em;
+  font-size: 5.9pt;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--faint);
-  margin: 0 0 1mm;
+  margin: 0;
 }
-.bro-num {
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 7pt;
+.bro-label-ink { color: var(--ink); }
+.bro-label-red { color: var(--crimson); }
+.bro-figure {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 26pt;
+  line-height: 1;
   font-weight: 700;
-  color: var(--crimson);
-}
-
-/* --- blocks ------------------------------------------------------------ */
-.bro-tagline {
-  font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 8pt;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
   color: var(--crimson);
   margin: 0;
 }
-.bro-quote {
-  border-left: 2px solid var(--crimson);
-  padding: 0 0 0 5mm;
-  margin: 0 0 4mm;
+/* Big quiet ordinals in the rail. */
+.bro-ord {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 17pt;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--hair-strong);
+  margin: 0;
 }
-.bro-panel {
-  background: var(--tint);
-  border-left: 3px solid var(--crimson);
-  padding: 5mm 6mm;
+.bro-mono {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7pt;
+  letter-spacing: 0.1em;
+  color: var(--crimson);
+  margin: 0;
 }
-.bro-card {
-  border: 1px solid var(--hair);
-  padding: 4mm 4.5mm;
-  background: #fff;
-}
-.bro-grid { display: grid; gap: 4mm; }
-.bro-g2 { grid-template-columns: 1fr 1fr; }
-.bro-g3 { grid-template-columns: repeat(3, 1fr); }
-.bro-g4 { grid-template-columns: repeat(4, 1fr); }
-.bro-row {
+
+/* --- rules & rhythm ----------------------------------------------------- */
+.bro-hr { height: 0.5pt; background: var(--hair); border: 0; margin: 7mm 0; }
+.bro-hr-heavy { height: 1.5pt; background: var(--crimson); border: 0; margin: 0 0 5mm; width: 22mm; }
+.bro-stack > * + * { margin-top: 6mm; }
+.bro-tight > * + * { margin-top: 3mm; }
+
+/* A list row: hairline beneath, never boxed. */
+.bro-item {
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 4mm;
+  grid-template-columns: 9mm 1fr;
+  gap: 0 4mm;
   align-items: baseline;
-  border-bottom: 1px solid var(--hair);
-  padding: 2.4mm 0;
+  border-bottom: 0.5pt solid var(--hair);
+  padding: 2.6mm 0;
 }
-.bro-row-2col {
+.bro-item-3 { grid-template-columns: 9mm 1fr auto; }
+.bro-item:first-child { border-top: 0.5pt solid var(--hair); }
+
+/* --- schedule (the programme pages) ------------------------------------ */
+.bro-sess { margin: 0 0 5mm; }
+.bro-sess-head {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 3.5mm;
+  grid-template-columns: 11mm 1fr auto;
+  gap: 0 4mm;
   align-items: baseline;
-  border-bottom: 1px solid var(--hair);
-  padding: 2.2mm 0;
+  border-bottom: 1pt solid var(--crimson);
+  padding-bottom: 1.6mm;
+  margin-bottom: 1mm;
 }
+.bro-sess-code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7.4pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--crimson);
+  margin: 0;
+}
+.bro-slot {
+  display: grid;
+  grid-template-columns: 11mm 1fr;
+  gap: 0 4mm;
+  align-items: baseline;
+  border-bottom: 0.5pt solid var(--hair);
+  padding: 1.5mm 0;
+}
+.bro-slot-time {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.8pt;
+  color: var(--faint);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.bro-slot-title { font-size: 8.4pt; line-height: 1.34; margin: 0; color: var(--ink); }
+.bro-slot-who {
+  font-size: 7.2pt;
+  line-height: 1.4;
+  color: var(--crimson);
+  margin: 0.4mm 0 0;
+}
+/* Breaks recede; panels and keynotes step forward. */
+.bro-slot.is-break .bro-slot-title {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.4pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.bro-slot.is-panel .bro-slot-title,
+.bro-slot.is-keynote .bro-slot-title { font-weight: 650; }
+.bro-slot.is-keynote { background: var(--tint); }
+.bro-tent {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 5.6pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-left: 2mm;
+}
+
+/* --- the one permitted panel ------------------------------------------- */
+.bro-panel { background: var(--tint); padding: 6mm 7mm; }
+.bro-panel-edge { border-left: 1.5pt solid var(--crimson); }
 
 /* --- fee table --------------------------------------------------------- */
 .bro-table { width: 100%; border-collapse: collapse; }
 .bro-table th,
 .bro-table td {
   text-align: right;
-  padding: 2.8mm 3mm;
-  border-bottom: 1px solid var(--hair);
-  font-size: 9.4pt;
+  padding: 3mm 3mm;
+  border-bottom: 0.5pt solid var(--hair);
+  font-size: 9.6pt;
+  font-variant-numeric: tabular-nums;
 }
 .bro-table th:first-child,
 .bro-table td:first-child { text-align: left; }
 .bro-table thead th {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6.6pt;
-  letter-spacing: 0.16em;
+  font-size: 5.9pt;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--faint);
   font-weight: 700;
-  border-bottom: 1px solid var(--crimson);
+  border-bottom: 1pt solid var(--ink);
+  padding-bottom: 2mm;
 }
 .bro-table thead th span {
   display: block;
   font-weight: 400;
-  letter-spacing: 0.08em;
-  color: var(--faint);
-  margin-top: 0.6mm;
+  letter-spacing: 0.1em;
+  margin-top: 0.8mm;
 }
-.bro-table td:first-child { font-weight: 700; color: var(--ink); }
-.bro-table .is-best { color: var(--crimson); font-weight: 800; }
-.bro-table thead th.is-best { color: var(--crimson); }
+.bro-table td:first-child { font-weight: 650; color: var(--ink); }
+.bro-table .is-best { color: var(--crimson); font-weight: 700; }
+.bro-table thead th.is-best { color: var(--crimson); border-bottom-color: var(--crimson); }
 
-/* --- call-to-action "buttons" (real links in the PDF) ------------------- */
+/* --- links styled as quiet editorial buttons --------------------------- */
 .bro-btn {
   display: inline-block;
-  background: var(--crimson);
-  color: #fff !important;
+  background: var(--ink);
+  color: var(--paper) !important;
   text-decoration: none;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 7.4pt;
+  font-size: 6.8pt;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 3.2mm 6mm;
+  padding: 3.4mm 7mm;
 }
+.bro-btn-red { background: var(--crimson); }
 .bro-btn-ghost {
-  background: #fff;
-  color: var(--crimson) !important;
-  border: 1px solid var(--crimson);
+  background: transparent;
+  color: var(--ink) !important;
+  border: 0.5pt solid var(--ink);
 }
 .bro-btn-row { display: flex; flex-wrap: wrap; gap: 3mm; align-items: center; }
 .bro-url {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 7.2pt;
+  font-size: 6.6pt;
+  letter-spacing: 0.06em;
   color: var(--crimson);
   text-decoration: none;
   word-break: break-all;
 }
 
-/* --- cover ------------------------------------------------------------- */
-.bro-cover {
-  background: var(--ink);
-  color: #fff;
-  justify-content: space-between;
-}
-.bro-cover .bro-h1 { color: #fff; font-size: 44pt; }
-.bro-cover .bro-p { color: rgba(255, 255, 255, 0.72); }
-.bro-cover-ph {
-  border: 1px dashed rgba(255, 255, 255, 0.35);
-  padding: 12mm 8mm;
-  text-align: center;
-}
-.bro-cover-ph .bro-label { color: rgba(255, 255, 255, 0.5); }
+/* --- grids ------------------------------------------------------------- */
+.bro-cols { display: grid; gap: 6mm var(--gut); }
+.bro-c2 { grid-template-columns: 1fr 1fr; }
+.bro-c3 { grid-template-columns: repeat(3, 1fr); }
+.bro-c4 { grid-template-columns: repeat(4, 1fr); }
+.bro-c6 { grid-template-columns: repeat(6, 1fr); }
 
-/* --- images ------------------------------------------------------------ */
-.bro-img {
+/* --- portraits --------------------------------------------------------- */
+.bro-por {
   display: block;
   width: 100%;
-  height: 26mm;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  border: 1px solid var(--hair);
+  object-position: 50% 20%;
+  background: var(--tint);
+  filter: grayscale(100%) contrast(1.04);
+}
+.bro-por-name { font-size: 7.6pt; line-height: 1.24; font-weight: 650; margin: 1.6mm 0 0; }
+.bro-por-role {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 5.2pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0.6mm 0 0;
+}
+.bro-por-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: var(--tint);
+  border: 0.5pt dashed var(--hair-strong);
+}
+.bro-por-ph span {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--hair-strong);
 }
 .bro-qr {
   display: block;
-  width: 34mm;
-  height: 34mm;
-  border: 1px solid var(--hair);
+  width: 32mm;
+  height: 32mm;
   background: #fff;
-  padding: 1.5mm;
-  box-sizing: content-box;
+}
+
+/* --- cover ------------------------------------------------------------- */
+.bro-cover { background: var(--ink); color: var(--paper); }
+.bro-cover .bro-display { color: var(--paper); font-size: 52pt; }
+.bro-cover .bro-p,
+.bro-cover .bro-lede { color: rgba(255, 254, 253, 0.66); }
+.bro-cover .bro-label { color: rgba(255, 254, 253, 0.42); }
+.bro-cover-ph {
+  border: 0.5pt dashed rgba(255, 254, 253, 0.28);
+  padding: 16mm 10mm;
+  text-align: center;
 }
