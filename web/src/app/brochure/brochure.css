@@ -394,7 +394,6 @@ body::before {
   object-fit: cover;
   object-position: 50% 20%;
   background: var(--tint);
-  filter: grayscale(100%) contrast(1.04);
 }
 .bro-por-name { font-size: 7.6pt; line-height: 1.24; font-weight: 650; margin: 1.6mm 0 0; }
 .bro-por-role {
