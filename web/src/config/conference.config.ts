@@ -335,7 +335,7 @@ export const conferenceConfig: ConferenceConfig = {
     currencySymbol: "₹",
 
     // Blob store is connected, so proof of payment is enforced.
-    requirePaymentProof: false,
+    requirePaymentProof: true,
 
     methods: {
       razorpay: false,        // enable once gateway credentials are issued

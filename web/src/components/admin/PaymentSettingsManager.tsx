@@ -390,7 +390,7 @@ export function PaymentSettingsManager() {
                       ...prev,
                       bankDetails: { ...prev.bankDetails, accountName: e.target.value }
                     }))}
-                    placeholder="e.g., TASCON 2026"
+                    placeholder="e.g., IACTS 2026"
                   />
                 </div>
                 <div>

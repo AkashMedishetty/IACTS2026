@@ -34,7 +34,7 @@ import {
 import { toast } from 'sonner'
 import { topicsForSpecialty, SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
 
-// TASCON 2026 Abstract Categories and Topics
+// IACTS 2026 Abstract Categories and Topics
 const SUBMISSION_CATEGORY_OPTIONS = [
   { value: 'award-paper', label: 'Award Paper' },
   { value: 'free-paper', label: 'Free Paper' },
@@ -69,7 +69,7 @@ interface Abstract {
   abstractId: string
   title: string
   track: string
-  // New TASCON 2026 fields
+  // New IACTS 2026 fields
   submittingFor?: string
   submissionCategory?: 'award-paper' | 'free-paper' | 'poster-presentation'
   submissionTopic?: string
@@ -163,12 +163,12 @@ export function AbstractsSubmissionsManager() {
       subject: 'Congratulations! Your Abstract {abstractId} Has Been Accepted',
       message: `Dear {name},
 
-Congratulations! We are pleased to inform you that your abstract titled "{title}" (ID: {abstractId}) has been ACCEPTED for presentation at TASCON 2026.
+Congratulations! We are pleased to inform you that your abstract titled "{title}" (ID: {abstractId}) has been ACCEPTED for presentation at IACTS 2026.
 
 Please visit our abstracts page to view your accepted abstract and submit your final presentation.
 
 Best regards,
-TASCON 2026 Organizing Committee`
+IACTS 2026 Organizing Committee`
     },
     {
       id: 'rejection',
@@ -176,14 +176,14 @@ TASCON 2026 Organizing Committee`
       subject: 'Update on Your Abstract Submission {abstractId}',
       message: `Dear {name},
 
-Thank you for submitting your abstract titled "{title}" (ID: {abstractId}) to TASCON 2026.
+Thank you for submitting your abstract titled "{title}" (ID: {abstractId}) to IACTS 2026.
 
 After careful review by our scientific committee, we regret to inform you that your abstract has not been selected for presentation at this year's conference.
 
-We appreciate your interest in TASCON 2026 and encourage you to submit again in the future.
+We appreciate your interest in IACTS 2026 and encourage you to submit again in the future.
 
 Best regards,
-TASCON 2026 Organizing Committee`
+IACTS 2026 Organizing Committee`
     },
     {
       id: 'revision',
@@ -196,7 +196,7 @@ Thank you for your abstract submission "{title}" (ID: {abstractId}).
 Our reviewers have requested some revisions before final acceptance. Please log in to your dashboard to view the feedback and submit your revised abstract.
 
 Best regards,
-TASCON 2026 Organizing Committee`
+IACTS 2026 Organizing Committee`
     },
     {
       id: 'reminder',
@@ -209,7 +209,7 @@ This is a reminder that the final submission for your accepted abstract "{title}
 Please log in to your dashboard and complete your final submission at your earliest convenience.
 
 Best regards,
-TASCON 2026 Organizing Committee`
+IACTS 2026 Organizing Committee`
     },
     {
       id: 'custom',

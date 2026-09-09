@@ -58,7 +58,7 @@ export function CertificateConfig() {
     content: {
       title: 'CERTIFICATE OF PARTICIPATION',
       bodyText: 'This is to certify that {name} has successfully participated in the {conference} held from {startDate} to {endDate} at {location}.',
-      footerText: '© 2026 TASCON. All rights reserved.',
+      footerText: '© 2026 IACTS Technocollege CME. All rights reserved.',
       issuedByName: 'Dr. Conference Organizer',
       issuedByTitle: 'Conference Chair'
     },

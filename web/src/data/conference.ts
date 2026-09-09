@@ -29,13 +29,12 @@ export const days = [
     venue: "NIMS (Nizam's Institute of Medical Sciences), Hyderabad",
     stage: "Approach",
     blurb:
-      "Five parallel hands-on tracks, each with limited capacity.",
+      "Hands-on sessions for postgraduate trainees, each with limited capacity.",
     items: [
-      { title: "Hands-on Wet Lab Sessions", tag: "Cadaveric" },
-      { title: "Robotic Simulation Training", tag: "Simulator" },
-      { title: "Suturing & Anastomosis Lab", tag: "Bench" },
-      { title: "Endovascular Skills Workshop", tag: "Cath lab" },
-      { title: "Perfusion & ECMO Basics", tag: "Circuit" },
+      { title: "Young Innovators Forum", tag: "Forum" },
+      { title: "Coronary Anastomosis Contest", tag: "Contest" },
+      { title: "Advanced Aortic Workshop", tag: "Workshop" },
+      { title: "Coronary anastomosis and valve anastomosis wet lab", tag: "Wet lab" },
     ],
   },
   {
@@ -144,8 +143,18 @@ export const capabilities = [
 ] as const;
 
 export const patrons = [
-  { name: "Dr. Rahul Devraj", role: "Director, NIMS Hyderabad" },
-  { name: "Dr. P Chandrashekhar", role: "Dean, NIMS Hyderabad" },
+  {
+    name: "Dr. Rahul Devraj",
+    title: "Chief Patron",
+    role: "Director, NIMS Hyderabad",
+    portrait: "/committee/rahul-devraj.jpg",
+  },
+  {
+    name: "Dr. P. Chandrashekhar",
+    title: "Co-Patron",
+    role: "Dean, NIMS Hyderabad",
+    portrait: "/committee/chandrashekhar.jpg",
+  },
 ] as const;
 
 /** portrait: null until the committee supplies usable high-res files.
@@ -155,21 +164,29 @@ export const leadership = [
   { name: "Dr. Amaresh Rao Malempati", role: "Organising Secretary", portrait: "/committee/amaresh.png" },
   { name: "Dr. Tella Rama Krishna Dev", role: "Organising Co-Secretary", portrait: "/committee/rama-krishna.png" },
   { name: "Dr. Anita Bhalla", role: "Organising Co-Secretary", portrait: "/committee/anita.png" },
-  { name: "Dr. Abhijeet Dashetwar", role: "Treasurer", portrait: "/committee/abhijeet.png" },
+  { name: "Dr. Abhijeet M Dashetwar", role: "Treasurer", portrait: "/committee/abhijeet.png" },
 ] as const;
 
+/**
+ * Executive committee. Portraits supplied by the committee on 9 September 2026.
+ *
+ * `portrait: null` means NO photograph was supplied for that member — it is not
+ * a missing file to hunt for. Those two entries render the type-only treatment,
+ * which is why the field is explicit rather than inferred from a filename that
+ * happens not to exist.
+ */
 export const executiveCommittee = [
-  "Dr. Kaladhar",
-  "Dr. P. S. S. Gopal",
-  "Dr. Sai Surabhi",
-  "Dr. Praveen",
-  "Dr. Sahir Reddy",
-  "Dr. Uday",
-  "Dr. Bhargavi",
-  "Dr. Sireesha",
-  "Dr. Pramod",
-  "Dr. Harshita",
-  "Dr. Tribhuvan",
+  { name: "Dr. B. Kaladhar", portrait: "/committee/kaladhar.jpg" },
+  { name: "Dr. P. S. S. Gopal", portrait: null },
+  { name: "Dr. P. Sai Surabhi", portrait: "/committee/sai-surabhi.jpg" },
+  { name: "Dr. D. Praveen", portrait: "/committee/praveen.jpg" },
+  { name: "Dr. K. Sahir Vardhan Reddy", portrait: "/committee/sahir-vardhan-reddy.jpg" },
+  { name: "Dr. T. Uday", portrait: "/committee/uday.jpg" },
+  { name: "Dr. A. Bhargavi", portrait: "/committee/bhargavi.jpg" },
+  { name: "Dr. S. Sireesha", portrait: "/committee/sireesha.jpg" },
+  { name: "Dr. J. Pramodh Reddy", portrait: "/committee/pramodh-reddy.jpg" },
+  { name: "Dr. Harshita", portrait: null },
+  { name: "Dr. M. Tribhuvan", portrait: "/committee/tribhuvan.jpg" },
 ] as const;
 
 export const venues = [
@@ -204,6 +221,33 @@ export const secretariat = {
   ],
 } as const;
 
+/**
+ * Registration helpline, supplied by the committee on 9 September 2026.
+ * This is the number a delegate rings about registration itself — distinct
+ * from the secretariat's scientific contacts above.
+ */
+export const registrationHelpline = {
+  label: "Registration helpline",
+  name: "Virinchi",
+  number: "9014772432",
+} as const;
+
+/**
+ * What the CME is and who it is for. Every sentence here is derived from the
+ * Organising Secretary's own message (Organising_Secretary_message.pdf) and the
+ * committee's programme note (About_the_techno_programme_.pdf) — nothing is
+ * invented copy.
+ */
+export const about = {
+  heading: "Built for the surgeons who will practise the next decade.",
+  lede: "Conceived primarily for postgraduate students and young surgeons in the early stages of their careers, Technocollege is designed to bridge the gap between conventional surgical training and the rapidly evolving technological landscape of our specialty.",
+  body: "Young surgeons should not have to wait until they are established in their careers to encounter the technologies that are transforming our specialty. Technocollege brings together young surgeons and pioneers of the field, creating an environment where experiences can be shared, ideas challenged and the learning curve shortened.",
+  /** The Secretary's five verbs, verbatim: "to expose, train, question, interact and innovate". */
+  verbs: ["Expose", "Train", "Question", "Interact", "Innovate"],
+  closing:
+    "Technocollege 2026 is not merely about predicting what cardiac and thoracic surgery will look like tomorrow. It is about experiencing the technology that is already shaping it today.",
+} as const;
+
 /** Everything the site must NOT invent. Surfaces read this to render
     honest "announced soon" states instead of placeholder values. */
 export const pending = {
@@ -218,6 +262,78 @@ export const pending = {
   accommodation: "early-bird-complimentary",
   sessionTimetable: null,
   phones: "published",
+} as const;
+
+/**
+ * Welcome messages, supplied by the office-bearers themselves
+ * (Organising_Chairman.pdf, Organising_Secretary_message.pdf). Verbatim —
+ * these are signed statements and must not be paraphrased or trimmed.
+ */
+export const messages = [
+  {
+    id: "chairman",
+    role: "Organising Chairman",
+    name: "Dr. G. Ravindra",
+    portrait: "/committee/ravindra.png",
+    salutation: "Dear colleagues,",
+    paragraphs: [
+      "It gives me immense pleasure to welcome you all to IACTS Technocollege CME 2026, being conducted under the aegis of the Indian Association of Cardiovascular and Thoracic Surgeons.",
+      "Technocollege is a timely initiative that brings together young surgeons, postgraduate trainees, experienced practitioners, innovators and technology leaders on a common platform. It is not simply a programme to learn new techniques; it is an opportunity to develop a mindset of adaptability, innovation and lifelong learning. The interactions, demonstrations and exchange of experiences during these three days will, I hope, inspire participants to look beyond the operating room of today and envision the possibilities of tomorrow.",
+      "Hyderabad provides a wonderful setting for this meeting. A city that seamlessly combines a rich cultural heritage with a rapidly growing ecosystem of medicine, technology, innovation and entrepreneurship, Hyderabad truly reflects the spirit of this conference. I warmly invite all delegates to experience not only the scientific programme, but also the legendary hospitality, culture, cuisine and warmth of Hyderabad.",
+      "I am confident that Technocollege 2026 will be an enriching experience—academically stimulating, professionally inspiring and personally memorable.",
+      "I look forward to welcoming each one of you to Hyderabad and to this exciting journey into the future of cardiothoracic surgery.",
+    ],
+  },
+  {
+    id: "secretary",
+    role: "Organising Secretary",
+    name: "Dr. Amaresh Rao Malempati",
+    portrait: "/committee/amaresh.png",
+    salutation: "Dear Colleagues,",
+    paragraphs: [
+      "Cardiovascular and thoracic surgery is witnessing an unprecedented transformation. Technologies that were once considered futuristic—minimally invasive and robotic surgery, advanced aortic interventions, mechanical circulatory support, organ transplantation, image-guided procedures and sophisticated thoracic techniques—are rapidly becoming part of contemporary surgical practice. The future is no longer something we are waiting for; it is already happening in our operating rooms.",
+      "It is with this conviction that we present IACTS Technocollege CME 2026, under the aegis of the Indian Association of Cardiovascular and Thoracic Surgeons (IACTS). Conceived primarily for postgraduate students and young surgeons in the early stages of their careers, Technocollege is designed to bridge the gap between conventional surgical training and the rapidly evolving technological landscape of our specialty.",
+      "We believe that young surgeons should not have to wait until they are established in their careers to encounter the technologies that are transforming our specialty. Technocollege is therefore conceived as a platform to expose, train, question, interact and innovate. More importantly, it brings together young surgeons and pioneers of the field, creating an environment where experiences can be shared, ideas challenged and the learning curve shortened.",
+      "Technocollege 2026 is not merely about predicting what cardiac and thoracic surgery will look like tomorrow. It is about experiencing the technology that is already shaping it today.",
+      "The future is now. And we invite you to be a part of it.",
+    ],
+  },
+] as const;
+
+/**
+ * Programme narrative, from About_the_techno_programme_.pdf. Day Zero is the
+ * hands-on day at NIMS; the two following days at Dr. MCR HRD Institute are
+ * structured around four domains plus the Breakthrough Sessions.
+ */
+export const programmeOverview = {
+  dayZero: {
+    label: "Day Zero",
+    heading: "Pre-conference Hands-on Workshops",
+    venue: "Nizam's Institute of Medical Sciences, Hyderabad",
+    body: "Providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, valve replacement techniques, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
+    skills: [
+      "Vascular and coronary anastomosis",
+      "Valve replacement techniques",
+      "CABG surgical planning",
+      "Aortic surgical planning",
+    ],
+  },
+  scientific: {
+    label: "Days One & Two",
+    heading: "Beyond conventional CME learning",
+    venue: "Dr. Marri Channa Reddy Human Resource Development Institute",
+    body: "The scientific programme is structured around four major domains shaping the future of our specialty.",
+  },
+  domains: [
+    { code: "01", title: "Minimally Invasive and Robotic Cardiac Surgery" },
+    { code: "02", title: "Aortic Surgery" },
+    { code: "03", title: "Heart-Lung Transplantation" },
+    { code: "04", title: "Complex Congenital and Thoracic Surgery", note: "Including VATS and Robotic Thoracic Surgery" },
+  ],
+  breakthrough: {
+    heading: "Breakthrough Sessions",
+    body: "A distinctive feature of Technocollege, where industry partners and technology innovators will showcase emerging technologies and demonstrate their real-world applications. These sessions are intended to provide participants with an opportunity to see, understand and critically evaluate technologies that may define their practice in the years ahead.",
+  },
 } as const;
 
 export const closingPromises = [

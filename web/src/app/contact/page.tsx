@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/site/PageShell";
-import { conference, secretariat, venues } from "@/data/conference";
+import { conference, secretariat, venues, registrationHelpline } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
 export const metadata: Metadata = { title: `Contact — ${conference.name}` };
 export default function Page() {
@@ -23,6 +23,15 @@ export default function Page() {
                 {p.name} · +91 {p.number}
               </a>
             ))}
+            <p className="mt-4 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">
+              {registrationHelpline.label}
+            </p>
+            <a
+              href={`tel:+91${registrationHelpline.number}`}
+              className="mt-1.5 block text-[15px] font-bold text-[#b3122a] no-underline"
+            >
+              {registrationHelpline.name} · +91 {registrationHelpline.number}
+            </a>
           </div>
           <div className="border border-[#b3122a]/15 bg-white px-5 py-4">
             <p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">Venues</p>

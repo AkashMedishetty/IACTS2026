@@ -154,6 +154,7 @@ export default function RegisterForm() {
         lastName: v.lastName,
         phone: v.phone,
         designation: v.designation,
+        specialization: v.specialization,
         institution: v.institution,
         mciNumber: v.mciNumber,
         address: { pincode: v.pincode },
@@ -279,6 +280,11 @@ export default function RegisterForm() {
         ? "Letters only"
         : "",
     designation: !v.designation ? "Designation is required" : "",
+    specialization: !v.specialization?.trim()
+      ? "Specialization is required"
+      : v.specialization.trim().length < 2
+        ? "Specialization looks too short"
+        : "",
     institution: !v.institution?.trim()
       ? "Institution is required"
       : v.institution.trim().length < 3
@@ -297,6 +303,17 @@ export default function RegisterForm() {
           ? "UTR / transaction reference is required"
           : !UTR_RE.test(v.utr.trim())
             ? "UTR should be 6–30 letters or digits, no spaces"
+            : ""
+        : "",
+    /* The screenshot is validated off the UPLOADED result, not the file input:
+       a chosen file that failed to upload must NOT count as satisfied, or the
+       secretariat receives a UTR with no proof attached. */
+    screenshot:
+      v.paymentMethod === "bank-transfer"
+        ? uploading
+          ? "Wait for the screenshot upload to finish"
+          : !screenshot?.url
+            ? "Payment screenshot is required"
             : ""
         : "",
   };
@@ -406,7 +423,9 @@ export default function RegisterForm() {
               {conferenceConfig.registration.formFields.designations.map((d) => <option key={d}>{d}</option>)}
             </select>
           </Field>
-          <Field label="Specialization"><input className={inputCls} value={v.specialization || ""} onChange={(e) => set("specialization", e.target.value)} /></Field>
+          <Field label="Specialization" required error={showErr("specialization")} onBlur={() => touch("specialization")}>
+            <input className={inputCls} value={v.specialization || ""} onChange={(e) => set("specialization", e.target.value)} placeholder="e.g. Cardiothoracic Surgery" />
+          </Field>
           <Field label="Institution / Hospital" required error={showErr("institution")} onBlur={() => touch("institution")}><input className={inputCls} value={v.institution || ""} onChange={(e) => set("institution", e.target.value)} /></Field>
           <Field label="Medical registration no. (MCI/NMC)" error={showErr("mciNumber")} onBlur={() => touch("mciNumber")}><input className={inputCls} value={v.mciNumber || ""} onChange={(e) => set("mciNumber", e.target.value)} /></Field>
         </Section>
@@ -424,10 +443,14 @@ export default function RegisterForm() {
             <Field label="IACTS membership number" required><input className={inputCls} value={v.membershipNumber || ""} onChange={(e) => set("membershipNumber", e.target.value)} /></Field>
           ) : <div className="hidden sm:block" />}
           <div className="sm:col-span-2">
-            <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/25 bg-white p-4">
+            {/* The checkbox was size-4 (16px) — far below the ~44px minimum
+                touch target, which is why it read as unusably small on a phone.
+                It is now 28px on mobile, and the whole 4-corner label row is the
+                hit area. */}
+            <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/25 bg-white p-4 sm:gap-3">
               <input
                 type="checkbox"
-                className="mt-0.5 size-4 accent-[#b3122a]"
+                className="mt-0.5 size-7 shrink-0 accent-[#b3122a] sm:size-5"
                 checked={!!v.workshopOptIn}
                 onChange={(e) => set("workshopOptIn", e.target.checked)}
               />
@@ -448,7 +471,7 @@ export default function RegisterForm() {
           <Section n="05" title="Accommodation">
             <div className="sm:col-span-2">
               <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/20 bg-white p-4">
-                <input type="checkbox" className="mt-0.5 size-4 accent-[#b3122a]" checked={!!v.accommodationRequired} onChange={(e) => set("accommodationRequired", e.target.checked)} />
+                <input type="checkbox" className="mt-0.5 size-6 shrink-0 accent-[#b3122a] sm:size-5" checked={!!v.accommodationRequired} onChange={(e) => set("accommodationRequired", e.target.checked)} />
                 <span>
                   <span className="block text-[14px] font-semibold text-[#160a0d]">I require accommodation at the venue</span>
                   <span className="mt-1 block text-[12px] leading-[1.6] text-[#614d53]">{acc.note}</span>
@@ -498,44 +521,69 @@ export default function RegisterForm() {
             {v.paymentMethod === "bank-transfer" && bankReady ? (
               <div className="border-l-4 border-[#b3122a] bg-[#f8e9ed] p-5">
                 <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#b3122a]">Pay to this account</p>
-                <dl className="mt-3 grid gap-3 sm:grid-cols-2">
-                  <div><dt className={labelCls}>Account name</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.accountName}</dd></div>
-                  <div><dt className={labelCls}>Account number</dt><dd className="m-0 text-[17px] font-bold tabular-nums tracking-wide text-[#160a0d]">{bank.accountNumber}</dd></div>
-                  <div><dt className={labelCls}>Bank</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.bankName}</dd></div>
-                  <div><dt className={labelCls}>IFSC</dt><dd className="m-0 text-[17px] font-bold tracking-wide text-[#160a0d]">{bank.ifscCode}</dd></div>
-                  {bank.branchName ? <div className="sm:col-span-2"><dt className={labelCls}>Branch</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.branchName}</dd></div> : null}
-                </dl>
+                <div className="mt-3 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-start">
+                  <dl className="grid gap-3 sm:grid-cols-2">
+                    <div><dt className={labelCls}>Account name</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.accountName}</dd></div>
+                    <div><dt className={labelCls}>Account number</dt><dd className="m-0 text-[17px] font-bold tabular-nums tracking-wide text-[#160a0d]">{bank.accountNumber}</dd></div>
+                    <div><dt className={labelCls}>Bank</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.bankName}</dd></div>
+                    <div><dt className={labelCls}>IFSC</dt><dd className="m-0 text-[17px] font-bold tracking-wide text-[#160a0d]">{bank.ifscCode}</dd></div>
+                    {bank.branchName ? <div className="sm:col-span-2"><dt className={labelCls}>Branch</dt><dd className="m-0 text-[15px] font-semibold text-[#160a0d]">{bank.branchName}</dd></div> : null}
+                  </dl>
+                  {/* UPI QR, supplied by the committee. Rendered on white at a
+                      generous size because a QR shown small or on a tinted
+                      background is one a phone camera struggles to lock onto. */}
+                  <figure className="m-0 shrink-0 self-start border border-[#b3122a]/20 bg-white p-3">
+                    <img
+                      src="/payment/qr.png"
+                      alt="UPI QR code for paying the registration fee"
+                      width={200}
+                      height={200}
+                      className="block size-[200px] sm:size-[184px]"
+                    />
+                    <figcaption className="mt-2 max-w-[200px] text-center font-mono text-[9px] uppercase leading-[1.5] tracking-[.14em] text-[#6a545a]">
+                      Scan to pay by UPI
+                    </figcaption>
+                  </figure>
+                </div>
               </div>
             ) : null}
             {v.paymentMethod === "bank-transfer" ? (
               <div className="grid gap-4 border border-[#b3122a]/15 bg-white p-4 sm:grid-cols-2">
-                <p className="sm:col-span-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#7d656c]">
+                <p className="sm:col-span-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#6a545a]">
                   Proof of payment
                 </p>
                 <Field label="UTR / Transaction reference" required error={showErr("utr")} onBlur={() => touch("utr")} hint="The reference from your NEFT, IMPS or UPI payment.">
                   <input className={inputCls} value={v.utr || ""} onChange={(e) => set("utr", e.target.value)} placeholder="e.g. UTR123456789" />
                 </Field>
                 <div>
-                  <span className={labelCls}>Payment screenshot (optional)</span>
+                  <span className={labelCls}>
+                    Payment screenshot <span className="text-[#b3122a]">*</span>
+                  </span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/gif,image/webp"
-                    className="mt-1.5 block w-full text-[12px] text-[#614d53] file:mr-3 file:border-0 file:bg-[#b3122a] file:px-4 file:py-2 file:font-mono file:text-[9px] file:uppercase file:tracking-[.14em] file:text-white"
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadScreenshot(f); }}
+                    aria-invalid={showErr("screenshot") ? true : undefined}
+                    className="mt-1.5 block w-full text-[12px] text-[#614d53] file:mr-3 file:min-h-11 file:border-0 file:bg-[#b3122a] file:px-4 file:py-2 file:font-mono file:text-[10px] file:uppercase file:tracking-[.14em] file:text-white"
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadScreenshot(f); touch("screenshot"); }}
                   />
-                  <span className="mt-1 block text-[11px] leading-4 text-[#7d656c]">
+                  <span className="mt-1 block text-[11px] leading-4 text-[#6a545a]">
                     {uploading ? "Uploading…" : screenshot ? `Attached: ${screenshot.name}` : "JPEG, PNG, GIF or WebP. Max 5 MB."}
                   </span>
+                  {showErr("screenshot") ? (
+                    <span role="alert" className="mt-1 block text-[11px] font-semibold leading-4 text-[#b3122a]">
+                      {showErr("screenshot")}
+                    </span>
+                  ) : null}
                 </div>
-                <p className="sm:col-span-2 text-[11px] leading-[1.6] text-[#7d656c]">
-                  Complete the transfer first, then enter its reference here. Attaching a screenshot helps the
-                  secretariat match your payment faster.
+                <p className="sm:col-span-2 text-[11px] leading-[1.6] text-[#6a545a]">
+                  Complete the transfer first, then enter its reference and attach the screenshot. Both are required so
+                  the secretariat can match your payment.
                 </p>
               </div>
             ) : null}
 
             <label className="mt-2 flex cursor-pointer items-start gap-3">
-              <input type="checkbox" className="mt-0.5 size-4 accent-[#b3122a]" checked={!!v.consent} onChange={(e) => set("consent", e.target.checked)} />
+              <input type="checkbox" className="mt-0.5 size-6 shrink-0 accent-[#b3122a] sm:size-5" checked={!!v.consent} onChange={(e) => set("consent", e.target.checked)} />
               <span className="text-[12px] leading-[1.7] text-[#614d53]">
                 I confirm the details above are correct and accept the{" "}
                 <a href="/terms-conditions" className="text-[#b3122a] underline">terms</a>,{" "}

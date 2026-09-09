@@ -35,7 +35,7 @@
   --color-gold: #b3122a;
   --color-gold-lift: #72091a;
   --color-venous: #c51a38;
-  --color-faint: #7d656c;
+  --color-faint: #6a545a;
 
 
   /* ---- shadcn/ui token layer, mapped to the Living Operative Field palette.
@@ -114,11 +114,23 @@ body::after {
 
 .u-eyebrow {
   font-family: var(--font-mono);
-  font-size: clamp(0.53rem, 0.7vw, 0.72rem);
-  letter-spacing: 0.24em;
+  /* Was clamp(0.53rem, 0.7vw, 0.72rem) — 8.5px at the small end, which is
+     below what this uppercase mono at 0.24em tracking can carry legibly.
+     Reported as "text is too small and not visible". */
+  font-size: clamp(0.68rem, 0.82vw, 0.82rem);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-muted-foreground);
 }
+
+/* SAFETY NET. `text-muted` resolves to --color-muted (#f8e9ed), which is the
+   muted BACKGROUND tint, so it paints near-white text on this near-white page
+   — invisible. It was doing exactly that to the office-bearers' messages, the
+   programme venues and bodies, the Breakthrough Sessions paragraph and the
+   workshop seats note. Those call sites now use text-muted-foreground, and this
+   rule stops the mistake from ever rendering invisible copy again: in this
+   design system nothing wants text painted in a background tint. */
+.text-muted { color: var(--color-muted-foreground); }
 
 /* gradient-clipped display type — the house headline treatment */
 .u-word {
@@ -220,6 +232,21 @@ body::after {
   .conference-content > section > * {
     padding-inline: 0;
   }
+}
+
+/* Inner pages (PageShell) carry no persistent 3D field between their sections,
+   so the home page's travelling rhythm — 12svh of page padding plus 16svh of
+   section margin — is just dead space there. Very visible on a single-section
+   page such as Fees once its FAQ was removed.
+   MUST stay after the mobile block above: `.conference-content--page > section`
+   and `.conference-content > section` have IDENTICAL specificity (0,1,1), so
+   source order decides, and placed earlier the mobile 7svh silently won. */
+.conference-content--page { padding-block: 3svh; }
+.conference-content--page > section { margin-block: 4svh; }
+
+@media (max-width: 1023px) {
+  .conference-content--page { padding-block: 2svh; }
+  .conference-content--page > section { margin-block: 2.5svh; }
 }
 
 @keyframes conference-marquee {

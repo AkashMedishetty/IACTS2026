@@ -1,0 +1,331 @@
+/* ============================================================================
+   IACTS TechnoCollege CME 2026 — DELEGATE BROCHURE, print stylesheet.
+
+   This route exists to be PRINTED, not browsed: it is rendered to PDF by
+   Chromium. Two consequences drive everything below.
+
+   1. Every page is a fixed A4 box (210x297mm) with `break-after: page`, so a
+      page can never reflow into the next one the way a web section would. Any
+      content that outgrows its box is a LAYOUT BUG, and the render script
+      measures for exactly that rather than trusting it.
+   2. Colour must be forced with print-color-adjust, or Chromium strips the
+      crimson and the tinted panels and prints a white page with black text.
+
+   The design language is deliberately the same as the client's own trade
+   brochure (V5): letterspaced running header, dot-separated eyebrow, tight
+   uppercase display headline, footer with the event name left and the page
+   number right.
+   ========================================================================= */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.bro {
+  --ink: #160a0d;
+  --crimson: #b3122a;
+  --crimson-deep: #8c0b20;
+  --maroon: #5f0717;
+  --muted: #5c4a4f;
+  --faint: #8a757b;
+  --tint: #fdf3f5;
+  --tint-2: #f8e9ed;
+  --hair: rgba(95, 7, 23, 0.16);
+  --pad: 16mm;
+
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  color: var(--ink);
+  background: #fff;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* --- the page box ------------------------------------------------------- */
+.bro-page {
+  position: relative;
+  box-sizing: border-box;
+  width: 210mm;
+  height: 297mm;
+  padding: var(--pad);
+  overflow: hidden; /* a bug should clip visibly, not silently reflow */
+  background: #fff;
+  break-after: page;
+  page-break-after: always;
+  display: flex;
+  flex-direction: column;
+}
+.bro-page:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+/* On screen only, show the page edges so the route is reviewable in a browser.
+   `@media screen` keeps this out of the PDF entirely. */
+@media screen {
+  .bro {
+    background: #e9e4e5;
+    padding: 24px 0;
+  }
+  .bro-page {
+    margin: 0 auto 24px;
+    box-shadow: 0 10px 40px -12px rgba(95, 7, 23, 0.35);
+  }
+}
+
+/* --- running header / footer -------------------------------------------- */
+.bro-rule {
+  height: 2px;
+  background: var(--crimson);
+  flex: none;
+}
+.bro-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8mm;
+  padding-bottom: 3mm;
+  flex: none;
+}
+.bro-head-mark {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.4pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.bro-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8mm;
+  border-top: 1px solid var(--hair);
+  padding-top: 2.5mm;
+  margin-top: auto;
+  flex: none;
+}
+.bro-foot-name,
+.bro-foot-num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.6pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.bro-foot-num {
+  color: var(--crimson);
+  font-weight: 700;
+}
+.bro-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-top: 5mm;
+}
+
+/* --- type -------------------------------------------------------------- */
+.bro-eyebrow {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7pt;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin: 0 0 4mm;
+}
+.bro-h1 {
+  font-size: 30pt;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 0 0 5mm;
+  color: var(--ink);
+}
+.bro-h2 {
+  font-size: 17pt;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  margin: 0 0 3mm;
+}
+.bro-h3 {
+  font-size: 10.5pt;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 1.5mm;
+}
+.bro-serif {
+  font-family: var(--font-display, Georgia, serif);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: none;
+  color: var(--crimson);
+}
+.bro-p {
+  font-size: 9.4pt;
+  line-height: 1.62;
+  color: var(--muted);
+  margin: 0 0 3mm;
+}
+.bro-p strong { color: var(--ink); }
+.bro-lead {
+  font-size: 10.6pt;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.bro-small {
+  font-size: 8pt;
+  line-height: 1.55;
+  color: var(--faint);
+  margin: 0;
+}
+.bro-label {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.6pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0 0 1mm;
+}
+.bro-num {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7pt;
+  font-weight: 700;
+  color: var(--crimson);
+}
+
+/* --- blocks ------------------------------------------------------------ */
+.bro-tagline {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 8pt;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--crimson);
+  margin: 0;
+}
+.bro-quote {
+  border-left: 2px solid var(--crimson);
+  padding: 0 0 0 5mm;
+  margin: 0 0 4mm;
+}
+.bro-panel {
+  background: var(--tint);
+  border-left: 3px solid var(--crimson);
+  padding: 5mm 6mm;
+}
+.bro-card {
+  border: 1px solid var(--hair);
+  padding: 4mm 4.5mm;
+  background: #fff;
+}
+.bro-grid { display: grid; gap: 4mm; }
+.bro-g2 { grid-template-columns: 1fr 1fr; }
+.bro-g3 { grid-template-columns: repeat(3, 1fr); }
+.bro-g4 { grid-template-columns: repeat(4, 1fr); }
+.bro-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 4mm;
+  align-items: baseline;
+  border-bottom: 1px solid var(--hair);
+  padding: 2.4mm 0;
+}
+.bro-row-2col {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3.5mm;
+  align-items: baseline;
+  border-bottom: 1px solid var(--hair);
+  padding: 2.2mm 0;
+}
+
+/* --- fee table --------------------------------------------------------- */
+.bro-table { width: 100%; border-collapse: collapse; }
+.bro-table th,
+.bro-table td {
+  text-align: right;
+  padding: 2.8mm 3mm;
+  border-bottom: 1px solid var(--hair);
+  font-size: 9.4pt;
+}
+.bro-table th:first-child,
+.bro-table td:first-child { text-align: left; }
+.bro-table thead th {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 6.6pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  font-weight: 700;
+  border-bottom: 1px solid var(--crimson);
+}
+.bro-table thead th span {
+  display: block;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--faint);
+  margin-top: 0.6mm;
+}
+.bro-table td:first-child { font-weight: 700; color: var(--ink); }
+.bro-table .is-best { color: var(--crimson); font-weight: 800; }
+.bro-table thead th.is-best { color: var(--crimson); }
+
+/* --- call-to-action "buttons" (real links in the PDF) ------------------- */
+.bro-btn {
+  display: inline-block;
+  background: var(--crimson);
+  color: #fff !important;
+  text-decoration: none;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7.4pt;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3.2mm 6mm;
+}
+.bro-btn-ghost {
+  background: #fff;
+  color: var(--crimson) !important;
+  border: 1px solid var(--crimson);
+}
+.bro-btn-row { display: flex; flex-wrap: wrap; gap: 3mm; align-items: center; }
+.bro-url {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7.2pt;
+  color: var(--crimson);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+/* --- cover ------------------------------------------------------------- */
+.bro-cover {
+  background: var(--ink);
+  color: #fff;
+  justify-content: space-between;
+}
+.bro-cover .bro-h1 { color: #fff; font-size: 44pt; }
+.bro-cover .bro-p { color: rgba(255, 255, 255, 0.72); }
+.bro-cover-ph {
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  padding: 12mm 8mm;
+  text-align: center;
+}
+.bro-cover-ph .bro-label { color: rgba(255, 255, 255, 0.5); }
+
+/* --- images ------------------------------------------------------------ */
+.bro-img {
+  display: block;
+  width: 100%;
+  height: 26mm;
+  object-fit: cover;
+  border: 1px solid var(--hair);
+}
+.bro-qr {
+  display: block;
+  width: 34mm;
+  height: 34mm;
+  border: 1px solid var(--hair);
+  background: #fff;
+  padding: 1.5mm;
+  box-sizing: content-box;
+}

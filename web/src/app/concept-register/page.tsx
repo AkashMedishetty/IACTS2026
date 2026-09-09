@@ -280,10 +280,10 @@ export default function ConceptPlate() {
         </div>
         <p className="pl-l mt-10 text-[9px] opacity-60">Executive committee</p>
         <ul className="mt-4 grid list-none gap-x-8 p-0 sm:grid-cols-2 lg:grid-cols-3">
-          {executiveCommittee.map((name, i) => (
-            <li key={name} className="flex items-baseline gap-4 border-b py-2.5" style={{ borderColor: "var(--hair)" }}>
+          {executiveCommittee.map((member, i) => (
+            <li key={member.name} className="flex items-baseline gap-4 border-b py-2.5" style={{ borderColor: "var(--hair)" }}>
               <span className="pl-d text-[.95rem]" style={{ color: "var(--red)" }}>{i + 1}</span>
-              <span className="pl-d text-[.98rem]">{name}</span>
+              <span className="pl-d text-[.98rem]">{member.name}</span>
             </li>
           ))}
         </ul>

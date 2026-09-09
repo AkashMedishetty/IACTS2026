@@ -310,10 +310,10 @@ export default function ConceptTheatre() {
           </div>
           <p className="mt-8 font-mono text-[9px] uppercase tracking-[.24em]" style={{ color: MUTED }}>Executive committee</p>
           <div className="mt-3 grid gap-px sm:grid-cols-2 lg:grid-cols-3" style={{ background: LINE }}>
-            {executiveCommittee.map((name, i) => (
-              <div key={name} className="flex items-baseline gap-3 p-3" style={{ background: PANEL }}>
+            {executiveCommittee.map((member, i) => (
+              <div key={member.name} className="flex items-baseline gap-3 p-3" style={{ background: PANEL }}>
                 <span className="font-mono text-[9px] tabular-nums" style={{ color: RED }}>{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-[.88rem]">{name}</span>
+                <span className="text-[.88rem]">{member.name}</span>
               </div>
             ))}
           </div>

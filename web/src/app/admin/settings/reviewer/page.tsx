@@ -62,10 +62,10 @@ const defaultConfig: ReviewerConfig = {
   emailNotificationMode: 'immediate',
   pendingEmailsCount: 0,
   pendingEmails: [],
-  acceptanceEmailSubject: 'Congratulations! Your Abstract {abstractId} Has Been Accepted - TASCON 2026',
+  acceptanceEmailSubject: 'Congratulations! Your Abstract {abstractId} Has Been Accepted - IACTS 2026',
   acceptanceEmailBody: `Dear {name},
 
-Congratulations! We are pleased to inform you that your abstract titled "{title}" (ID: {abstractId}) has been ACCEPTED for presentation at TASCON 2026.
+Congratulations! We are pleased to inform you that your abstract titled "{title}" (ID: {abstractId}) has been ACCEPTED for presentation at IACTS 2026.
 
 Presentation Type: {approvedFor}
 
@@ -74,18 +74,18 @@ Please log in to your dashboard to view the details and complete any required ne
 Dashboard: {dashboardUrl}
 
 Best regards,
-TASCON 2026 Organizing Committee`,
-  rejectionEmailSubject: 'Update on Your Abstract Submission {abstractId} - TASCON 2026',
+IACTS 2026 Organizing Committee`,
+  rejectionEmailSubject: 'Update on Your Abstract Submission {abstractId} - IACTS 2026',
   rejectionEmailBody: `Dear {name},
 
-Thank you for submitting your abstract titled "{title}" (ID: {abstractId}) to TASCON 2026.
+Thank you for submitting your abstract titled "{title}" (ID: {abstractId}) to IACTS 2026.
 
 After careful review by our scientific committee, we regret to inform you that your abstract has not been selected for presentation at this year's conference.
 
-We appreciate your interest in TASCON 2026 and encourage you to submit again in the future.
+We appreciate your interest in IACTS 2026 and encourage you to submit again in the future.
 
 Best regards,
-TASCON 2026 Organizing Committee`
+IACTS 2026 Organizing Committee`
 }
 
 export default function ReviewerSettingsPage() {

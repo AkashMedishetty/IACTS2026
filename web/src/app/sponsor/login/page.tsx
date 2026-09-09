@@ -61,7 +61,7 @@ export default function SponsorLoginPage() {
             <Building2 className="w-6 h-6 text-primary" />
           </div>
           <CardTitle className="text-2xl">Sponsor Portal</CardTitle>
-          <CardDescription>TASCON 2026</CardDescription>
+          <CardDescription>IACTS Technocollege CME 2026</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

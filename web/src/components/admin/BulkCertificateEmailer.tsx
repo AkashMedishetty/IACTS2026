@@ -37,8 +37,8 @@ export function BulkCertificateEmailer() {
     hasCertificate: 'no'
   })
   const [emailContent, setEmailContent] = useState({
-    subject: 'Your Certificate of Participation - TASCON 2026',
-    message: 'Dear {name},\n\nThank you for participating in TASCON 2026. Please find your certificate of participation attached to this email.\n\nBest regards,\nTASCON 2026 Team'
+    subject: 'Your Certificate of Participation - IACTS 2026',
+    message: 'Dear {name},\n\nThank you for participating in IACTS 2026. Please find your certificate of participation attached to this email.\n\nBest regards,\nIACTS 2026 Team'
   })
   const [progress, setProgress] = useState({ sent: 0, failed: 0, total: 0 })
 

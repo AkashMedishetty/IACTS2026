@@ -33,7 +33,7 @@ export function AbstractsSettingsManager() {
       const response = await fetch('/api/admin/abstracts/config')
       const data = await response.json()
       if (data.success) {
-        // Ensure new TASCON 2026 fields exist with defaults
+        // Ensure new IACTS 2026 fields exist with defaults
         const configData = {
           ...data.data,
           submittingForOptions: data.data.submittingForOptions || [
@@ -134,7 +134,7 @@ export function AbstractsSettingsManager() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5" />
-            TASCON 2026 Abstracts Configuration
+            IACTS 2026 Abstracts Configuration
           </CardTitle>
           <CardDescription>
             Manage abstract submission settings for each subspecialty

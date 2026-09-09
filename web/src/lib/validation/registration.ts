@@ -13,6 +13,7 @@ export interface RegistrationInput {
     lastName?: string
     phone?: string
     designation?: string
+    specialization?: string
     institution?: string
     mciNumber?: string
     address?: { pincode?: string }
@@ -57,6 +58,9 @@ export function validateRegistration(input: RegistrationInput): string[] {
   if (!p.designation) e.push('Designation is required')
   else if (!conferenceConfig.registration.formFields.designations.includes(p.designation))
     e.push('Select a designation from the list')
+
+  if (!p.specialization?.trim()) e.push('Specialization is required')
+  else if (p.specialization.trim().length < 2) e.push('Specialization looks too short')
 
   if (!p.institution?.trim()) e.push('Institution is required')
   else if (p.institution.trim().length < 3) e.push('Institution name looks too short')

@@ -1,5 +1,5 @@
 import { EVENT_INFO } from "@/lib/constants";
-import { secretariat, venues } from "@/data/conference";
+import { secretariat, venues, registrationHelpline } from "@/data/conference";
 
 export default function Footer() {
   return (
@@ -43,6 +43,15 @@ export default function Footer() {
             <p className="u-eyebrow text-gold-lift">Register</p>
             <a href="/register" className="mt-2 inline-flex min-h-11 items-center gap-2 bg-[#b3122a] px-5 text-[13px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
               Register now
+            </a>
+            <p className="mt-5 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">
+              {registrationHelpline.label}
+            </p>
+            <a
+              href={`tel:+91${registrationHelpline.number}`}
+              className="mt-1.5 block text-[clamp(1rem,1.6vw,1.2rem)] font-bold leading-snug text-[#b3122a] no-underline"
+            >
+              {registrationHelpline.name} · +91 {registrationHelpline.number}
             </a>
           </div>
         </div>

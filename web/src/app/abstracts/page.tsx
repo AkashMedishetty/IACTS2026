@@ -12,7 +12,7 @@ import { Label } from "../../components/ui/label"
 import { Checkbox } from "../../components/ui/checkbox"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Navigation } from "../../components/Navigation"
-import { Calendar, FileText, Award, Upload, CheckCircle, Bell, Mail, Lock, LogIn, Clock, AlertCircle, UserPlus, User, MapPin, Stethoscope, ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, X, Download } from "lucide-react"
+import { Calendar, FileText, Award, Upload, CheckCircle, Bell, Mail, Lock, LogIn, Clock, AlertCircle, UserPlus, User, MapPin, Stethoscope, ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, X } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { conferenceConfig } from "../../config/conference.config"
@@ -812,6 +812,34 @@ export default function AbstractsPage() {
   const [configLoading, setConfigLoading] = useState(true)
   const [registrationTypes, setRegistrationTypes] = useState<Array<{ value: string; label: string; price: number }>>([])
 
+  /* The deadline and the numbered rules are the committee's published text.
+     Prefer the live admin config, fall back to the compiled config — never a
+     hardcoded date, which is how "5 July 2026" survived from another
+     conference. */
+  const submissionRules: string[] =
+    abstractsConfig?.submissionRules?.length
+      ? abstractsConfig.submissionRules
+      : (conferenceConfig.abstracts.submissionRules ?? [])
+
+  const submissionDeadlineLabel = useMemo(() => {
+    /* Prefer the live admin window ONLY when an operator has actually enabled
+       it — they then own the date. While it is disabled the stored value is
+       whatever the record was seeded with (currently a placeholder ~3 months
+       out), so fall back to the committee's published date instead of showing
+       a deadline nobody set. */
+    const runtimeEnd = abstractsConfig?.submissionWindow?.enabled
+      ? abstractsConfig?.submissionWindow?.end
+      : undefined
+    const iso = runtimeEnd ?? conferenceConfig.abstracts.submissionWindow?.end
+    if (!iso) return 'To be announced'
+    const d = new Date(iso)
+    if (Number.isNaN(d.getTime())) return String(iso)
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  }, [abstractsConfig])
+
+  const abstractWordLimit =
+    abstractsConfig?.wordLimit ?? conferenceConfig.abstracts.wordLimit ?? 500
+
   // Flow state
   const [activeFlow, setActiveFlow] = useState<FlowType>('none')
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -988,7 +1016,7 @@ export default function AbstractsPage() {
                 </motion.div>
                 
                 <p className="text-lg md:text-xl max-w-3xl mx-auto">
-                  Submit your research abstracts for Free Paper and Poster Presentation
+                  Submit your abstract or case report for the scientific programme
                   <br /><span className="text-blue-200">at {conferenceConfig.shortName}, {conferenceConfig.venue.city}</span>
                 </p>
               </div>
@@ -1039,9 +1067,9 @@ export default function AbstractsPage() {
             )}
             
             {activeFlow === 'none' && submissionsDisabled && (
-              <div className="max-w-xl mx-auto">
+              <div className="max-w-xl mx-auto mb-14">
                 <Card className="bg-white/10 backdrop-blur-md border-white/20">
-                  <CardContent className="pt-6">
+                  <CardContent className="pt-6 pb-6">
                     <Bell className="w-12 h-12 mx-auto mb-4 text-[#160a0d]" />
                     <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-2 text-center">Get Notified When Submissions Open</h3>
                     <p className="text-gray-600 dark:text-gray-300 mb-4 text-center">Enter your email to receive a notification</p>
@@ -1056,12 +1084,20 @@ export default function AbstractsPage() {
               </div>
             )}
             
-            {activeFlow === 'none' && !submissionsDisabled && (
+            {/* The rules and the deadline are PUBLISHED INFORMATION and must be
+                readable whether or not the form is currently accepting
+                submissions. This block used to be gated on
+                `!submissionsDisabled`, so with the stored window closed the
+                page showed nothing but the notify-me box — every published rule
+                was invisible. Only the submit CTA is gated now. */}
+            {activeFlow === 'none' && (
               <div className="max-w-6xl mx-auto">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">Abstract Submission Guidelines</h2>
                   <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-                    Abstracts are invited for Free Paper Presentation and Poster Presentation at TASCON 2026, Hyderabad.
+                    Abstracts and case reports are invited for the scientific programme of {conferenceConfig.shortName}, {conferenceConfig.venue.city}.
+                    You do not choose the presentation format — the scientific committee reviews each submission and decides
+                    whether it is presented as a paper or a poster.
                   </p>
                 </motion.div>
 
@@ -1076,12 +1112,12 @@ export default function AbstractsPage() {
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 text-center">
                           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                            <p className="text-sm text-white/80">Last Date to Submit <span className="text-yellow-300">(Extended)</span></p>
-                            <p className="font-bold text-yellow-300">5 July 2026</p>
+                            <p className="text-sm text-white/80">Last Date for Submission</p>
+                            <p className="font-bold text-yellow-300">{submissionDeadlineLabel}</p>
                           </div>
                           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                             <p className="text-sm text-white/80">Acceptance Notification</p>
-                            <p className="font-bold text-green-300">By 10 July 2026</p>
+                            <p className="font-bold text-white/90">To be announced</p>
                           </div>
                         </div>
                       </div>
@@ -1110,30 +1146,13 @@ export default function AbstractsPage() {
                   </Card>
                 </motion.div>
 
-                {/* Presentation Templates — public download */}
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
-                  <Card className="bg-gradient-to-r from-[#25406b] to-[#152843] text-white border-0 shadow-xl">
-                    <CardContent className="p-6">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          <Download className="w-8 h-8 text-[#b3122a] flex-shrink-0" />
-                          <div>
-                            <h3 className="text-xl font-bold">Presentation Templates</h3>
-                            <p className="text-white/80 text-sm">Download the official templates and prepare your paper / poster.</p>
-                          </div>
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-3">
-                          <a href="/templates/paper-template.pptx" download className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-[#25406b] font-bold text-sm hover:bg-[#FFF6E4] transition-colors">
-                            <FileText className="w-4 h-4" /> Paper Template
-                          </a>
-                          <a href="/templates/poster-template.pptx" download className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#b3122a] text-[#25406b] font-bold text-sm hover:bg-[#c51a38] transition-colors">
-                            <FileText className="w-4 h-4" /> Poster Template
-                          </a>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                {/* Presentation templates are NOT published. The two download
+                    buttons that used to sit here pointed at
+                    /templates/paper-template.pptx and
+                    /templates/poster-template.pptx — neither file exists (there
+                    is no public/templates directory), so both were 404s
+                    presented as official downloads. Restore this card only when
+                    the committee supplies real files. */}
 
                 {/* Quick Rules */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
@@ -1142,10 +1161,10 @@ export default function AbstractsPage() {
                       <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200 mb-4 flex items-center gap-2"><FileText className="w-5 h-5" />Quick Submission Rules</h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {[
-                          'Max 150 words',
-                          '12pt Arial, double spacing',
+                          `Max ${abstractWordLimit} words`,
+                          'Calibri, size 14',
                           'Word format only (.doc/.docx)',
-                          'No images, tables or graphs',
+                          'Registration is mandatory',
                         ].map((rule, i) => (
                           <div key={i} className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
                             <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" /><span className="text-sm">{rule}</span>
@@ -1156,25 +1175,31 @@ export default function AbstractsPage() {
                   </Card>
                 </motion.div>
 
-                {/* Free Paper & Poster Guidelines */}
+                {/* Submission rules — the committee's own numbered list, read
+                    from config (admin-editable) rather than hardcoded. The
+                    bullets that used to be here belonged to a different
+                    conference: 150 words, 12pt Arial double-spaced, "no images
+                    tables or graphs", an HOD letter, and a Free-Paper-Only /
+                    Poster-Only / Either declaration the submitter is never asked
+                    for — this committee assigns the format after review. */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
                   <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
                     <CardContent className="p-6">
                       <div className="flex items-start">
                         <FileText className="w-6 h-6 mr-3 text-blue-600 mt-1 flex-shrink-0" />
-                        <div>
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-3">Guidelines for Free Paper &amp; Poster</h3>
-                          <ul className="text-gray-700 dark:text-gray-300 text-sm space-y-2 list-disc pl-5">
-                            <li>The abstract must not exceed <strong>150 words</strong> and should be in <strong>12pt Arial font with double spacing</strong>.</li>
-                            <li>The title of the abstract must be concise; avoid using abbreviations.</li>
-                            <li>Do not include personal details. <strong>Only the email ID</strong> is to be submitted for further correspondence.</li>
-                            <li>The abstract should include <strong>Aim, Methods, Results and Conclusion</strong>.</li>
-                            <li>Do not include images, tables or graphs in the abstract.</li>
-                            <li>The first author will be considered as the presenting author.</li>
-                            <li>One author can present only one oral presentation; a poster presentation can be additional.</li>
-                            <li>Poster abstracts must follow the same formatting and word-count guidelines as Free Papers. Please explicitly indicate at the top of your submission whether it is for <strong>&apos;Free Paper Only&apos;</strong>, <strong>&apos;Poster Only&apos;</strong>, or <strong>&apos;Either&apos;</strong>.</li>
-                            <li>Abstracts must be submitted online via the conference website in <strong>Microsoft Word (.doc or .docx)</strong> format only. PDF submissions will not be accepted.</li>
-                          </ul>
+                        <div className="w-full">
+                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-1">Submission Rules</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                            Last date for submission — <strong className="text-[#b3122a] dark:text-red-300">{submissionDeadlineLabel}</strong>
+                          </p>
+                          <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0 list-none p-0 m-0">
+                            {submissionRules.map((rule, i) => (
+                              <li key={rule} className="flex gap-3 py-3 border-b border-slate-200 dark:border-slate-700">
+                                <span className="font-mono text-xs font-semibold text-[#b3122a] pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{rule}</span>
+                              </li>
+                            ))}
+                          </ol>
                         </div>
                       </div>
                     </CardContent>
@@ -1190,8 +1215,8 @@ export default function AbstractsPage() {
                         <div>
                           <h3 className="text-lg font-bold text-red-800 dark:text-red-200 mb-3">Important Notice</h3>
                           <ul className="text-red-700 dark:text-red-300 space-y-2 text-sm">
-                            <li>&bull; Conference registration is mandatory to present a Free Paper / Poster.</li>
-                            <li>&bull; Postgraduate students must submit their HOD&apos;s letter.</li>
+                            <li>&bull; Conference registration is mandatory to submit and to present.</li>
+                            <li>&bull; The presentation format — paper or poster — is decided by the scientific committee, not the submitter.</li>
                             <li>&bull; The Scientific Committee reserves the right to accept/reject any paper without assigning any reason.</li>
                           </ul>
                         </div>
@@ -1200,20 +1225,32 @@ export default function AbstractsPage() {
                   </Card>
                 </motion.div>
 
-                {/* CTA */}
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
-                  <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                    <Button onClick={() => { setActiveFlow('registered'); if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="px-10 py-6 text-lg bg-[#b3122a] hover:bg-[#b3122a] text-white rounded-full shadow-xl font-bold">
-                      <Upload className="w-5 h-5 mr-2" />Submit Your Abstract
-                    </Button>
-                    
-                    {!session && abstractsConfig?.enableAbstractsWithoutRegistration && (
-                      <Button onClick={() => setActiveFlow('unregistered')} variant="outline" className="px-10 py-6 text-lg border-[#b3122a] text-[#b3122a] hover:bg-[#c51a38]/10 rounded-full shadow-xl font-bold">
-                        <UserPlus className="w-5 h-5 mr-2" />Register & Submit
+                {/* CTA — gated on the live submission window. When the window is
+                    closed the rules above still render; only the ability to
+                    submit is withheld, and it says so rather than offering a
+                    button that cannot work. */}
+                {submissionsDisabled ? (
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
+                    <p className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 font-semibold">
+                      <Clock className="w-5 h-5" />
+                      Online submission is not open yet — use the notify form above and we will email you when it opens.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
+                    <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                      <Button onClick={() => { setActiveFlow('registered'); if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="px-10 py-6 text-lg bg-[#b3122a] hover:bg-[#b3122a] text-white rounded-full shadow-xl font-bold">
+                        <Upload className="w-5 h-5 mr-2" />Submit Your Abstract
                       </Button>
-                    )}
-                  </div>
-                </motion.div>
+
+                      {!session && abstractsConfig?.enableAbstractsWithoutRegistration && (
+                        <Button onClick={() => setActiveFlow('unregistered')} variant="outline" className="px-10 py-6 text-lg border-[#b3122a] text-[#b3122a] hover:bg-[#c51a38]/10 rounded-full shadow-xl font-bold">
+                          <UserPlus className="w-5 h-5 mr-2" />Register &amp; Submit
+                        </Button>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
               </div>
             )}
           </div>
