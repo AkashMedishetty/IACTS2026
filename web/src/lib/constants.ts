@@ -67,6 +67,31 @@ export const NAV_ITEMS = [
   { label: "Venue", href: "#venue", path: "/venue" },
 ] as const;
 
+/**
+ * THE primary navigation, shared by the home hero nav and the inner-page
+ * SiteHeader. Both used to keep their own hardcoded label array and had drifted:
+ * home listed Faculty (a Coming Soon placeholder) while the inner header did
+ * not, and NEITHER listed Committee — a real page the committee spent an entire
+ * review on. Two literals meant to agree will always drift, so there is now one.
+ *
+ * Faculty is deliberately absent until it has content: pointing the primary nav
+ * at an "announcing soon" page spends a nav slot to tell someone nothing. Add it
+ * back here once the faculty list is published and both navs pick it up together.
+ */
+export const PRIMARY_NAV_LABELS = [
+  "About",
+  "Programme",
+  "Workshops",
+  "Committee",
+  "Abstracts",
+  "Registration Details",
+  "Venue",
+] as const;
+
+export const PRIMARY_NAV = NAV_ITEMS.filter((n) =>
+  (PRIMARY_NAV_LABELS as readonly string[]).includes(n.label),
+);
+
 /** Surfaces read this to render honest "announced soon" states. */
 export const PENDING = pending;
 

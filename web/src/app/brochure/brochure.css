@@ -91,8 +91,8 @@ body::before {
 .bro-head-mark,
 .bro-head-sec {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6pt;
-  letter-spacing: 0.34em;
+  font-size: 6.8pt;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--faint);
   margin: 0;
@@ -141,11 +141,16 @@ body::before {
 /* --- type scale --------------------------------------------------------- */
 .bro-kicker {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 6.4pt;
-  letter-spacing: 0.3em;
+  /* Was 6.4pt at 0.3em tracking, which read as a faint scatter of letters rather
+     than a section heading. Raised and the tracking eased slightly, because wide
+     tracking on small type is what made it feel weak — the letters were further
+     apart than they were tall. */
+  font-size: 9.5pt;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--crimson);
   margin: 0 0 6mm;
+  font-weight: 600;
 }
 /* Display headline: serif, large, tight. This is the page's single loud voice. */
 .bro-display {
@@ -202,8 +207,9 @@ body::before {
 }
 .bro-label {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 5.9pt;
-  letter-spacing: 0.24em;
+  /* Raised with .bro-kicker: these are section headings too. */
+  font-size: 7.6pt;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--faint);
   margin: 0;
@@ -229,7 +235,7 @@ body::before {
 }
 .bro-mono {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 7pt;
+  font-size: 8.4pt;
   letter-spacing: 0.1em;
   color: var(--crimson);
   margin: 0;
@@ -431,6 +437,147 @@ body::before {
 .bro-sched .bro-sess-head { padding-bottom: 1.2mm; }
 .bro-sched .bro-display { font-size: 21pt; margin-bottom: 3.5mm; }
 
+/* --- supplied artwork ---------------------------------------------------
+   The client supplied a finished A4 cover (2475x3500, ~300dpi) and an interior
+   backdrop (1594x2254, ~193dpi).
+
+   The backdrop carries running text, so it was MEASURED rather than eyeballed:
+   mean luminance 0.957, worst-5% region still 17.4:1 against the ink, and 0% of
+   16px blocks above 0.05 local deviation — a calm, light ground, so body copy
+   sits directly on it with no scrim. Re-measure if the artwork is replaced.
+
+   The cover is a finished design, so nothing is overlaid on it — no heading, no
+   placeholder, no folio. Printing our own type over supplied cover artwork is
+   how you end up with two competing titles. */
+.bro-page--art {
+  /* Backdrop at 77%.
+     `opacity` is NOT usable here — it would fade the text and photographs on the
+     page along with the ground. Instead a 23% paper-coloured scrim is composited
+     OVER the image in the same background shorthand, which is mathematically the
+     same result (77% artwork against the paper it sits on) and leaves every child
+     element at full strength. It also survives print, where a semi-transparent
+     pseudo-element layer is far less predictable. */
+  background-image:
+    linear-gradient(rgba(255, 254, 253, 0.23), rgba(255, 254, 253, 0.23)),
+    url("/brochure/backdrop.png");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+}
+
+
+/* ============================================================================
+   CENTRED EDITORIAL MODE + PHOTOGRAPHY
+   ---------------------------------------------------------------------------
+   The asymmetric metadata-rail layout was rejected as cramped and too plain.
+   This mode centres everything, opens the vertical rhythm right up, and puts
+   the real photography (venues, Hyderabad, portraits) on the page instead of
+   filling it with dense schedule tables.
+
+   The session-by-session agenda is deliberately NOT here any more: the brochure
+   mirrors the website, and the agenda is announced as forthcoming. Less content
+   per page is the point — space is what makes it read as considered rather than
+   packed.
+   ========================================================================= */
+.bro-c .bro-body {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 0;
+}
+.bro-c .bro-display,
+.bro-c .bro-h2,
+.bro-c .bro-lede,
+.bro-c .bro-p,
+.bro-c .bro-note {
+  margin-left: auto;
+  margin-right: auto;
+}
+.bro-c .bro-lede { max-width: 132mm; }
+.bro-c .bro-p { max-width: 138mm; }
+.bro-c .bro-hr-heavy { margin-left: auto; margin-right: auto; }
+.bro-c .bro-kicker { margin-bottom: 5mm; }
+.bro-c .bro-btn-row { justify-content: center; }
+
+/* Generous, unhurried scale for the centred mode. */
+.bro-c .bro-display { font-size: 34pt; margin-bottom: 8mm; }
+.bro-c .bro-lede { font-size: 11.6pt; line-height: 1.62; margin-bottom: 6mm; }
+.bro-c .bro-p { font-size: 9.6pt; line-height: 1.78; margin-bottom: 4.5mm; }
+
+/* A centred hairline divider — replaces the left-anchored rule. */
+.bro-rule-c {
+  width: 24mm;
+  height: 1.5pt;
+  background: var(--crimson);
+  border: 0;
+  margin: 0 auto 6mm;
+}
+
+/* --- photography --------------------------------------------------------- */
+.bro-photo {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  background: var(--tint);
+}
+.bro-photo-hero { aspect-ratio: 16 / 7; }
+.bro-photo-tile { aspect-ratio: 4 / 3; }
+.bro-figcap {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 7.2pt;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 2mm 0 0;
+}
+.bro-photo-name {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 12pt;
+  font-weight: 700;
+  margin: 2mm 0 0.8mm;
+}
+
+/* Centred numbered list — no left rail, the number sits above the label. */
+.bro-stack-c { display: grid; gap: 5mm; }
+.bro-cell {
+  border-top: 0.5pt solid var(--hair);
+  padding-top: 3mm;
+}
+.bro-cell .bro-mono { display: block; margin-bottom: 1.5mm; }
+
+/* Portrait grid that breathes — used for the committee pages. */
+.bro-people {
+  display: grid;
+  gap: 5mm 4mm;
+  justify-items: center;
+}
+.bro-people-3 { grid-template-columns: repeat(3, 1fr); }
+.bro-people-4 { grid-template-columns: repeat(4, 1fr); }
+.bro-people-5 { grid-template-columns: repeat(5, 1fr); }
+.bro-people .bro-por { max-width: 34mm; }
+.bro-people-md .bro-por,
+.bro-people-md .bro-por-ph { max-width: 25mm; }
+.bro-people-md .bro-photo-name { font-size: 9pt; margin-top: 1.4mm; }
+
+/* Executive committee tier on the single combined committee page: smaller
+   portraits and a tighter name, so eighteen faces fit one A4 without any tier
+   losing its hierarchy. */
+.bro-people-sm .bro-por { max-width: 17mm; }
+.bro-people-sm .bro-photo-name { font-size: 7.2pt; margin-top: 1mm; }
+.bro-people-sm .bro-por-ph { max-width: 17mm; }
+
+
+
+/* The two welcome pages carry five verbatim paragraphs each plus a portrait, and
+   clipped at the centred mode's generous 9.6pt/1.78. They get their own slightly
+   tighter tier rather than trimming the office-bearers' signed words. */
+.bro-msg .bro-display { font-size: 25pt; margin-bottom: 5mm; }
+.bro-msg .bro-p { font-size: 8.9pt; line-height: 1.66; margin-bottom: 3.2mm; max-width: 132mm; }
+.bro-msg .bro-kicker { margin-bottom: 3.5mm; }
+.bro-msg .bro-rule-c { margin-bottom: 4mm; }
+.bro-msg .bro-photo-name { font-size: 11pt; margin-top: 1.5mm; }
+
 /* --- portraits --------------------------------------------------------- */
 .bro-por {
   display: block;
@@ -443,8 +590,8 @@ body::before {
 .bro-por-name { font-size: 7.6pt; line-height: 1.24; font-weight: 650; margin: 1.6mm 0 0; }
 .bro-por-role {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 5.2pt;
-  letter-spacing: 0.16em;
+  font-size: 6.8pt;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--faint);
   margin: 0.6mm 0 0;
@@ -482,3 +629,19 @@ body::before {
   padding: 16mm 10mm;
   text-align: center;
 }
+
+/* MUST stay after `.bro-cover` above. `.bro-cover` sets the `background`
+   SHORTHAND, which resets background-image, and both rules are a single class —
+   identical specificity, so source order decides. Placed earlier, this rule was
+   silently discarded and the supplied cover never embedded in the PDF at all
+   (pdfimages showed zero images on page 1). Same trap as the inner-page rhythm
+   rules in globals.css. */
+.bro-cover--art {
+  background-color: #14090c;
+  background-image: url("/brochure/cover.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0;
+}
+.bro-cover--art .bro-body { padding: 0; }

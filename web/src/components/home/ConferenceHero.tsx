@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { conference, days, secretariat } from "@/data/conference";
-import { NAV_ITEMS } from "@/lib/constants";
+import { PRIMARY_NAV } from "@/lib/constants";
 import type { InteractionState } from "@/components/anatomy/AnatomyParticles";
 
 const AnatomyScene = dynamic(() => import("@/components/anatomy/AnatomyScene"), {
@@ -12,9 +12,9 @@ const AnatomyScene = dynamic(() => import("@/components/anatomy/AnatomyScene"), 
 });
 
 /* Real routes, not on-page anchors — every nav item has its own page. */
-const navigation = NAV_ITEMS.filter((n) =>
-  ["About", "Programme", "Workshops", "Faculty", "Abstracts", "Registration Details", "Venue"].includes(n.label),
-).map((n) => [n.label, n.path] as const);
+/* Shared with the inner-page SiteHeader via PRIMARY_NAV — see constants.ts.
+   These two used to keep separate hardcoded lists and had drifted apart. */
+const navigation = PRIMARY_NAV.map((n) => [n.label, n.path] as const);
 
 const chapters = [
   { short: "Cloud", label: "Point cloud", at: 0 },

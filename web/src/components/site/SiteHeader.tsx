@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { conference, secretariat } from "@/data/conference";
-import { NAV_ITEMS } from "@/lib/constants";
+import { PRIMARY_NAV } from "@/lib/constants";
 
 export function Arrow() {
   return (
@@ -27,7 +27,8 @@ export function Seal() {
 
 export default function SiteHeader({ cta = true }: { cta?: boolean }) {
   const [open, setOpen] = useState(false);
-  const nav = NAV_ITEMS.filter((n) => ["About", "Programme", "Workshops", "Abstracts", "Registration Details", "Venue"].includes(n.label));
+    /* Shared with the home hero nav via PRIMARY_NAV — see constants.ts. */
+  const nav = PRIMARY_NAV;
 
   return (
     <>
@@ -74,7 +75,10 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
       {open ? (
         <div className="fixed inset-0 z-40 grid bg-[#b3122a] px-[var(--gutter)] pb-10 pt-20 text-white xl:hidden">
           <nav aria-label="Mobile" className="self-center">
-            {NAV_ITEMS.map((n, i) => (
+            {/* Same PRIMARY_NAV as desktop. This rendered the full NAV_ITEMS, so
+                the mobile menu listed ten items — including Awards, Industry and
+                the Coming Soon Faculty page — while desktop showed seven. */}
+            {PRIMARY_NAV.map((n, i) => (
               <a key={n.path} href={n.path} onClick={() => setOpen(false)} className="flex items-baseline gap-4 border-b border-white/25 py-3 text-[clamp(1.6rem,7vw,3rem)] font-black uppercase leading-none tracking-[-.05em] text-white no-underline">
                 <span className="font-mono text-[9px] font-normal tracking-[.16em] text-white/60">0{i + 1}</span>
                 {n.label}

@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./brochure.css";
 import {
   about,
-  closingPromises,
   conference,
+  days,
   executiveCommittee,
   highlights,
   leadership,
@@ -12,39 +12,30 @@ import {
   patrons,
   programmeOverview,
   registrationHelpline,
+  registrationIncludes,
   secretariat,
   venues,
 } from "@/data/conference";
-import {
-  cvts2035,
-  day0,
-  day0Stations,
-  day1,
-  day2,
-  signatureFormats,
-  technologyLabs,
-  threeDayFlow,
-  youngSurgeonsToolkit,
-  type SessionBlock,
-  type Slot,
-} from "@/data/programme";
 import { conferenceConfig } from "@/config/conference.config";
 import { pricingTiers } from "@/config/pricing.config";
 
 /**
  * DELEGATE BROCHURE — a print route, rendered to PDF by Chromium.
  *
- * TEN PAGES, NOTHING CUT. The previous version ran to 21 because each session
- * block got its own page. Everything still here; the schedule now flows in
- * balanced CSS columns and related sections share a page. Two things were
- * genuinely MISSING from the 21-page version and are restored: the eight
- * scientific `highlights` and `closingPromises` were imported but never
- * rendered.
+ * THIS IS A REFLECTION OF THE WEBSITE, not a programme book. The
+ * session-by-session agenda was deliberately REMOVED: the committee asked for
+ * "just the agenda to be published soon", and the brochure to mirror the site.
+ * data/programme.ts still holds the full schedule for whenever it is wanted —
+ * nothing was deleted, it is simply not rendered here.
  *
- * It imports the SAME data modules the website renders from, so a fee, a rule,
- * a phone number or a committee name cannot drift between site and brochure.
- * The session-by-session programme comes from data/programme.ts, transcribed
- * from the client's own trade brochure V5.
+ * Everything is CENTRED and the vertical rhythm is open. The previous version
+ * was rejected as plain and cramped, so this puts the real photography (venues,
+ * Hyderabad, portraits) on the page and carries less content per page. Space is
+ * the material.
+ *
+ * THE COVER RENDERS NOTHING. The supplied artwork is a finished design; the
+ * earlier version left a placeholder box and a contents list sitting on top of
+ * it, which read as an overlay. Do not put type back on page 1.
  *
  * `<img>` rather than next/image throughout, deliberately: next/image lazy-loads
  * and swaps in placeholders, which in a headless print render can commit a blank
@@ -58,12 +49,7 @@ export const metadata: Metadata = {
 };
 
 const RAW_SITE = conferenceConfig.contact.website.replace(/\/$/, "");
-/**
- * A brochure is printed and handed out — a localhost link in it is dead forever.
- * conferenceConfig.contact.website prefers NEXT_PUBLIC_APP_URL, which in a dev
- * environment is a loopback address, so every button here silently pointed at
- * http://localhost. Reject loopback/private and use the canonical public domain.
- */
+/** A printed localhost link is dead forever — reject loopback bases. */
 const SITE = /^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[?::1|192\.168\.|10\.)/i.test(RAW_SITE)
   ? "https://iactstechnocollegecme2026.com"
   : RAW_SITE;
@@ -71,86 +57,68 @@ const SITE = /^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[?::1|192\.168\.|10\.)/i.
 const LINK = {
   register: `${SITE}/register`,
   abstracts: `${SITE}/abstracts`,
-  fees: `${SITE}/pricing`,
   programme: `${SITE}/programme`,
   site: SITE,
 };
 
 const MARK = "Future Is Now · Hyderabad 2026";
 
+/**
+ * The same marks the website's Strata section uses, in the same order, so the two
+ * surfaces read as one system. They are Unicode typographic glyphs rather than
+ * emoji deliberately: emoji render in their own fixed multicolour artwork and
+ * cannot be held to the single brand red.
+ */
+const HIGHLIGHT_MARKS = ["✚", "◈", "◎", "⬡", "✦", "★", "❖", "◉"] as const;
+
+const HYDERABAD = [
+  ["Golconda Fort", "16th century", "/hyderabad/golconda.jpg"],
+  ["Salar Jung Museum", "Collection", "/hyderabad/salar-jung.jpg"],
+  ["Hussain Sagar", "Heart of the city", "/hyderabad/hussain-sagar.jpg"],
+  ["Birla Mandir", "Naubath Pahad", "/hyderabad/birla-mandir.jpg"],
+  ["Ramoji Film City", "Day trip", "/hyderabad/ramoji.jpg"],
+  ["HITEC City", "Modern Hyderabad", "/hyderabad/hitec-city.jpg"],
+] as const;
+
 function Page({
   n,
   section,
   children,
   cover = false,
-  dense = false,
-  sched = false,
+  msg = false,
 }: {
   n?: string;
   section?: string;
-  children: ReactNode;
+  children?: ReactNode;
   cover?: boolean;
-  dense?: boolean;
-  sched?: boolean;
+  msg?: boolean;
 }) {
+  /* The cover is artwork only — no header, no folio, no children. */
+  if (cover) {
+    return <section className="bro-page bro-cover bro-cover--art" />;
+  }
   return (
-    <section
-      className={`bro-page${cover ? " bro-cover" : ""}${dense ? " bro-dense" : ""}${sched ? " bro-sched" : ""}`}
-    >
-      {!cover ? (
-        <header className="bro-head">
-          <p className="bro-head-sec">{section ?? ""}</p>
-          <p className="bro-head-mark">{MARK}</p>
-        </header>
-      ) : null}
+    <section className={`bro-page bro-c bro-page--art${msg ? " bro-msg" : ""}`}>
+      <header className="bro-head">
+        <p className="bro-head-sec">{section ?? ""}</p>
+        <p className="bro-head-mark">{MARK}</p>
+      </header>
       <div className="bro-body">{children}</div>
-      {!cover ? (
-        <footer className="bro-foot">
-          <p className="bro-foot-name">{conference.name}</p>
-          <p className="bro-foot-num">{n}</p>
-        </footer>
-      ) : null}
+      <footer className="bro-foot">
+        <p className="bro-foot-name">{conference.name}</p>
+        <p className="bro-foot-num">{n}</p>
+      </footer>
     </section>
   );
 }
 
-function Split({ rail, children, wide = false }: { rail: ReactNode; children: ReactNode; wide?: boolean }) {
+function Head({ kicker, children }: { kicker: string; children: ReactNode }) {
   return (
-    <div className={`bro-split${wide ? " bro-split-wide" : ""}`}>
-      <div className="bro-rail">{rail}</div>
-      <div>{children}</div>
-    </div>
-  );
-}
-
-function SlotRow({ s }: { s: Slot }) {
-  return (
-    <div className={`bro-slot${s.kind ? ` is-${s.kind}` : ""}`}>
-      <p className="bro-slot-time">{s.time ?? ""}</p>
-      <div>
-        <p className="bro-slot-title">
-          {s.title}
-          {s.tentative ? <span className="bro-tent">tentative</span> : null}
-        </p>
-        {s.who ? <p className="bro-slot-who">{s.who}</p> : null}
-      </div>
-    </div>
-  );
-}
-
-function Session({ b }: { b: SessionBlock }) {
-  return (
-    <div className="bro-sess">
-      <div className="bro-sess-head">
-        <p className="bro-sess-code">{b.code ?? "·"}</p>
-        <p className="bro-h3" style={{ fontSize: "9.4pt" }}>{b.title}</p>
-        <p className="bro-label">{b.window ?? ""}</p>
-      </div>
-      {b.slots.map((s) => (
-        <SlotRow key={`${s.time ?? ""}${s.title}`} s={s} />
-      ))}
-      {b.note ? <p className="bro-note" style={{ marginTop: "1.8mm" }}>{b.note}</p> : null}
-    </div>
+    <>
+      <p className="bro-kicker">{kicker}</p>
+      <hr className="bro-rule-c" />
+      <p className="bro-display">{children}</p>
+    </>
   );
 }
 
@@ -164,25 +132,35 @@ function initials(name: string) {
     .join("");
 }
 
-function Portrait({ src, name, role }: { src?: string | null; name: string; role?: string }) {
+function Person({
+  src,
+  name,
+  role,
+  title,
+}: {
+  src?: string | null;
+  name: string;
+  role?: string;
+  title?: string;
+}) {
   return (
     <div>
       {src ? (
         <img className="bro-por" src={src} alt={name} />
       ) : (
-        <div className="bro-por-ph">
+        <div className="bro-por-ph" style={{ maxWidth: "34mm" }}>
           <span>{initials(name)}</span>
         </div>
       )}
-      <p className="bro-por-name">{name}</p>
+      <p className="bro-photo-name" style={{ fontSize: "10pt" }}>{name}</p>
       {role ? <p className="bro-por-role">{role}</p> : null}
+      {title ? <p className="bro-note" style={{ fontSize: "6.8pt", marginTop: "1mm" }}>{title}</p> : null}
     </div>
   );
 }
 
 export default function BrochurePage() {
   const [chairman, secretary] = messages;
-  const { domains, breakthrough } = programmeOverview;
   const bank = conferenceConfig.payment.bankDetails;
   const abstractRules = conferenceConfig.abstracts.submissionRules ?? [];
   const deadline = conferenceConfig.abstracts.submissionWindow?.end;
@@ -204,327 +182,214 @@ export default function BrochurePage() {
 
   return (
     <div className="bro">
-      {/* ========================== 01 · COVER ============================= */}
-      <Page cover>
-        <div style={{ display: "flex", flexDirection: "column", height: "100%", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <p className="bro-label">{MARK}</p>
-            <p className="bro-label">Delegate Brochure</p>
-          </div>
+      {/* 01 · COVER — supplied artwork, nothing on top of it. */}
+      <Page cover />
 
-          <div className="bro-cover-ph">
-            <p className="bro-label">Cover artwork · placeholder</p>
-            <p className="bro-note" style={{ marginTop: "3mm", color: "rgba(255,254,253,.5)" }}>
-              Final cover to be supplied. Every page after this one is complete.
-            </p>
-          </div>
+      {/* 02 · CHAIRMAN */}
+      <Page n="02" section="Welcome" msg>
+        <Head kicker="Organising Chairman's Message">
+          A mindset of adaptability, innovation and <span className="bro-em">lifelong learning</span>
+        </Head>
 
-          <div>
-            <div style={{ height: "1.5pt", background: "var(--crimson)", width: "26mm", marginBottom: "6mm" }} />
-            <p className="bro-display" style={{ marginBottom: "4mm" }}>
-              The future
-              <br />
-              <span className="bro-em">is now</span>
-            </p>
-            <p className="bro-lede" style={{ color: "var(--paper)", maxWidth: "118mm", marginBottom: "5mm" }}>
-              IACTS TechnoCollege CME 2026 — a pre-conference workshop and a two-day CME built for the next generation
-              of cardiothoracic surgeons.
-            </p>
-            <div className="bro-cols bro-c3" style={{ gap: "4mm", maxWidth: "150mm" }}>
-              <div>
-                <p className="bro-label">Dates</p>
-                <p className="bro-h3" style={{ color: "var(--paper)", marginTop: "1mm" }}>{conference.dates.label}</p>
-              </div>
-              <div>
-                <p className="bro-label">City</p>
-                <p className="bro-h3" style={{ color: "var(--paper)", marginTop: "1mm" }}>{conference.city}</p>
-              </div>
-              <div>
-                <p className="bro-label">Convened by</p>
-                <p className="bro-h3" style={{ color: "var(--paper)", marginTop: "1mm" }}>{conference.organisedBy}</p>
-              </div>
-            </div>
-          </div>
+        <img
+          className="bro-por"
+          src={chairman.portrait}
+          alt={chairman.name}
+          style={{ width: "30mm", margin: "0 auto 3mm" }}
+        />
+        <p className="bro-photo-name">{chairman.name}</p>
+        <p className="bro-por-role" style={{ marginBottom: "6mm" }}>{chairman.role}</p>
 
-          {/* Replaces the old standalone contents page — a ten-page document
-              does not need a full-page table of contents. */}
-          <div style={{ borderTop: "0.5pt solid rgba(255,254,253,.22)", paddingTop: "4mm" }}>
-            <p className="bro-label" style={{ marginBottom: "2mm" }}>Inside</p>
-            <p className="bro-note" style={{ color: "rgba(255,254,253,.62)", lineHeight: 1.75 }}>
-              02 Welcome · 03 About &amp; the three-day shape · 04 Day 0 and the technology labs · 05 Day 1 ·
-              06 Day 2 · 07 CVTS 2035 &amp; scientific highlights · 08 Fees and how to register · 09 Abstracts,
-              venues &amp; Hyderabad · 10 Committee and contact
-            </p>
-            <p className="bro-label" style={{ marginTop: "4mm", letterSpacing: ".26em" }}>
-              Learn it · Do it · Challenge it · Innovate it
-            </p>
-          </div>
-        </div>
+        <p className="bro-label bro-label-red" style={{ marginBottom: "3mm" }}>{chairman.salutation}</p>
+        {chairman.paragraphs.map((t) => (
+          <p key={t.slice(0, 36)} className="bro-p">{t}</p>
+        ))}
       </Page>
 
-      {/* ===================== 02 · WELCOME (BOTH) ========================= */}
-      <Page n="02" section="Welcome" dense>
-        <p className="bro-kicker">Messages from the organising office-bearers</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display" style={{ marginBottom: "5mm" }}>
+      {/* 03 · SECRETARY */}
+      <Page n="03" section="Welcome" msg>
+        <Head kicker="Organising Secretary's Message">
           The future is no longer something we are <span className="bro-em">waiting for</span>
-        </p>
+        </Head>
 
-        <div className="bro-cols bro-c2" style={{ gap: "8mm" }}>
-          {[chairman, secretary].map((m) => (
-            <div key={m.id}>
-              <div style={{ display: "flex", gap: "4mm", alignItems: "flex-start", marginBottom: "3mm" }}>
-                <img
-                  className="bro-por"
-                  src={m.portrait}
-                  alt={m.name}
-                  style={{ width: "20mm", flex: "none" }}
-                />
-                <div>
-                  <p className="bro-label bro-label-red">{m.role}</p>
-                  <p className="bro-h2" style={{ fontSize: "12.5pt", marginTop: "1.5mm" }}>{m.name}</p>
-                </div>
-              </div>
-              <p className="bro-label bro-label-red" style={{ marginBottom: "2mm" }}>{m.salutation}</p>
-              {m.paragraphs.map((t) => (
-                <p key={t.slice(0, 36)} className="bro-p" style={{ fontSize: "7.9pt", lineHeight: 1.56 }}>
-                  {t}
-                </p>
-              ))}
-              <p className="bro-note" style={{ marginTop: "2.5mm", borderTop: "0.5pt solid var(--hair)", paddingTop: "2mm" }}>
-                {m.name} · {m.role}
-              </p>
-            </div>
-          ))}
-        </div>
+        <img
+          className="bro-por"
+          src={secretary.portrait}
+          alt={secretary.name}
+          style={{ width: "30mm", margin: "0 auto 3mm" }}
+        />
+        <p className="bro-photo-name">{secretary.name}</p>
+        <p className="bro-por-role" style={{ marginBottom: "6mm" }}>{secretary.role}</p>
+
+        <p className="bro-label bro-label-red" style={{ marginBottom: "3mm" }}>{secretary.salutation}</p>
+        {secretary.paragraphs.map((t) => (
+          <p key={t.slice(0, 36)} className="bro-p">{t}</p>
+        ))}
       </Page>
 
-      {/* ============ 03 · ABOUT + DOMAINS + FLOW + FORMATS ================ */}
-      <Page n="03" section="About · Programme shape" dense>
-        <p className="bro-kicker">About the CME</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">{about.heading}</p>
-
-        <Split
-          rail={
-            <>
-              <p className="bro-label">Conceived for</p>
-              <p className="bro-note">Postgraduate students and young surgeons early in their careers.</p>
-              <p className="bro-label" style={{ marginTop: "4mm" }}>A platform to</p>
-              {about.verbs.map((v) => (
-                <p key={v} className="bro-mono" style={{ marginTop: "1.2mm" }}>{v}</p>
-              ))}
-            </>
-          }
-        >
-          <p className="bro-lede">{about.lede}</p>
-          <p className="bro-p">{about.body}</p>
-          <p className="bro-p" style={{ color: "var(--ink)" }}>{about.closing}</p>
-
-          <p className="bro-label bro-label-ink" style={{ marginTop: "4mm", marginBottom: "1.5mm" }}>
-            Four scientific domains
-          </p>
-          <div className="bro-2col">
-            {domains.map((d) => (
-              <div key={d.code} className="bro-item">
-                <p className="bro-mono">{d.code}</p>
-                <div>
-                  <p className="bro-h3">{d.title}</p>
-                  {"note" in d && d.note ? <p className="bro-label" style={{ marginTop: "0.6mm" }}>{d.note}</p> : null}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Split>
-
-        <div className="bro-hr" />
-
-        <div className="bro-cols bro-c3" style={{ gap: "6mm", marginBottom: "4mm" }}>
-          {threeDayFlow.map((d) => (
-            <div key={d.label} style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "2.5mm" }}>
-              <p className="bro-label bro-label-red">{d.label}</p>
-              <p className="bro-h3" style={{ margin: "1.5mm 0 1.5mm", fontSize: "10.5pt" }}>{d.title}</p>
-              <p className="bro-note">{d.blurb}</p>
-            </div>
-          ))}
-        </div>
-
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "1.5mm" }}>Signature formats</p>
-        <div className="bro-3col">
-          {signatureFormats.map((f, i) => (
-            <div key={f} className="bro-item">
-              <p className="bro-mono">{String(i + 1).padStart(2, "0")}</p>
-              <p className="bro-note" style={{ color: "var(--ink)" }}>{f}</p>
-            </div>
-          ))}
-        </div>
-        <p className="bro-label bro-label-red" style={{ marginTop: "3.5mm", letterSpacing: ".2em" }}>
-          Operate well · Think critically · Innovate responsibly
+      {/* 04 · ABOUT THE CME */}
+      <Page n="04" section="About">
+        <Head kicker="About the CME">{about.heading}</Head>
+        <p className="bro-lede">{about.lede}</p>
+        {about.programmeNote.map((para) => (
+          <p key={para.slice(0, 36)} className="bro-p">{para}</p>
+        ))}
+        <p className="bro-p" style={{ color: "var(--ink)", marginTop: "2mm" }}>{about.closing}</p>
+        <p className="bro-note" style={{ marginTop: "7mm" }}>
+          {conference.dates.label} · {conference.city}
+          <br />
+          Convened by {conference.organisedBy}
+          <br />
+          Under the aegis of the {conference.association}
         </p>
       </Page>
 
-      {/* =============== 04 · DAY 0 + TECHNOLOGY LABS ====================== */}
-      <Page n="04" section={`${day0.label} · Workshops & Labs`} dense>
-        <p className="bro-kicker">{day0.label} · {day0.date} · {day0.window} · {day0.venue}</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">{day0.title}</p>
-        <p className="bro-lede">{day0.blurb}</p>
-
-        <div className="bro-2col">
-          {day0Stations.map((s) => (
-            <div key={s.code} className="bro-item">
-              <p className="bro-mono">{s.code}</p>
-              <div>
-                <p className="bro-h3">{s.title}</p>
-                <p className="bro-note" style={{ marginTop: "0.8mm" }}>{s.blurb}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="bro-panel bro-panel-edge" style={{ marginTop: "4mm" }}>
-          <p className="bro-label bro-label-red">Learn it · Do it · Challenge it</p>
-          <p className="bro-p" style={{ margin: "1.8mm 0 0", color: "var(--ink)" }}>
-            {day0.closing} Workshop places are limited and allocated with registration — select your preference in the
-            registration form.
-          </p>
-        </div>
-
-        <div className="bro-hr" />
-
-        <p className="bro-kicker" style={{ marginBottom: "2mm" }}>Industry × Surgeon · Technology Labs</p>
-        <p className="bro-p" style={{ marginBottom: "2.5mm" }}>
-          Built around hands-on education rather than sponsored lectures — six immersive labs run alongside the
-          scientific programme.
+      {/* 05 · SCIENTIFIC HIGHLIGHTS */}
+      <Page n="05" section="Programme">
+        <Head kicker="Scientific Highlights">
+          Eight <span className="bro-em">highlights</span>
+        </Head>
+        <p className="bro-lede">
+          The eight areas the programme is built around, as published by the organising committee.
         </p>
-        <div className="bro-2col">
-          {technologyLabs.map((l, i) => (
-            <div key={l.title} className="bro-item">
-              <p className="bro-mono">{String(i + 1).padStart(2, "0")}</p>
-              <div>
-                <p className="bro-h3">{l.title}</p>
-                <p className="bro-note" style={{ marginTop: "0.8mm" }}>{l.blurb}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Page>
 
-      {/* ========================== 05 · DAY 1 ============================= */}
-      <Page n="05" section={`${day1.label} · ${day1.date}`} dense sched>
-        <p className="bro-kicker">
-          {day1.label} · {day1.date} · {day1.window} · {day1.venue}
-        </p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">{day1.title}</p>
-
-        <div className="bro-2col">
-          {day1.blocks.map((b) => (
-            <Session key={b.title} b={b} />
-          ))}
-          <div style={{ borderTop: "1pt solid var(--crimson)", paddingTop: "2.5mm", marginTop: "1mm" }}>
-            <p className="bro-h3" style={{ fontSize: "10pt" }}>{youngSurgeonsToolkit.title}</p>
-            <p className="bro-label" style={{ marginTop: "0.8mm" }}>{youngSurgeonsToolkit.window}</p>
-            {youngSurgeonsToolkit.items.map((t) => (
-              <div key={t.title} style={{ marginTop: "2mm" }}>
-                <p className="bro-slot-title" style={{ fontWeight: 650 }}>{t.title}</p>
-                <p className="bro-note">{t.blurb}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Page>
-
-      {/* ========================== 06 · DAY 2 ============================= */}
-      <Page n="06" section={`${day2.label} · ${day2.date}`} dense sched>
-        <p className="bro-kicker">
-          {day2.label} · {day2.date} · {day2.window} · {day2.venue}
-        </p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">{day2.title}</p>
-
-        <div className="bro-2col">
-          {day2.blocks.map((b) => (
-            <Session key={b.title} b={b} />
-          ))}
-        </div>
-      </Page>
-
-      {/* ============= 07 · CVTS 2035 + SCIENTIFIC HIGHLIGHTS ============== */}
-      <Page n="07" section="CVTS 2035 · Highlights" dense>
-        <p className="bro-kicker">{cvts2035.code} · {cvts2035.window}</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">{cvts2035.title}</p>
-        <p className="bro-lede" style={{ fontStyle: "italic", marginBottom: "3mm" }}>{cvts2035.question}</p>
-
-        <div className="bro-cols bro-c2" style={{ gap: "8mm", marginBottom: "3.5mm" }}>
-          <div>
-            <p className="bro-label bro-label-ink" style={{ marginBottom: "1.5mm" }}>On the table</p>
-            <div className="bro-2col">
-              {cvts2035.topics.map((t) => (
-                <p key={t} className="bro-note" style={{ color: "var(--ink)", marginBottom: "1mm" }}>· {t}</p>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="bro-label bro-label-ink" style={{ marginBottom: "1.5mm" }}>Proposed panel</p>
-            <div className="bro-2col">
-              {cvts2035.panel.map((p) => (
-                <p key={p} className="bro-note" style={{ color: "var(--ink)", marginBottom: "1mm" }}>· {p}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="bro-panel bro-panel-edge">
-          <p className="bro-label bro-label-red">{cvts2035.closing.title}</p>
-          <p className="bro-p" style={{ margin: "1.8mm 0 0", color: "var(--ink)" }}>{cvts2035.closing.body}</p>
-        </div>
-
-        <div className="bro-hr" />
-
-        <p className="bro-kicker" style={{ marginBottom: "2mm" }}>Scientific highlights</p>
-        <div className="bro-2col">
+        <div className="bro-cols bro-c2" style={{ gap: "5mm 9mm", marginTop: "2mm" }}>
           {highlights.map((h, i) => (
-            <div key={h.title} className="bro-item" style={{ padding: "1.6mm 0" }}>
-              <p className="bro-mono">{String(i + 1).padStart(2, "0")}</p>
-              <div>
-                <p className="bro-h3">{h.title}</p>
-                <p className="bro-label" style={{ marginTop: "0.5mm" }}>{h.sub}</p>
-                <p className="bro-note" style={{ marginTop: "0.8mm" }}>{h.points.join(" · ")}</p>
+            <div key={h.title} className="bro-cell" style={{ textAlign: "left" }}>
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+                <span aria-hidden style={{ fontSize: "12pt", color: "var(--crimson)", lineHeight: 1 }}>
+                  {HIGHLIGHT_MARKS[i % HIGHLIGHT_MARKS.length]}
+                </span>
+                <span className="bro-mono" style={{ display: "inline", color: "var(--faint)" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="bro-cols" style={{ gridTemplateColumns: `repeat(${closingPromises.length}, 1fr)`, gap: "2mm", marginTop: "3.5mm" }}>
-          {closingPromises.map((p) => (
-            <div key={p} style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "1.8mm" }}>
-              <p className="bro-label bro-label-ink">{p}</p>
+              <p className="bro-h3" style={{ fontSize: "10.5pt", marginTop: "2mm" }}>{h.title}</p>
+              <p className="bro-label" style={{ marginTop: "1.2mm", fontSize: "6.6pt" }}>{h.sub}</p>
+              <ul style={{ listStyle: "none", padding: 0, margin: "2mm 0 0" }}>
+                {h.points.map((pt) => (
+                  <li key={pt} className="bro-note" style={{ fontSize: "7.4pt", marginBottom: "0.8mm" }}>
+                    {pt}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
       </Page>
 
-      {/* ================= 08 · FEES + HOW TO REGISTER ===================== */}
-      <Page n="08" section="Registration" dense>
-        <p className="bro-kicker">Registration</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">
-          Fees &amp; how to <span className="bro-em">register</span>
+      {/* 06 · PROGRAMME — agenda forthcoming */}
+      <Page n="06" section="Programme">
+        <Head kicker="Programme Overview">
+          Three days, <span className="bro-em">two venues</span>
+        </Head>
+
+        <div className="bro-cols bro-c3" style={{ gap: "7mm", marginBottom: "9mm" }}>
+          <div className="bro-cell">
+            <span className="bro-mono">Day 0</span>
+            <p className="bro-h3" style={{ fontSize: "10.5pt" }}>23 October</p>
+            <p className="bro-note" style={{ marginTop: "1.5mm" }}>
+              Pre-conference hands-on workshops · NIMS Hyderabad
+            </p>
+          </div>
+          <div className="bro-cell">
+            <span className="bro-mono">Days 1 &amp; 2</span>
+            <p className="bro-h3" style={{ fontSize: "10.5pt" }}>24 &amp; 25 October</p>
+            <p className="bro-note" style={{ marginTop: "1.5mm" }}>
+              Scientific programme · Dr. MCR HRD Institute
+            </p>
+          </div>
+          <div className="bro-cell">
+            <span className="bro-mono">Theme</span>
+            <p className="bro-h3" style={{ fontSize: "10.5pt" }}>{conference.theme}</p>
+            <p className="bro-note" style={{ marginTop: "1.5mm" }}>
+              Science · Skill · Innovation
+            </p>
+          </div>
+        </div>
+
+        <div className="bro-panel bro-panel-edge" style={{ textAlign: "center", borderLeft: 0, borderTop: "1.5pt solid var(--crimson)" }}>
+          <p className="bro-h2" style={{ fontSize: "16pt", marginBottom: "2mm" }}>
+            The detailed scientific agenda will be published soon
+          </p>
+          <p className="bro-note">
+            Session timings and faculty are being finalised by the scientific committee. The full programme will be
+            published on the conference website.
+          </p>
+        </div>
+
+        <div className="bro-btn-row" style={{ marginTop: "8mm" }}>
+          <a className="bro-btn bro-btn-ghost" href={LINK.programme}>
+            {LINK.programme.replace(/^https?:\/\//, "")}
+          </a>
+        </div>
+      </Page>
+
+      {/* 07 · WORKSHOPS — mirrors the website's /workshops route.
+          This was MISSING: the rewrite that removed the session-by-session agenda
+          also took the workshop tracks with it, so the five pre-conference tracks
+          — including MICS CABG, which the committee added on 10 September — were
+          nowhere in the brochure while Workshops sits in the site's primary nav.
+          Found by diffing the site's nav and data exports against the rendered
+          PDF rather than by re-reading the source. */}
+      <Page n="07" section="Workshops">
+        <Head kicker="Pre-Conference Workshops">
+          Day 0 · <span className="bro-em">23 October</span>
+        </Head>
+        <p className="bro-lede">
+          Hands-on sessions at NIMS Hyderabad for postgraduate trainees and young surgeons. Places are limited and
+          allocated with registration.
         </p>
+
+        <p className="bro-label bro-label-ink" style={{ marginTop: "2mm", marginBottom: "3mm" }}>The tracks</p>
+        <div className="bro-cols bro-c2" style={{ gap: "4mm 9mm" }}>
+          {days[0].items.map((item, i) => (
+            <div key={item.title} className="bro-cell">
+              <span className="bro-mono">{String(i + 1).padStart(2, "0")}</span>
+              <p className="bro-h3" style={{ fontSize: "10.5pt" }}>{item.title}</p>
+              <p className="bro-label" style={{ marginTop: "1mm", fontSize: "6.6pt" }}>{item.tag}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="bro-label bro-label-ink" style={{ marginTop: "7mm", marginBottom: "3mm" }}>Skills covered</p>
+        <div className="bro-cols bro-c2" style={{ gap: "3mm 9mm" }}>
+          {programmeOverview.dayZero.skills.map((skill) => (
+            <p key={skill} className="bro-note" style={{ fontSize: "8.6pt", color: "var(--ink)" }}>
+              {skill}
+            </p>
+          ))}
+        </div>
+
+        <div
+          className="bro-panel"
+          style={{ marginTop: "8mm", textAlign: "center", borderTop: "1.5pt solid var(--crimson)" }}
+        >
+          <p className="bro-h3" style={{ fontSize: "10.5pt" }}>Workshop schedule yet to be finalised</p>
+          <p className="bro-note" style={{ marginTop: "2mm" }}>
+            Select your workshop preference in the registration form; the secretariat will write to confirm your place.
+            Per-track seat counts to be announced.
+          </p>
+        </div>
+      </Page>
+
+      {/* 08 · FEES */}
+      <Page n="08" section="Registration">
+        <Head kicker="Registration">
+          Registration <span className="bro-em">fees</span>
+        </Head>
         <p className="bro-lede">
           Charged at the tier active on the date payment is received. All amounts in Indian rupees, inclusive of GST.
         </p>
 
-        <table className="bro-table">
+        <table className="bro-table" style={{ marginTop: "2mm" }}>
           <thead>
             <tr>
               <th>Category</th>
               {tiers.map((t, i) => (
                 <th key={t.key} className={i === 0 ? "is-best" : undefined}>
                   {t.label}
-                  <span>{dmy(t.startDate)} — {dmy(t.endDate)}</span>
+                  <span>till {dmy(t.endDate)}</span>
                 </th>
               ))}
             </tr>
@@ -546,224 +411,236 @@ export default function BrochurePage() {
           </tbody>
         </table>
 
-        <div className="bro-panel bro-panel-edge" style={{ marginTop: "4mm" }}>
-          <p className="bro-label bro-label-red">Included with Early Bird</p>
-          <p className="bro-h3" style={{ fontSize: "11pt", margin: "1.5mm 0 1mm" }}>
-            Complimentary twin-sharing accommodation at the venue
-          </p>
-          <p className="bro-note">
-            Early Bird rates apply until {earlyBird ? dmy(earlyBird.endDate) : "the published date"}. Concessional
-            categories require proof of eligibility.
-          </p>
-        </div>
-
-        <div className="bro-hr" />
-
-        <div className="bro-split bro-split-wide">
-          <div className="bro-rail">
-            {bank ? (
-              <>
-                <p className="bro-label bro-label-red">Pay to this account</p>
-                <p className="bro-label" style={{ marginTop: "2.5mm" }}>Account name</p>
-                <p className="bro-note" style={{ color: "var(--ink)", fontWeight: 650 }}>{bank.accountName}</p>
-                <p className="bro-label" style={{ marginTop: "2mm" }}>Account number</p>
-                <p className="bro-h3">{bank.accountNumber}</p>
-                <p className="bro-label" style={{ marginTop: "2mm" }}>Bank · IFSC</p>
-                <p className="bro-note" style={{ color: "var(--ink)", fontWeight: 650 }}>{bank.bankName}</p>
-                <p className="bro-h3">{bank.ifscCode}</p>
-                {bank.branchName ? <p className="bro-note" style={{ marginTop: "1mm" }}>{bank.branchName}</p> : null}
-              </>
-            ) : null}
-            <img className="bro-qr" src="/payment/qr.png" alt="UPI QR code for the registration fee" style={{ width: "28mm", height: "28mm" }} />
-            <p className="bro-label">Scan to pay by UPI</p>
-          </div>
-          <div>
-            {[
-              ["01", "Register online", "Complete the delegate form on the conference website."],
-              ["02", "Pay the fee", "Transfer by NEFT, IMPS or UPI using the account details or the QR code."],
-              ["03", "Attach your proof", "Enter the UTR / transaction reference and upload the payment screenshot. Both are required."],
-              ["04", "Receive confirmation", "The secretariat matches your payment and issues your registration ID and QR pass by email."],
-            ].map(([n, t, d]) => (
-              <div key={n} className="bro-item">
-                <p className="bro-mono">{n}</p>
-                <div>
-                  <p className="bro-h3">{t}</p>
-                  <p className="bro-note" style={{ marginTop: "0.6mm" }}>{d}</p>
-                </div>
-              </div>
-            ))}
-            <p className="bro-label bro-label-ink" style={{ marginTop: "3.5mm" }}>You will be asked for</p>
-            <p className="bro-note" style={{ marginTop: "1mm" }}>
-              Name, email and mobile · designation and specialization · institution · medical registration number ·
-              registration category · workshop preference · accommodation requirement · UTR and payment screenshot.
-            </p>
-            <div style={{ marginTop: "3.5mm", borderTop: "1pt solid var(--crimson)", paddingTop: "2mm" }}>
-              <p className="bro-label bro-label-red">{registrationHelpline.label}</p>
-              <p className="bro-h2" style={{ fontSize: "14pt", marginTop: "1mm", color: "var(--crimson)" }}>
-                {registrationHelpline.name} · +91 {registrationHelpline.number}
-              </p>
-            </div>
-            <div className="bro-btn-row" style={{ marginTop: "3.5mm" }}>
-              <a className="bro-btn bro-btn-red" href={LINK.register}>Register now</a>
-              <a className="bro-btn bro-btn-ghost" href={LINK.fees}>Full fee details</a>
-              <a className="bro-url" href={LINK.register}>{LINK.register.replace(/^https?:\/\//, "")}</a>
-            </div>
-          </div>
-        </div>
-      </Page>
-
-      {/* ========== 09 · ABSTRACTS + VENUES + HYDERABAD ==================== */}
-      <Page n="09" section="Abstracts · Venue" dense>
-        <p className="bro-kicker">Abstracts</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">
-          Abstract <span className="bro-em">submission</span>
+        <p className="bro-label bro-label-ink" style={{ marginTop: "9mm", marginBottom: "3mm" }}>
+          What you get with your registration
         </p>
-
-        <div className="bro-split">
-          <div className="bro-rail">
-            <p className="bro-label bro-label-red">Last date</p>
-            <p className="bro-figure" style={{ fontSize: "15pt", marginTop: "1mm" }}>{deadlineLabel}</p>
-            <p className="bro-label" style={{ marginTop: "3.5mm" }}>Format</p>
-            <p className="bro-note">Decided by the scientific committee after review — paper or poster. You do not choose.</p>
-            <div className="bro-btn-row" style={{ marginTop: "3.5mm" }}>
-              <a className="bro-btn bro-btn-red" href={LINK.abstracts}>Submit</a>
-            </div>
-            <p style={{ marginTop: "2mm" }}>
-              <a className="bro-url" href={LINK.abstracts}>{LINK.abstracts.replace(/^https?:\/\//, "")}</a>
-            </p>
-            <p style={{ marginTop: "1.5mm" }}>
-              <a className="bro-url" href={`mailto:${conferenceConfig.contact.abstractsEmail}`}>
-                {conferenceConfig.contact.abstractsEmail}
-              </a>
-            </p>
-          </div>
-          <div>
-            <p className="bro-p" style={{ marginBottom: "2mm" }}>
-              Abstracts and case reports are invited for the scientific programme. Conference registration is mandatory
-              before you submit, and submission is online only through the conference website.
-            </p>
-            <div className="bro-2col">
-              {abstractRules.map((rule, i) => (
-                <div key={rule} className="bro-item" style={{ padding: "1.5mm 0" }}>
-                  <p className="bro-mono">{String(i + 1).padStart(2, "0")}</p>
-                  <p className="bro-note" style={{ color: "var(--muted)" }}>{rule}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="bro-hr" />
-
-        <p className="bro-kicker" style={{ marginBottom: "2mm" }}>Where it happens</p>
-        <div className="bro-cols bro-c2" style={{ gap: "7mm", marginBottom: "3.5mm" }}>
-          {venues.map((v, i) => (
-            <div key={v.id} style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "2.5mm" }}>
-              <p className="bro-label bro-label-red">{i === 0 ? "Day 0 · 23 Oct" : "Day 1 & 2 · 24–25 Oct"}</p>
-              <p className="bro-h3" style={{ fontSize: "11pt", margin: "1.5mm 0 1mm" }}>{v.name}</p>
-              <p className="bro-note">{v.full}</p>
-              <p className="bro-note" style={{ marginTop: "1mm" }}>{v.address}</p>
+        <div className="bro-cols bro-c3" style={{ gap: "5mm 7mm" }}>
+          {registrationIncludes.map((item) => (
+            <div key={item} className="bro-cell">
+              <p className="bro-h3" style={{ fontSize: "9.6pt" }}>{item}</p>
             </div>
           ))}
         </div>
-        <p className="bro-note" style={{ marginBottom: "3mm" }}>
+
+        <p className="bro-note" style={{ marginTop: "8mm" }}>
+          Early Bird includes complimentary twin-sharing accommodation at the venue, until{" "}
+          {earlyBird ? dmy(earlyBird.endDate) : "the published date"}. Concessional categories require proof of
+          eligibility.
+        </p>
+      </Page>
+
+      {/* 08 · HOW TO REGISTER */}
+      <Page n="09" section="Registration">
+        <Head kicker="Registration">
+          How to <span className="bro-em">register</span>
+        </Head>
+
+        <div className="bro-cols bro-c2" style={{ gap: "6mm 9mm", marginBottom: "8mm" }}>
+          {[
+            ["01", "Register online", "Complete the delegate form on the conference website."],
+            ["02", "Pay the fee", "Transfer by NEFT, IMPS or UPI using the details below."],
+            ["03", "Attach your proof", "Enter the UTR reference and upload the payment screenshot. Both are required."],
+            ["04", "Receive confirmation", "The secretariat issues your registration ID and QR pass by email."],
+          ].map(([n, t, d]) => (
+            <div key={n} className="bro-cell">
+              <span className="bro-mono">{n}</span>
+              <p className="bro-h3" style={{ fontSize: "10.5pt" }}>{t}</p>
+              <p className="bro-note" style={{ marginTop: "1.5mm" }}>{d}</p>
+            </div>
+          ))}
+        </div>
+
+        {bank ? (
+          <>
+            <p className="bro-label bro-label-ink" style={{ marginBottom: "3mm" }}>Pay to this account</p>
+            <p className="bro-h3" style={{ fontSize: "10.5pt" }}>{bank.accountName}</p>
+            <p className="bro-p" style={{ margin: "2mm auto 0", fontSize: "9.4pt" }}>
+              {bank.accountNumber} · {bank.bankName} · {bank.ifscCode}
+              {bank.branchName ? <><br />{bank.branchName}</> : null}
+            </p>
+          </>
+        ) : null}
+
+        <img
+          className="bro-qr"
+          src="/payment/qr.png"
+          alt="UPI QR code for the registration fee"
+          style={{ margin: "6mm auto 0", width: "34mm", height: "34mm" }}
+        />
+        <p className="bro-figcap">Scan to pay by UPI</p>
+
+        <p className="bro-label bro-label-red" style={{ marginTop: "8mm" }}>{registrationHelpline.label}</p>
+        <p className="bro-h2" style={{ fontSize: "17pt", marginTop: "2mm", color: "var(--crimson)" }}>
+          {registrationHelpline.name} · +91 {registrationHelpline.number}
+        </p>
+      </Page>
+
+      {/* 09 · ABSTRACTS */}
+      <Page n="10" section="Abstracts">
+        <Head kicker="Abstracts">
+          Abstract <span className="bro-em">submission</span>
+        </Head>
+        <p className="bro-lede">
+          Abstracts and case reports are invited for the scientific programme. Conference registration is mandatory
+          before you submit, and submission is online only.
+        </p>
+
+        <p className="bro-label bro-label-red" style={{ marginTop: "2mm" }}>Last date for submission</p>
+        <p className="bro-figure" style={{ fontSize: "26pt", marginTop: "2mm" }}>{deadlineLabel}</p>
+
+        <div className="bro-cols bro-c2" style={{ gap: "0 9mm", marginTop: "8mm" }}>
+          {abstractRules.map((rule, i) => (
+            <div
+              key={rule}
+              style={{ borderBottom: "0.5pt solid var(--hair)", padding: "2.6mm 0", textAlign: "left" }}
+            >
+              <span className="bro-mono" style={{ marginRight: "3mm" }}>{String(i + 1).padStart(2, "0")}</span>
+              <span className="bro-note" style={{ color: "var(--muted)" }}>{rule}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bro-btn-row" style={{ marginTop: "8mm" }}>
+          <a className="bro-btn bro-btn-red" href={LINK.abstracts}>Submit an abstract</a>
+        </div>
+        <p className="bro-figcap" style={{ marginTop: "3mm" }}>
+          {LINK.abstracts.replace(/^https?:\/\//, "")}
+        </p>
+      </Page>
+
+      {/* 10 · VENUES */}
+      <Page n="11" section="Venue">
+        <Head kicker="Where it happens">
+          The <span className="bro-em">venues</span>
+        </Head>
+
+        <div className="bro-cols bro-c2" style={{ gap: "8mm" }}>
+          {venues.map((v, i) => (
+            <div key={v.id}>
+              <img className="bro-photo bro-photo-tile" src={v.image} alt={v.full} />
+              <p className="bro-figcap" style={{ color: "var(--crimson)" }}>
+                {i === 0 ? "Day 0 · 23 October" : "Days 1 & 2 · 24–25 October"}
+              </p>
+              <p className="bro-photo-name">{v.name}</p>
+              <p className="bro-note">{v.full}</p>
+              <p className="bro-note" style={{ marginTop: "1.5mm" }}>{v.address}</p>
+            </div>
+          ))}
+        </div>
+
+        <p className="bro-p" style={{ marginTop: "9mm" }}>
           Both venues are centrally located with easy access from Rajiv Gandhi International Airport and the city
           centre. Travel notes and recommended stays will be shared with registered delegates.
         </p>
+      </Page>
 
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "1.5mm" }}>Explore Hyderabad</p>
-        <div className="bro-3col">
-          {[
-            ["Golconda Fort", "16th century", "Granite citadel of the Qutb Shahi kings, famous for acoustics that carry a handclap from the gateway to the summit."],
-            ["Salar Jung Museum", "Collection", "One of the largest one-man collections in the world — sculpture, manuscripts and textiles from across continents."],
-            ["Hussain Sagar", "Heart of the city", "The lake dividing Hyderabad from Secunderabad, with the monolithic Buddha at its centre."],
-            ["Birla Mandir", "Naubath Pahad", "White marble on the hill above Hussain Sagar, with one of the widest views over the city."],
-            ["Ramoji Film City", "Day trip", "The world's largest integrated film studio complex, on the eastern edge of the city."],
-            ["HITEC City", "Modern Hyderabad", "The technology and biotech corridor that made Hyderabad a centre for research and pharma."],
-          ].map(([name, tag, blurb]) => (
-            <div key={name} style={{ borderTop: "0.5pt solid var(--hair)", paddingTop: "2mm", marginBottom: "2mm" }}>
-              <p className="bro-h3" style={{ fontSize: "8.8pt" }}>{name}</p>
-              <p className="bro-label" style={{ marginTop: "0.5mm" }}>{tag}</p>
-              <p className="bro-note" style={{ marginTop: "0.8mm" }}>{blurb}</p>
+      {/* 11 · HYDERABAD */}
+      <Page n="12" section="Host City">
+        <Head kicker="Explore Hyderabad">
+          A city of heritage — and of <span className="bro-em">medicine</span>
+        </Head>
+        <p className="bro-lede">
+          A rich cultural heritage alongside a fast-growing ecosystem of medicine, technology and innovation — the
+          spirit of this conference.
+        </p>
+
+        <div className="bro-cols bro-c3" style={{ gap: "6mm 5mm", marginTop: "2mm" }}>
+          {HYDERABAD.map(([name, tag, img]) => (
+            <div key={name}>
+              <img className="bro-photo bro-photo-tile" src={img} alt={name} />
+              <p className="bro-photo-name" style={{ fontSize: "10.5pt" }}>{name}</p>
+              <p className="bro-figcap">{tag}</p>
             </div>
           ))}
         </div>
       </Page>
 
-      {/* =============== 10 · COMMITTEE + CONTACT ========================== */}
-      <Page n="10" section="Leadership · Contact" dense>
-        <p className="bro-kicker">Leadership</p>
-        <div className="bro-hr-heavy" />
-        <p className="bro-display">
+      {/* 12 · THE WHOLE COMMITTEE ON ONE PAGE
+          Patrons, office-bearers and the executive committee together — 18
+          portraits. Each tier gets its own portrait width rather than one shared
+          size, because seniority should read from the page: patrons largest,
+          office-bearers (who also carry an institutional designation) middle,
+          executive committee smallest at six-up. The heading is deliberately
+          compact here; on a page of eighteen faces the faces are the content. */}
+      <Page n="13" section="Leadership">
+        <p className="bro-kicker" style={{ marginBottom: "3mm" }}>Leadership</p>
+        <hr className="bro-rule-c" style={{ marginBottom: "3mm" }} />
+        <p className="bro-display" style={{ fontSize: "20pt", marginBottom: "3mm" }}>
           Organising <span className="bro-em">committee</span>
         </p>
 
         <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Patrons</p>
-        <div className="bro-cols" style={{ gridTemplateColumns: "repeat(9, 1fr)", gap: "3mm", marginBottom: "3.5mm" }}>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: "58mm", marginInline: "auto", marginBottom: "4mm", gap: "4mm" }}
+        >
           {patrons.map((p) => (
-            <Portrait key={p.name} src={p.portrait} name={p.name} role={p.title} />
+            <Person key={p.name} src={p.portrait} name={p.name} role={p.title} title={p.role} />
           ))}
         </div>
 
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Organising committee</p>
-        <div className="bro-cols" style={{ gridTemplateColumns: "repeat(9, 1fr)", gap: "3mm", marginBottom: "3.5mm" }}>
+        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Office-bearers</p>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "4mm", gap: "4mm" }}
+        >
           {leadership.map((l) => (
-            <Portrait key={l.name} src={l.portrait} name={l.name} role={l.role} />
+            <Person key={l.name} src={l.portrait} name={l.name} role={l.role} title={l.title} />
           ))}
         </div>
 
         <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Executive committee</p>
-        <div className="bro-cols" style={{ gridTemplateColumns: "repeat(11, 1fr)", gap: "2.5mm" }}>
+        <div
+          className="bro-people bro-people-sm"
+          style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: "3mm" }}
+        >
           {executiveCommittee.map((m) => (
-            <Portrait key={m.name} src={m.portrait} name={m.name} />
+            <Person key={m.name} src={m.portrait} name={m.name} />
           ))}
         </div>
 
-        <div className="bro-hr" />
+        <p className="bro-note" style={{ marginTop: "4mm" }}>
+          Conference Secretariat · {secretariat.department}, {secretariat.city}
+        </p>
+      </Page>
 
-        <div className="bro-cols bro-c3" style={{ gap: "6mm" }}>
-          <div style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "2.5mm" }}>
-            <p className="bro-label bro-label-red">Conference secretariat</p>
-            <p className="bro-h3" style={{ marginTop: "2mm" }}>{secretariat.department}</p>
+      {/* 13 · CONTACT */}
+      <Page n="14" section="Contact">
+        <Head kicker="Join us in Hyderabad">
+          The future <span className="bro-em">is now</span>
+        </Head>
+        <p className="bro-lede">{conference.closing}</p>
+
+        <div className="bro-btn-row" style={{ margin: "8mm 0" }}>
+          <a className="bro-btn bro-btn-red" href={LINK.register}>Register now</a>
+          <a className="bro-btn bro-btn-ghost" href={LINK.abstracts}>Submit an abstract</a>
+        </div>
+
+        <div className="bro-cols bro-c2" style={{ gap: "8mm", marginTop: "4mm" }}>
+          <div className="bro-cell">
+            <span className="bro-mono">Secretariat</span>
+            <p className="bro-h3" style={{ fontSize: "10.5pt" }}>{secretariat.department}</p>
             <p className="bro-note">{secretariat.city}</p>
-            <p style={{ marginTop: "2mm" }}>
-              <a className="bro-url" href={`mailto:${secretariat.email}`}>{secretariat.email}</a>
-            </p>
+            <p className="bro-note" style={{ marginTop: "2mm" }}>{secretariat.email}</p>
             {secretariat.phones.map((p) => (
-              <p key={p.number} className="bro-note" style={{ marginTop: "1.5mm", color: "var(--crimson)", fontWeight: 650 }}>
+              <p key={p.number} className="bro-note" style={{ marginTop: "1.5mm", color: "var(--crimson)" }}>
                 {p.name} · +91 {p.number}
               </p>
             ))}
           </div>
-          <div style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "2.5mm" }}>
-            <p className="bro-label bro-label-red">{registrationHelpline.label}</p>
-            <p className="bro-h3" style={{ marginTop: "2mm", color: "var(--crimson)" }}>
-              {registrationHelpline.name}
-              <br />+91 {registrationHelpline.number}
+          <div className="bro-cell">
+            <span className="bro-mono">{registrationHelpline.label}</span>
+            <p className="bro-h3" style={{ fontSize: "10.5pt", color: "var(--crimson)" }}>
+              {registrationHelpline.name} · +91 {registrationHelpline.number}
             </p>
-            <p className="bro-label" style={{ marginTop: "3mm" }}>Website</p>
-            <p style={{ marginTop: "1mm" }}>
-              <a className="bro-url" href={LINK.site}>{LINK.site.replace(/^https?:\/\//, "")}</a>
-            </p>
-          </div>
-          <div style={{ borderTop: "1.5pt solid var(--crimson)", paddingTop: "2.5mm" }}>
-            <p className="bro-label bro-label-red">Dates &amp; city</p>
-            <p className="bro-h3" style={{ marginTop: "2mm" }}>{conference.dates.label}</p>
+            <p className="bro-note" style={{ marginTop: "3mm" }}>{LINK.site.replace(/^https?:\/\//, "")}</p>
+            <p className="bro-note" style={{ marginTop: "3mm" }}>{conference.dates.label}</p>
             <p className="bro-note">{conference.city}</p>
-            <p className="bro-note" style={{ marginTop: "2mm" }}>{conference.closing}</p>
-            <div className="bro-btn-row" style={{ marginTop: "2.5mm" }}>
-              <a className="bro-btn bro-btn-red" href={LINK.register}>Register</a>
-              <a className="bro-btn bro-btn-ghost" href={LINK.programme}>Programme</a>
-            </div>
           </div>
         </div>
 
-        <p className="bro-label bro-label-red" style={{ marginTop: "4mm", letterSpacing: ".26em" }}>
+        <p className="bro-label bro-label-red" style={{ marginTop: "10mm", letterSpacing: ".26em" }}>
           Learn it · Do it · Challenge it · Innovate it
-        </p>
-        <p className="bro-note" style={{ marginTop: "1.5mm" }}>
-          Under the aegis of the {conference.association} · Convened by {conference.organisedBy}
         </p>
       </Page>
     </div>

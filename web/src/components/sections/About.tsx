@@ -1,4 +1,4 @@
-import { about, conference } from "@/data/conference";
+import { about, conference, venues } from "@/data/conference";
 
 /**
  * About the CME — rebuilt to the 10 September 2026 committee review.
@@ -68,6 +68,51 @@ export default function About() {
         >
           Convened by {conference.organisedBy} · Under the aegis of the {conference.association}
         </p>
+
+        {/* DATES · CITY · VENUES.
+            Removing the old Day-Zero/domains breakdown on the 10 September
+            review also removed the only place the About section stated WHERE and
+            WHEN — a delegate could read the whole thing and not learn the city.
+            This restores those facts as a compact key-value band (the site's own
+            hairline + mono-label idiom), not as the programme breakdown the
+            committee asked to be taken out. */}
+        <div className="mt-11 border-t border-[var(--hair)] pt-9 text-left" data-r>
+          <div className="grid gap-x-[clamp(1.5rem,3vw,3rem)] gap-y-7 sm:grid-cols-3">
+            <div>
+              <p className="u-eyebrow text-gold-lift">Dates</p>
+              <p className="mt-2.5 text-[clamp(1.05rem,1.7vw,1.35rem)] font-bold tracking-[-0.015em] text-[#160a0d]">
+                {conference.dates.label}
+              </p>
+            </div>
+            <div>
+              <p className="u-eyebrow text-gold-lift">City</p>
+              <p className="mt-2.5 text-[clamp(1.05rem,1.7vw,1.35rem)] font-bold tracking-[-0.015em] text-[#160a0d]">
+                {conference.city}
+              </p>
+            </div>
+            <div>
+              <p className="u-eyebrow text-gold-lift">Theme</p>
+              <p className="mt-2.5 text-[clamp(1.05rem,1.7vw,1.35rem)] font-bold tracking-[-0.015em] text-[#b3122a]">
+                {conference.theme}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-9 grid gap-x-[clamp(1.5rem,3vw,3rem)] gap-y-7 sm:grid-cols-2">
+            {venues.map((v, i) => (
+              <div key={v.id} className="border-t-2 border-[#b3122a] pt-4">
+                <p className="u-eyebrow text-gold-lift">
+                  {i === 0 ? "23 October · Pre-Conference Workshop" : "24 & 25 October · Scientific Programme"}
+                </p>
+                <p className="mt-2.5 text-[clamp(1.05rem,1.7vw,1.35rem)] font-bold tracking-[-0.015em] text-[#160a0d]">
+                  {v.name}
+                </p>
+                <p className="mt-1.5 text-[0.95rem] leading-snug text-muted-foreground">{v.full}</p>
+                <p className="mt-1.5 text-[0.92rem] leading-snug text-muted-foreground">{v.address}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
