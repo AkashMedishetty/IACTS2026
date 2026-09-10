@@ -1,4 +1,5 @@
 import { EVENT_INFO } from "@/lib/constants";
+import { registrationIncludes } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
 import { pricingTiers } from "@/config/pricing.config";
 import { getCurrentTierKey, tierLabel } from "@/lib/registration";
@@ -47,12 +48,12 @@ export default function RegisterCta() {
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead>
               <tr>
-                <th className="border-b border-[var(--hair)] pb-3 font-mono text-[9px] uppercase tracking-[.16em] text-faint">Category</th>
+                <th className="border-b border-[var(--hair)] pb-3 font-mono text-[11px] uppercase tracking-[.14em] text-[#6a545a]">Category</th>
                 {TIER_KEYS.map((k) => {
                   const w = conferenceConfig.payment.tiers[k];
                   const active = k === activeKey;
                   return (
-                    <th key={k} className={`border-b pb-3 text-right font-mono text-[9px] uppercase tracking-[.16em] ${active ? "border-[#b3122a] text-[#b3122a]" : "border-[var(--hair)] text-faint"}`}>
+                    <th key={k} className={`border-b pb-3 text-right font-mono text-[11px] uppercase tracking-[.14em] ${active ? "border-[#b3122a] text-[#b3122a]" : "border-[var(--hair)] text-faint"}`}>
                       {tierLabel(k)}
                       <span className="mt-1 block font-normal normal-case tracking-normal opacity-70">
                         {w?.endDate ? `till ${fmtDate(w.endDate)}` : "at the venue"}
@@ -65,12 +66,12 @@ export default function RegisterCta() {
             <tbody>
               {categories.map((cat) => (
                 <tr key={cat.key}>
-                  <td className="border-b border-[var(--hair)] py-3.5 text-[0.95rem] font-semibold text-bone">{cat.label}</td>
+                  <td className="border-b border-[var(--hair)] py-4 text-[1.05rem] font-semibold text-bone">{cat.label}</td>
                   {TIER_KEYS.map((k) => {
                     const amt = pricingTiers[k]?.categories?.[cat.key]?.amount ?? 0;
                     const active = k === activeKey;
                     return (
-                      <td key={k} className={`border-b py-3.5 text-right tabular-nums ${active ? "border-[#b3122a] text-[1.05rem] font-bold text-[#b3122a]" : "border-[var(--hair)] text-[0.95rem] text-muted-foreground"}`}>
+                      <td key={k} className={`border-b py-4 text-right tabular-nums ${active ? "border-[#b3122a] text-[1.25rem] font-bold text-[#b3122a]" : "border-[var(--hair)] text-[1.05rem] text-muted-foreground"}`}>
                         ₹{amt.toLocaleString("en-IN")}
                       </td>
                     );
@@ -79,6 +80,27 @@ export default function RegisterCta() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* WHAT YOU GET — requested on the 10 September 2026 review specifically
+            for residents and trainees: "they'll be thinking what all I get … so
+            that they know what they are paying for." Verbatim from the
+            committee's own list in New_additions.pdf. */}
+        <div className="mt-[clamp(2rem,4vh,3rem)] border-t border-[var(--hair)] pt-7" data-r>
+          <p className="u-eyebrow text-gold-lift">What you get with your registration</p>
+          <ul className="mt-5 grid list-none gap-x-[clamp(1.5rem,3vw,3rem)] gap-y-0 p-0 sm:grid-cols-2">
+            {registrationIncludes.map((item, i) => (
+              <li
+                key={item}
+                className="flex items-baseline gap-3.5 border-b border-[var(--hair)] py-3.5"
+              >
+                <span className="font-mono text-[0.7rem] tabular-nums text-gold">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="text-[1.02rem] leading-snug text-[#160a0d]">{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="mt-[clamp(2rem,4vh,3rem)] flex flex-wrap items-center gap-3" data-r>

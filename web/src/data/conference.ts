@@ -35,6 +35,8 @@ export const days = [
       { title: "Coronary Anastomosis Contest", tag: "Contest" },
       { title: "Advanced Aortic Workshop", tag: "Workshop" },
       { title: "Coronary anastomosis and valve anastomosis wet lab", tag: "Wet lab" },
+      /* Added from New_additions.pdf, 10 September 2026. */
+      { title: "MICS CABG planning and demo workshop", tag: "Workshop" },
     ],
   },
   {
@@ -159,12 +161,47 @@ export const patrons = [
 
 /** portrait: null until the committee supplies usable high-res files.
     The flyer crops are ~200-300px and are NOT web-usable. */
+/**
+ * Office-bearers. `title` is the institutional designation, supplied in
+ * New_additions.pdf after the 10 September 2026 review asked for these five to
+ * carry the same "role + actual designation" treatment the patrons already had.
+ *
+ * portrait: these five files are ~81-106px flyer crops, an order of magnitude
+ * smaller than the patrons' 704-760px photographs, which is why they render
+ * visibly soft next to them. That is a SOURCE limitation, not a rendering bug —
+ * replacing them needs real files from the committee.
+ */
 export const leadership = [
-  { name: "Dr. G. Ravindra", role: "Organising Chairman", portrait: "/committee/ravindra.png" },
-  { name: "Dr. Amaresh Rao Malempati", role: "Organising Secretary", portrait: "/committee/amaresh.png" },
-  { name: "Dr. Tella Rama Krishna Dev", role: "Organising Co-Secretary", portrait: "/committee/rama-krishna.png" },
-  { name: "Dr. Anita Bhalla", role: "Organising Co-Secretary", portrait: "/committee/anita.png" },
-  { name: "Dr. Abhijeet M Dashetwar", role: "Treasurer", portrait: "/committee/abhijeet.png" },
+  {
+    name: "Dr. G. Ravindra",
+    role: "Organising Chairman",
+    title: "Prof and HOD, CVTS, Gandhi Hospital",
+    portrait: "/committee/ravindra.png",
+  },
+  {
+    name: "Dr. Amaresh Rao Malempati",
+    role: "Organising Secretary",
+    title: "Prof and HOD, CVTS, NIMS",
+    portrait: "/committee/amaresh.png",
+  },
+  {
+    name: "Dr. Tella Rama Krishna Dev",
+    role: "Organising Co-Secretary",
+    title: "Prof and Unit Chief, CVTS, NIMS",
+    portrait: "/committee/rama-krishna.png",
+  },
+  {
+    name: "Dr. Anita Bhalla",
+    role: "Organising Co-Secretary",
+    title: "Prof and HOD, Osmania Medical College",
+    portrait: "/committee/anita.png",
+  },
+  {
+    name: "Dr. Abhijeet M Dashetwar",
+    role: "Treasurer",
+    title: "Prof and HOD, ESI Hospital, Hyderabad",
+    portrait: "/committee/abhijeet.png",
+  },
 ] as const;
 
 /**
@@ -175,9 +212,15 @@ export const leadership = [
  * which is why the field is explicit rather than inferred from a filename that
  * happens not to exist.
  */
-export const executiveCommittee = [
+/**
+ * Explicitly typed rather than `as const`: every member now has a photograph, so
+ * literal narrowing collapsed `portrait` to `string` and TypeScript correctly
+ * called the no-photo fallback unreachable. The fallback must survive for the
+ * next member who joins without one, so the type stays `string | null`.
+ */
+export const executiveCommittee: readonly { name: string; portrait: string | null }[] = [
   { name: "Dr. B. Kaladhar", portrait: "/committee/kaladhar.jpg" },
-  { name: "Dr. P. S. S. Gopal", portrait: null },
+  { name: "Dr. P. S. S. Gopal", portrait: "/committee/gopal.jpg" },
   { name: "Dr. P. Sai Surabhi", portrait: "/committee/sai-surabhi.jpg" },
   { name: "Dr. D. Praveen", portrait: "/committee/praveen.jpg" },
   { name: "Dr. K. Sahir Vardhan Reddy", portrait: "/committee/sahir-vardhan-reddy.jpg" },
@@ -185,9 +228,10 @@ export const executiveCommittee = [
   { name: "Dr. A. Bhargavi", portrait: "/committee/bhargavi.jpg" },
   { name: "Dr. S. Sireesha", portrait: "/committee/sireesha.jpg" },
   { name: "Dr. J. Pramodh Reddy", portrait: "/committee/pramodh-reddy.jpg" },
-  { name: "Dr. Harshita", portrait: null },
+  /* Surname initial added from New_additions.pdf (was "Dr. Harshita"). */
+  { name: "Dr. Y. Harshita", portrait: "/committee/harshita.jpg" },
   { name: "Dr. M. Tribhuvan", portrait: "/committee/tribhuvan.jpg" },
-] as const;
+];
 
 export const venues = [
   {
@@ -222,6 +266,23 @@ export const secretariat = {
 } as const;
 
 /**
+ * What a delegate receives for the registration fee, from New_additions.pdf.
+ *
+ * Requested on the 10 September 2026 review specifically for residents and
+ * trainees — "they'll be thinking what all I get … so that they know what they
+ * are paying for." Verbatim from the client's list; do not embellish it, and do
+ * not promise anything the committee has not listed here.
+ */
+export const registrationIncludes = [
+  "Access to workshops",
+  "Access to abstract submission",
+  "Free accommodation for Early Birds",
+  "Breakfast on Days 2 and 3",
+  "Lunch on Days 1, 2 and 3",
+  "Banquet dinner on Day 2",
+] as const;
+
+/**
  * Registration helpline, supplied by the committee on 9 September 2026.
  * This is the number a delegate rings about registration itself — distinct
  * from the secretariat's scientific contacts above.
@@ -246,6 +307,20 @@ export const about = {
   verbs: ["Expose", "Train", "Question", "Interact", "Innovate"],
   closing:
     "Technocollege 2026 is not merely about predicting what cardiac and thoracic surgery will look like tomorrow. It is about experiencing the technology that is already shaping it today.",
+  /**
+   * About_the_techno_programme_.pdf, VERBATIM and complete.
+   *
+   * The 10 September committee review asked for exactly this text on the About
+   * section — "we just want exactly what is written coming here" — rather than
+   * the summarised version that was there. Do not paraphrase, reorder or trim
+   * it, and do not split it back out into a structured Day-Zero/domains layout:
+   * that layout was explicitly removed from the About section on the same call.
+   */
+  programmeNote: [
+    "The programme begins on Day Zero with the Pre-conference Hands-on Workshops at Nizam's Institute of Medical Sciences, Hyderabad, providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, valve replacement techniques, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
+    "The following two days at Dr. Marri Channa Reddy Human Resource Development Institute will take participants beyond conventional CME learning. The scientific programme is structured around four major domains shaping the future of our specialty: Minimally Invasive and Robotic Cardiac Surgery; Aortic Surgery; Heart-Lung Transplantation; Complex Congenital and Thoracic Surgery, including VATS and Robotic Thoracic Surgery.",
+    "A distinctive feature of Technocollege will be the Breakthrough Sessions, where industry partners and technology innovators will showcase emerging technologies and demonstrate their real-world applications. These sessions are intended to provide participants with an opportunity to see, understand and critically evaluate technologies that may define their practice in the years ahead.",
+  ],
 } as const;
 
 /** Everything the site must NOT invent. Surfaces read this to render

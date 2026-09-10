@@ -21,7 +21,19 @@ export default function Page() {
       lede={`${workshop.date} · ${venues[0].full}, Hyderabad. Hands-on sessions for postgraduate trainees and young surgeons.`}
     >
       <section className="u-shell py-[clamp(3rem,8vh,7rem)]">
-        <p className="max-w-2xl text-[clamp(1rem,1.2vw,1.12rem)] leading-[1.8] text-muted-foreground" data-r>
+        {/* Requested on the 10 September 2026 review: "you'll write the schedule
+            yet to be finalised … just give the information that is actually
+            important." Stated up front rather than buried, so a delegate reading
+            the tracks knows the timings are not fixed yet. */}
+        <p
+          className="border-l-2 border-[#b3122a] bg-white/70 px-5 py-4 text-[clamp(0.98rem,1.15vw,1.08rem)] font-semibold leading-[1.7] text-[#160a0d]"
+          data-r
+        >
+          Workshop schedule yet to be finalised. The tracks and skills below are confirmed; timings and faculty will be
+          published here once the committee confirms them.
+        </p>
+
+        <p className="mt-7 max-w-2xl text-[clamp(1rem,1.2vw,1.12rem)] leading-[1.8] text-muted-foreground" data-r>
           {dayZero.body}
         </p>
 

@@ -13,7 +13,7 @@ const AnatomyScene = dynamic(() => import("@/components/anatomy/AnatomyScene"), 
 
 /* Real routes, not on-page anchors — every nav item has its own page. */
 const navigation = NAV_ITEMS.filter((n) =>
-  ["About", "Programme", "Workshops", "Faculty", "Abstracts", "Fees", "Venue"].includes(n.label),
+  ["About", "Programme", "Workshops", "Faculty", "Abstracts", "Registration Details", "Venue"].includes(n.label),
 ).map((n) => [n.label, n.path] as const);
 
 const chapters = [

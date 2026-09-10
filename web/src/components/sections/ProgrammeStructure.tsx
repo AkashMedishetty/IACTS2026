@@ -17,29 +17,23 @@ export default function ProgrammeStructure() {
       id="structure"
       className="border-t border-[var(--hair)] u-shell py-[clamp(4rem,10vh,9rem)]"
     >
-      <header className="max-w-3xl">
-        <p className="u-eyebrow flex items-center gap-3" data-r>
-          <span className="text-gold">Structure</span> How the three days work
-        </p>
-        <h2
-          className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
-          data-r
-        >
-          Not merely what to do, but <span className="u-serif">how to think it through</span>
-        </h2>
-      </header>
+      {/* The "Structure / How the three days work / Not merely what to do but
+          how to think it through" heading block was REMOVED on the
+          10 September 2026 review — "this thing, take this off". The page's own
+          PROGRAMME OVERVIEW heading now carries it, and this section leads
+          straight into the days. Breakthrough Sessions below was explicitly
+          kept: "breakthrough sessions is good." */}
 
       {/* DAY ZERO */}
-      <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(1.5rem,4vw,4rem)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
+      <div className="grid gap-[clamp(1.5rem,4vw,4rem)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
         <div data-r>
-          <p className="u-eyebrow text-gold-lift">{dayZero.label}</p>
-          <h3 className="mt-3 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold tracking-[-0.02em]">
-            {dayZero.heading}
-          </h3>
-          <p className="mt-3 text-[1rem] text-muted-foreground">{dayZero.venue}</p>
-          <p className="mt-3 font-mono text-[0.74rem] uppercase tracking-[0.16em] text-crimson-lift">
+          <p className="text-[clamp(1.5rem,3.2vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#b3122a]">
             {days[0].date}
           </p>
+          <p className="mt-2 text-[clamp(1.05rem,1.9vw,1.5rem)] font-bold leading-snug tracking-[-0.015em] text-[#160a0d]">
+            {dayZero.label} · {dayZero.heading}
+          </p>
+          <p className="mt-3 text-[1rem] text-muted-foreground">{dayZero.venue}</p>
         </div>
         <div>
           <p className="max-w-2xl text-[clamp(1rem,1.15vw,1.1rem)] leading-[1.8] text-muted-foreground" data-r>
@@ -65,14 +59,13 @@ export default function ProgrammeStructure() {
       {/* SCIENTIFIC DOMAINS */}
       <div className="mt-[clamp(3rem,7vh,6rem)] grid gap-[clamp(1.5rem,4vw,4rem)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)]">
         <div data-r>
-          <p className="u-eyebrow text-gold-lift">{scientific.label}</p>
-          <h3 className="mt-3 text-[clamp(1.3rem,2.6vw,2.1rem)] font-extrabold tracking-[-0.02em]">
-            {scientific.heading}
-          </h3>
-          <p className="mt-3 text-[1rem] text-muted-foreground">{scientific.venue}</p>
-          <p className="mt-3 font-mono text-[0.74rem] uppercase tracking-[0.16em] text-crimson-lift">
+          <p className="text-[clamp(1.5rem,3.2vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.025em] text-[#b3122a]">
             {days[1].date}
           </p>
+          <p className="mt-2 text-[clamp(1.05rem,1.9vw,1.5rem)] font-bold leading-snug tracking-[-0.015em] text-[#160a0d]">
+            {scientific.label} · {scientific.heading}
+          </p>
+          <p className="mt-3 text-[1rem] text-muted-foreground">{scientific.venue}</p>
         </div>
         <div>
           <p className="max-w-2xl text-[clamp(1rem,1.15vw,1.1rem)] leading-[1.8] text-muted-foreground" data-r>

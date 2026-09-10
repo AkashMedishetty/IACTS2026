@@ -1,11 +1,16 @@
 import { messages } from "@/data/conference";
 
 /**
- * Welcome messages from the Organising Chairman and Organising Secretary.
+ * Welcome messages — restructured to the 10 September 2026 committee review.
  *
- * Requested in the 9 Sep committee review: these must appear immediately BEFORE
- * the organising committee. The text is reproduced verbatim from the signed
- * statements the office-bearers supplied — do not paraphrase or trim it.
+ * The review replaced the previous two-up layout: "in one page, it's not to be
+ * side by side … the message will be one by one, organising chairman's message
+ * and then organising secretary's message." The shared "From the organising
+ * office-bearers" headline was dropped with it — each message now carries its
+ * own heading, e.g. "Organising Chairman's Message".
+ *
+ * The text is reproduced verbatim from the signed statements the office-bearers
+ * supplied. Do not paraphrase or trim it.
  */
 export default function Messages() {
   return (
@@ -13,57 +18,46 @@ export default function Messages() {
       id="messages"
       className="border-t border-[var(--hair)] u-shell py-[clamp(4rem,10vh,9rem)]"
     >
-      <header className="max-w-3xl">
-        <p className="u-eyebrow flex items-center gap-3" data-r>
-          <span className="text-gold">Welcome</span> Messages
-        </p>
-        <h2
-          className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
-          data-r
-        >
-          From the <span className="u-serif">organising office-bearers</span>
-        </h2>
-      </header>
-
-      <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(2rem,4vw,4rem)] lg:grid-cols-2">
+      <div className="mx-auto grid max-w-3xl gap-[clamp(3rem,8vh,6rem)]">
         {messages.map((message) => (
-          <article
-            key={message.id}
-            data-r
-            className="flex flex-col border-t border-[var(--hair-gold)] pt-6"
-          >
-            <div className="flex items-start gap-4">
+          <article key={message.id} data-r>
+            <h2
+              className="text-[clamp(1.7rem,4vw,3rem)] font-extrabold leading-[1.05] tracking-[-0.028em]"
+              data-r
+            >
+              <span className="u-word">{message.role}&rsquo;s Message</span>
+            </h2>
+
+            <div className="mt-7 flex items-center gap-5 border-b border-[var(--hair-gold)] pb-6">
               {message.portrait ? (
                 <img
                   src={message.portrait}
                   alt={message.name}
                   loading="lazy"
-                  width={92}
-                  height={104}
-                  className="h-[104px] w-[92px] shrink-0 rounded-sm border border-[var(--hair)] bg-white object-contain"
+                  width={104}
+                  height={124}
+                  /* object-cover with an upward bias: these are head-and-
+                     shoulders photographs, so a centred crop cuts foreheads. */
+                  className="h-[124px] w-[104px] shrink-0 rounded-sm border border-[var(--hair)] bg-white object-cover object-[50%_18%]"
                 />
               ) : null}
               <div>
-                <p className="u-eyebrow text-gold-lift">{message.role}</p>
-                <p className="mt-2 text-[clamp(1.1rem,2vw,1.6rem)] font-bold tracking-[-0.02em]">
+                <p className="text-[clamp(1.15rem,2.2vw,1.7rem)] font-bold tracking-[-0.02em]">
                   {message.name}
                 </p>
+                <p className="u-eyebrow mt-1.5 text-gold-lift">{message.role}</p>
               </div>
             </div>
 
-            <p className="mt-6 font-mono text-[0.8rem] uppercase tracking-[0.16em] text-crimson-lift">
+            <p className="mt-7 font-mono text-[0.8rem] uppercase tracking-[0.16em] text-crimson-lift">
               {message.salutation}
             </p>
 
-            <div className="mt-5 grid gap-5">
+            <div className="mt-4 grid gap-5">
               {message.paragraphs.map((paragraph) => (
                 <p
                   key={paragraph.slice(0, 48)}
-                  /* text-muted resolves to --color-muted (#f8e9ed) — the muted
-                     BACKGROUND — so these verbatim messages rendered near-white
-                     on a near-white surface and were invisible. The readable
-                     token is text-muted-foreground (#614d53). */
-                  className="text-[clamp(1rem,1.1vw,1.08rem)] leading-[1.8] text-muted-foreground"
+                  className="text-[clamp(1rem,1.15vw,1.1rem)] leading-[1.8] text-muted-foreground"
                 >
                   {paragraph}
                 </p>

@@ -1125,26 +1125,11 @@ export default function AbstractsPage() {
                   </Card>
                 </motion.div>
 
-                {/* Categories */}
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
-                  <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
-                    <CardContent className="p-6">
-                      <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-[#160a0d]" />Presentation Categories</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {[
-                          { t: 'Postgraduate', d: 'PG students — given priority' },
-                          { t: 'Junior Consultant / Fellow', d: '≤ 5 years since post-graduation' },
-                          { t: 'Senior Consultant', d: 'More than 5 years since post-graduation' },
-                        ].map((c, i) => (
-                          <div key={i} className="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
-                            <p className="font-semibold text-gray-800 dark:text-gray-100">{c.t}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{c.d}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                {/* The "Presentation Categories" card (Postgraduate / Junior
+                    Consultant / Senior Consultant) was REMOVED on the
+                    10 September 2026 committee review: "we actually don't have
+                    any categories as such … just remove it." Restore only if the
+                    committee later publishes real categories. */}
 
                 {/* Presentation templates are NOT published. The two download
                     buttons that used to sit here pointed at
@@ -1207,6 +1192,48 @@ export default function AbstractsPage() {
                 </motion.div>
 
                 {/* Important Notice */}
+                {/* FINAL submission rules — added on the 10 September 2026
+                    committee review. The flow the committee settled on is TWO
+                    stages, and the page must say so plainly or authors will
+                    format twice for nothing: submit a Word document now, and
+                    only once the scientific committee has accepted it do you
+                    resubmit on the official template. The template itself is not
+                    published yet, so it is promised rather than linked — do not
+                    add a download button until a real file exists. */}
+                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
+                  <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
+                    <CardContent className="p-6">
+                      <div className="flex items-start">
+                        <Upload className="w-6 h-6 mr-3 text-[#b3122a] mt-1 flex-shrink-0" />
+                        <div className="w-full">
+                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-1">Final Submission Rules</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                            These apply <strong>after</strong> your abstract is accepted — not to the submission you make today.
+                          </p>
+                          <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0 list-none p-0 m-0">
+                            {[
+                              'Initial submission is a Microsoft Word document — submit that now.',
+                              'Every submission is reviewed by the scientific committee, which decides acceptance and the presentation format.',
+                              'Once accepted, the final paper or poster must be prepared on the official conference template.',
+                              'The template carries the IACTS Technocollege CME 2026 branding and will be made available here; accepted authors will also be emailed a link.',
+                              'Final submissions are made from your delegate account, in the template only.',
+                              'The scientific committee gives the final confirmation on every accepted submission.',
+                            ].map((rule, i) => (
+                              <li key={rule} className="flex gap-3 py-3 border-b border-slate-200 dark:border-slate-700">
+                                <span className="font-mono text-xs font-semibold text-[#b3122a] pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+                                <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{rule}</span>
+                              </li>
+                            ))}
+                          </ol>
+                          <p className="mt-4 text-[13px] font-semibold text-[#b3122a]">
+                            Presentation template — to be published. Submit your abstract now; you do not need the template yet.
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                   <Card className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-800">
                     <CardContent className="p-6">

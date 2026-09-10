@@ -61,18 +61,30 @@ function Initials({ name }: { name: string }) {
 function Plate({
   name,
   role,
+  title,
   portrait,
   size = "lead",
+  /**
+   * Max rendered width for the portrait. The five office-bearer files are
+   * ~81-106px wide (original flyer crops), so at the grid's natural ~200px they
+   * were being upscaled ~2.5x by the browser and read visibly soft beside the
+   * patrons' 704-760px photographs. Capping the render width cuts the upscale
+   * factor rather than pretending detail exists. The real fix is better source
+   * files; this only stops us magnifying the deficiency.
+   */
+  capWidth,
 }: {
   name: string;
   role: string;
+  title?: string;
   portrait?: string | null;
   size?: "patron" | "lead";
+  capWidth?: string;
 }) {
   const big = size === "patron";
   return (
     <div data-r className="group relative border-t border-[var(--hair-gold)] pt-4">
-      <div className="mb-4">
+      <div className="mb-4" style={capWidth ? { maxWidth: capWidth } : undefined}>
         {portrait ? <Portrait src={portrait} name={name} /> : <Initials name={name} />}
       </div>
       <p className="u-eyebrow text-gold-lift">{role}</p>
@@ -85,6 +97,9 @@ function Plate({
       >
         {name}
       </p>
+      {title ? (
+        <p className="mt-1.5 text-[0.86rem] leading-snug text-muted-foreground">{title}</p>
+      ) : null}
       <span
         aria-hidden
         className="absolute left-0 top-0 h-px w-0 bg-crimson-lift transition-all duration-700 ease-[var(--ease-out-expo)] group-hover:w-full"
@@ -129,7 +144,14 @@ export default function Committee() {
       {/* LEADERSHIP */}
       <div className="mt-[clamp(2rem,5vh,3.5rem)] grid grid-cols-2 gap-[clamp(1.25rem,2.5vw,2.5rem)] sm:grid-cols-3 lg:grid-cols-5">
         {leadership.map((l) => (
-          <Plate key={l.name} name={l.name} role={l.role} portrait={l.portrait} />
+          <Plate
+            key={l.name}
+            name={l.name}
+            role={l.role}
+            title={l.title}
+            portrait={l.portrait}
+            capWidth="122px"
+          />
         ))}
       </div>
 

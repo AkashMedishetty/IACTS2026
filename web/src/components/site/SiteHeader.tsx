@@ -27,7 +27,7 @@ export function Seal() {
 
 export default function SiteHeader({ cta = true }: { cta?: boolean }) {
   const [open, setOpen] = useState(false);
-  const nav = NAV_ITEMS.filter((n) => ["About", "Programme", "Workshops", "Abstracts", "Fees", "Venue"].includes(n.label));
+  const nav = NAV_ITEMS.filter((n) => ["About", "Programme", "Workshops", "Abstracts", "Registration Details", "Venue"].includes(n.label));
 
   return (
     <>

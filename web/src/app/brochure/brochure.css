@@ -386,6 +386,51 @@ body::before {
 .bro-c4 { grid-template-columns: repeat(4, 1fr); }
 .bro-c6 { grid-template-columns: repeat(6, 1fr); }
 
+/* --- density: fitting the whole programme into under ten pages ----------
+   The 21-page version gave each session block its own page, which is why it
+   ran long. Nothing is cut to reach ten pages; the schedule instead flows in
+   BALANCED CSS COLUMNS. `break-inside: avoid` on a row is load-bearing — column
+   layout will otherwise split a slot so its faculty name lands at the top of
+   the next column, detached from its talk. */
+.bro-2col {
+  column-count: 2;
+  column-gap: 9mm;
+  column-fill: balance;
+}
+.bro-2col > * { break-inside: avoid; }
+.bro-3col { column-count: 3; column-gap: 7mm; column-fill: balance; }
+.bro-3col > * { break-inside: avoid; }
+
+/* A session header must never be orphaned at the foot of a column from its
+   first slots. */
+.bro-sess { break-inside: avoid-column; }
+
+.bro-dense { --pad-y: 12mm; --pad-x: 14mm; }
+.bro-dense .bro-body { padding-top: 6mm; }
+.bro-dense .bro-display { font-size: 24pt; margin-bottom: 4mm; }
+.bro-dense .bro-kicker { margin-bottom: 3mm; }
+.bro-dense .bro-hr-heavy { margin-bottom: 3mm; }
+.bro-dense .bro-slot { padding: 1.1mm 0; }
+.bro-dense .bro-slot-title { font-size: 7.9pt; line-height: 1.28; }
+.bro-dense .bro-slot-who { font-size: 6.8pt; margin-top: 0.2mm; }
+.bro-dense .bro-sess { margin-bottom: 3.5mm; }
+.bro-dense .bro-lede { font-size: 10pt; margin-bottom: 3.5mm; }
+.bro-dense .bro-p { font-size: 8.4pt; line-height: 1.6; margin-bottom: 2.2mm; }
+.bro-dense .bro-item { padding: 1.9mm 0; }
+.bro-dense .bro-hr { margin: 4.5mm 0; }
+.bro-dense .bro-panel { padding: 4mm 5mm; }
+
+/* The two day pages carry ~30 slots each and Day 1 clipped by 55px at
+   .bro-dense. Applied to BOTH day pages rather than only the offender, so the
+   two schedules stay visually identical — a reader flipping between them should
+   not see the type change size. */
+.bro-sched .bro-slot { padding: 0.8mm 0; }
+.bro-sched .bro-slot-title { font-size: 7.6pt; line-height: 1.24; }
+.bro-sched .bro-slot-who { font-size: 6.5pt; }
+.bro-sched .bro-sess { margin-bottom: 2.8mm; }
+.bro-sched .bro-sess-head { padding-bottom: 1.2mm; }
+.bro-sched .bro-display { font-size: 21pt; margin-bottom: 3.5mm; }
+
 /* --- portraits --------------------------------------------------------- */
 .bro-por {
   display: block;
