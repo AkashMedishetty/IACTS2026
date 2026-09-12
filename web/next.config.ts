@@ -6,6 +6,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/program', destination: '/programme', permanent: true },
+      { source: '/program-schedule', destination: '/programme', permanent: true },
+      /* The ported backend's nav pointed at /speakers; this site calls that
+         page /faculty. The dead links are gone, and these catch anything
+         already out in the wild. */
+      { source: '/speakers', destination: '/faculty', permanent: true },
       { source: '/login', destination: '/auth/login', permanent: true },
     ]
   },

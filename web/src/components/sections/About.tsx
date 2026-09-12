@@ -11,7 +11,10 @@ import { about, conference, venues } from "@/data/conference";
  *    … this has to be smaller".
  *  - The body is About_the_techno_programme_.pdf VERBATIM and in full: "we just
  *    want exactly what is written coming here."
- *  - CENTRED, not left-aligned, on the review's explicit instruction.
+ *  - CENTRED means the COLUMN is centred — equal margin left and right — with
+ *    the text ranged left inside it. It was middle-aligned (text-align:center)
+ *    and that was corrected: "it stays all side equal on the left and right,
+ *    not middle align."
  *  - The Day-Zero / four-scientific-domains breakdown that used to sit here was
  *    REMOVED: "all this day zero four scientific domains everything, all this is
  *    not needed. Just the about CME part." It lives on /programme instead.
@@ -28,7 +31,7 @@ export default function About() {
         style={{ background: "radial-gradient(circle,rgba(179,18,28,.4) 0%,transparent 70%)" }}
       />
 
-      <div className="relative mx-auto max-w-3xl text-center">
+      <div className="relative mx-auto max-w-3xl">
         <h2
           className="text-[clamp(2.4rem,6vw,4.6rem)] font-extrabold leading-[1.02] tracking-[-0.03em]"
           data-r
@@ -37,7 +40,7 @@ export default function About() {
         </h2>
 
         <p
-          className="mx-auto mt-8 max-w-2xl text-[clamp(1rem,1.25vw,1.15rem)] leading-[1.8] text-muted-foreground"
+          className="mt-8 text-[clamp(1rem,1.25vw,1.15rem)] leading-[1.8] text-muted-foreground"
           data-r
         >
           <span className="font-semibold text-[#160a0d]">{about.heading.replace(/\.$/, "")}</span>
@@ -49,14 +52,14 @@ export default function About() {
           <p
             key={para.slice(0, 40)}
             data-r
-            className="mx-auto mt-5 max-w-2xl text-[clamp(1rem,1.25vw,1.15rem)] leading-[1.8] text-muted-foreground"
+            className="mt-5 text-[clamp(1rem,1.25vw,1.15rem)] leading-[1.8] text-muted-foreground"
           >
             {para}
           </p>
         ))}
 
         <p
-          className="mx-auto mt-8 max-w-2xl border-t border-[var(--hair)] pt-7 text-[clamp(1.02rem,1.3vw,1.2rem)] font-medium leading-[1.75] text-[#3d2b30]"
+          className="mt-8 border-t border-[var(--hair)] pt-7 text-[clamp(1.02rem,1.3vw,1.2rem)] font-medium leading-[1.75] text-[#3d2b30]"
           data-r
         >
           {about.closing}
@@ -76,7 +79,7 @@ export default function About() {
             This restores those facts as a compact key-value band (the site's own
             hairline + mono-label idiom), not as the programme breakdown the
             committee asked to be taken out. */}
-        <div className="mt-11 border-t border-[var(--hair)] pt-9 text-left" data-r>
+        <div className="mt-11 border-t border-[var(--hair)] pt-9" data-r>
           <div className="grid gap-x-[clamp(1.5rem,3vw,3rem)] gap-y-7 sm:grid-cols-3">
             <div>
               <p className="u-eyebrow text-gold-lift">Dates</p>

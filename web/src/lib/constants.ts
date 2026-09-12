@@ -61,7 +61,7 @@ export const NAV_ITEMS = [
   { label: "Faculty", href: "#faculty", path: "/faculty" },
   { label: "Committee", href: "#committee", path: "/committee" },
   { label: "Abstracts", href: "#abstracts", path: "/abstracts" },
-  { label: "Registration Details", href: "#register", path: "/pricing" },
+  { label: "Registration", href: "#register", path: "/pricing" },
   { label: "Awards", href: "#awards", path: "/awards" },
   { label: "Industry", href: "#sponsors", path: "/sponsors" },
   { label: "Venue", href: "#venue", path: "/venue" },
@@ -84,7 +84,7 @@ export const PRIMARY_NAV_LABELS = [
   "Workshops",
   "Committee",
   "Abstracts",
-  "Registration Details",
+  "Registration",
   "Venue",
 ] as const;
 

@@ -38,7 +38,9 @@ export default function Messages() {
                   height={124}
                   /* object-cover with an upward bias: these are head-and-
                      shoulders photographs, so a centred crop cuts foreheads. */
-                  className="h-[124px] w-[104px] shrink-0 rounded-sm border border-[var(--hair)] bg-white object-cover object-[50%_18%]"
+                  /* Same 4:5 frame as every committee portrait — the chairman and the
+                     secretary appear in both places on /committee. */
+                  className="aspect-[4/5] w-[104px] shrink-0 rounded-sm border border-[var(--hair)] bg-white object-cover object-[50%_18%]"
                 />
               ) : null}
               <div>

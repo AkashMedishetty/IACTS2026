@@ -33,7 +33,7 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#b3122a]/15 bg-[#fffdfc]/95 backdrop-blur-sm">
-        <div className="mx-auto flex h-[70px] max-w-[1720px] items-center justify-between gap-5 px-[var(--gutter)]">
+        <div className="u-shell flex h-[70px] items-center justify-between gap-5">
           <a href="/" className="flex items-center gap-3 no-underline" aria-label={`${conference.acronym} home`}>
             <Seal />
             <span className="text-[12px] font-bold uppercase leading-[1.25] tracking-[.06em] text-[#160a0d] sm:text-[14px]">

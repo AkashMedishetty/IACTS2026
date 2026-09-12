@@ -80,6 +80,14 @@
   --hair-crimson: rgba(179, 18, 42, 0.34);
   --gutter: clamp(1rem, 3vw, 3.25rem);
   --shell: 1720px;
+  /* ONE column for the whole site. Every band — the nav, the hero, each section
+     card, the page titles, the footer — is this width, centred, with this inset,
+     so the left and right margins are identical on every row of the page and the
+     text starts at the same x all the way down. Reported as: the alignment "stays
+     all side equal on the left and right". Nothing else may invent its own
+     max-width or gutter; use .u-shell, which is exactly this. */
+  --column: 1680px;
+  --column-pad: clamp(1.25rem, 2.5vw, 3rem);
   /* the hero canvases read this to pick a blend mode and ink colour */
   --field-blend: multiply;
 }
@@ -110,7 +118,11 @@ body::after {
 ::selection { background: var(--color-crimson); color: #fff; }
 :focus-visible { outline: 2px solid var(--color-crimson-lift); outline-offset: 3px; }
 
-.u-shell { width: 100%; max-width: var(--shell); margin-inline: auto; padding-inline: var(--gutter); }
+.u-shell {
+  width: min(100% - 2 * var(--gutter), var(--column));
+  margin-inline: auto;
+  padding-inline: var(--column-pad);
+}
 
 .u-eyebrow {
   font-family: var(--font-mono);
@@ -185,7 +197,7 @@ body::after {
 
 .conference-content > section {
   position: relative;
-  width: min(100% - 2 * var(--gutter), 1680px);
+  width: min(100% - 2 * var(--gutter), var(--column));
   margin-inline: auto;
   margin-block: 16svh;
   padding-block: clamp(2rem, 4.5vh, 4rem) !important;
@@ -212,10 +224,34 @@ body::after {
 
 .conference-content > section > * {
   width: 100%;
-  padding-inline: clamp(1.25rem, 2.5vw, 3rem);
+  padding-inline: var(--column-pad);
+}
+
+/* A section card already IS the column: it centres itself and its children carry
+   the single inset above. A .u-shell on or inside a card would stack a second
+   gutter on top of that, which is how every section ended up with a different
+   left edge (43px, 79px, 87px and 123px on the same page). Zero it here so the
+   card's own inset is the only one. */
+.conference-content > section.u-shell {
+  padding-inline: 0;
+}
+
+/* A u-shell INSIDE a card must not re-centre itself in a narrower box — it fills
+   the card and takes its inset from the `> *` rule above, which is the same
+   --column-pad, so nothing doubles. */
+.conference-content > section .u-shell {
+  width: 100%;
 }
 
 @media (max-width: 1023px) {
+  /* Below 1024px the section cards go full-bleed and take a plain gutter, so the
+     bands that are NOT cards — the nav, the hero, the footer — drop their column
+     inset too and line up with them on the same 16px edge. */
+  .u-shell {
+    width: 100%;
+    padding-inline: var(--gutter);
+  }
+
   .conference-content { padding-block: 5svh; }
   .conference-content > section {
     width: 100%;
@@ -227,10 +263,11 @@ body::after {
     backdrop-filter: none;
     box-shadow: 0 18px 44px -26px rgba(95, 7, 23, 0.28);
   }
-  /* u-shell already supplies the gutter; a second inline pad strands text on a
-     360px screen. */
+  /* Below 1024px the card goes full-bleed, so the gutter is the only thing
+     keeping text off the screen edge, and it must come from here: the u-shells
+     inside a card are zeroed out. */
   .conference-content > section > * {
-    padding-inline: 0;
+    padding-inline: var(--gutter);
   }
 }
 

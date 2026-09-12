@@ -1,15 +1,21 @@
+import type { CSSProperties } from "react";
 import { patrons, leadership, executiveCommittee } from "@/data/conference";
 
 /**
  * Committee, with portraits.
  *
+ * EVERY portrait is the same size and gets the same treatment — patrons,
+ * office-bearers and executive members alike ("the photos of the committee,
+ * make everyone the same"). One token, --portrait-w, sets the rendered width
+ * for all of them, and one 4:5 frame sets the shape, so no plate can drift.
+ *
  * The supplied files run from 0.77 to 1.12 aspect (tall phone portraits through
  * to one landscape frame), so they are NOT cropped on disk — that risks slicing
- * a head off irreversibly. Every portrait instead sits in a fixed 4:5 frame and
- * is fitted with object-cover at `object-[50%_20%]`: the crop is biased upward,
- * because in a head-and-shoulders photograph the face sits above centre and a
- * centred crop is what cuts foreheads. Non-destructive, so a member whose crop
- * reads badly can be nudged with one class instead of a re-export.
+ * a head off irreversibly. Every portrait instead sits in that fixed 4:5 frame
+ * and is fitted with object-cover at `object-[50%_20%]`: the crop is biased
+ * upward, because in a head-and-shoulders photograph the face sits above centre
+ * and a centred crop is what cuts foreheads. Non-destructive, so a member whose
+ * crop reads badly can be nudged with one class instead of a re-export.
  *
  * `portrait: null` is an honest state, not a broken asset: two executive
  * members supplied no photograph and render the type-only plate.
@@ -25,7 +31,7 @@ function Portrait({
 }) {
   return (
     <div
-      className={`relative aspect-[4/5] w-full overflow-hidden rounded-sm border border-[var(--hair)] bg-[#f8e9ed] ${className}`}
+      className={`relative aspect-[4/5] w-full max-w-[var(--portrait-w)] overflow-hidden rounded-sm border border-[var(--hair)] bg-[#f8e9ed] ${className}`}
     >
       <img
         src={src}
@@ -47,7 +53,7 @@ function Initials({ name }: { name: string }) {
     .map((w) => w[0])
     .join("");
   return (
-    <div className="relative flex aspect-[4/5] w-full items-center justify-center overflow-hidden rounded-sm border border-dashed border-[var(--hair-gold)] bg-[#fdf6f8]">
+    <div className="relative flex aspect-[4/5] w-full max-w-[var(--portrait-w)] items-center justify-center overflow-hidden rounded-sm border border-dashed border-[var(--hair-gold)] bg-[#fdf6f8]">
       <span
         aria-hidden
         className="font-mono text-[clamp(1.4rem,3vw,2.2rem)] tracking-[0.06em] text-[#b3122a]/35"
@@ -63,38 +69,19 @@ function Plate({
   role,
   title,
   portrait,
-  size = "lead",
-  /**
-   * Max rendered width for the portrait. The five office-bearer files are
-   * ~81-106px wide (original flyer crops), so at the grid's natural ~200px they
-   * were being upscaled ~2.5x by the browser and read visibly soft beside the
-   * patrons' 704-760px photographs. Capping the render width cuts the upscale
-   * factor rather than pretending detail exists. The real fix is better source
-   * files; this only stops us magnifying the deficiency.
-   */
-  capWidth,
 }: {
   name: string;
   role: string;
   title?: string;
   portrait?: string | null;
-  size?: "patron" | "lead";
-  capWidth?: string;
 }) {
-  const big = size === "patron";
   return (
     <div data-r className="group relative border-t border-[var(--hair-gold)] pt-4">
-      <div className="mb-4" style={capWidth ? { maxWidth: capWidth } : undefined}>
+      <div className="mb-4">
         {portrait ? <Portrait src={portrait} name={name} /> : <Initials name={name} />}
       </div>
       <p className="u-eyebrow text-gold-lift">{role}</p>
-      <p
-        className={`mt-2 font-bold tracking-[-0.02em] transition-colors duration-500 group-hover:text-crimson-lift ${
-          big
-            ? "text-[clamp(1.15rem,2.2vw,1.9rem)]"
-            : "text-[clamp(1rem,1.7vw,1.45rem)]"
-        }`}
-      >
+      <p className="mt-2 text-[clamp(1rem,1.7vw,1.45rem)] font-bold tracking-[-0.02em] transition-colors duration-500 group-hover:text-crimson-lift">
         {name}
       </p>
       {title ? (
@@ -108,9 +95,18 @@ function Plate({
   );
 }
 
+/* One grid rhythm for patrons and office-bearers, so a patron's photograph is
+   the same size as everyone else's. */
+const PLATE_GRID =
+  "grid grid-cols-2 gap-[clamp(1.25rem,2.5vw,2.5rem)] sm:grid-cols-3 lg:grid-cols-5";
+
 export default function Committee() {
   return (
-    <section id="committee" className="u-shell py-[clamp(4rem,10vh,9rem)]">
+    <section
+      id="committee"
+      className="u-shell py-[clamp(4rem,10vh,9rem)]"
+      style={{ "--portrait-w": "clamp(120px,13vw,168px)" } as CSSProperties}
+    >
       <header className="max-w-3xl">
         <p className="u-eyebrow flex items-center gap-3" data-r>
           <span className="text-gold">03</span> Organising Committee
@@ -128,21 +124,20 @@ export default function Committee() {
         </p>
       </header>
 
-      {/* PATRONS — the two most senior plates, so they get the widest frames. */}
-      <div className="mt-[clamp(2.5rem,6vh,4.5rem)] grid gap-[clamp(1.25rem,3vw,3rem)] sm:grid-cols-2 lg:max-w-[54%]">
+      {/* PATRONS */}
+      <div className={`mt-[clamp(2.5rem,6vh,4.5rem)] ${PLATE_GRID}`}>
         {patrons.map((p) => (
           <Plate
             key={p.name}
             name={p.name}
             role={`${p.title} — ${p.role}`}
             portrait={p.portrait}
-            size="patron"
           />
         ))}
       </div>
 
       {/* LEADERSHIP */}
-      <div className="mt-[clamp(2rem,5vh,3.5rem)] grid grid-cols-2 gap-[clamp(1.25rem,2.5vw,2.5rem)] sm:grid-cols-3 lg:grid-cols-5">
+      <div className={`mt-[clamp(2rem,5vh,3.5rem)] ${PLATE_GRID}`}>
         {leadership.map((l) => (
           <Plate
             key={l.name}
@@ -150,7 +145,6 @@ export default function Committee() {
             role={l.role}
             title={l.title}
             portrait={l.portrait}
-            capWidth="122px"
           />
         ))}
       </div>

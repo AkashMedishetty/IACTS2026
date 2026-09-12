@@ -23,6 +23,7 @@ import { Menu, X, LogOut, User, LayoutDashboard, Settings, ChevronDown, Shield, 
 import { ThemeSwitcher } from './ThemeSwitcher'
 import { useConferenceTheme } from '../hooks/useConferenceTheme'
 import { MobileMenu } from './MobileResponsive'
+import { PRIMARY_NAV } from '@/lib/constants'
 
 export function Navigation() {
   const { data: session } = useSession()
@@ -31,14 +32,16 @@ export function Navigation() {
   const theme = useConferenceTheme()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  /**
+   * Taken from PRIMARY_NAV — the same list the public site header renders — so
+   * this nav cannot drift away from the routes that actually exist. It carried
+   * its own hardcoded array and had gone stale: /speakers and /program-schedule
+   * are not pages on this site and both 404'd.
+   */
   const publicLinks = [
     { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/speakers', label: 'Speakers' },
-    { href: '/program-schedule', label: 'Program' },
-    { href: '/abstracts', label: 'Abstracts' },
-    { href: '/venue', label: 'Venue' },
-    { href: '/contact', label: 'Contact' }
+    ...PRIMARY_NAV.map((n) => ({ href: n.path, label: n.label })),
+    { href: '/contact', label: 'Contact' },
   ]
 
   const userLinks = session ? [

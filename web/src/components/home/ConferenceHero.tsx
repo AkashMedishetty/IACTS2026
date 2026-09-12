@@ -295,7 +295,7 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
       />
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-[#b3122a]/15 bg-[#fffdfc] shadow-[0_1px_12px_rgba(95,7,23,.06)]">
-        <div className="mx-auto flex h-[70px] max-w-[1720px] items-center justify-between gap-5 px-[var(--gutter)]">
+        <div className="u-shell flex h-[70px] items-center justify-between gap-5">
           <a href="#hero" className="flex items-center gap-3 no-underline" aria-label="IACTS Technocollege CME home">
             <Seal />
             <span className="text-[12px] font-bold uppercase leading-[1.25] tracking-[.06em] text-[#160a0d] sm:text-[14px]">
@@ -349,8 +349,8 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
         </div>
       ) : null}
 
-      <section ref={heroRef} id="hero" className="relative z-10 flex min-h-svh scroll-mt-16 flex-col overflow-hidden px-[var(--gutter)] pb-7 pt-16 sm:pt-20">
-        <div className="mx-auto grid w-full max-w-[1720px] flex-1 items-center gap-[clamp(1.25rem,2vw,2.5rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)_minmax(0,.92fr)]">
+      <section ref={heroRef} id="hero" className="relative z-10 flex min-h-svh scroll-mt-16 flex-col overflow-hidden pb-7 pt-16 sm:pt-20">
+        <div className="u-shell grid flex-1 items-center gap-[clamp(1.25rem,2vw,2.5rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,1.02fr)_minmax(0,.92fr)]">
           <div className="relative z-10 order-2 grid gap-2.5 xl:order-none">
             <div className="border border-[#b3122a]/15 bg-white/[0.93] p-[clamp(1rem,1.5vw,1.6rem)] backdrop-blur-sm">
               <p className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.2em] text-[#7d656c]">
