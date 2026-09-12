@@ -1,5 +1,5 @@
 import { EVENT_INFO } from "@/lib/constants";
-import { registrationIncludes } from "@/data/conference";
+import { creditPoints, registrationIncludes } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
 import { pricingTiers } from "@/config/pricing.config";
 import { getCurrentTierKey, tierLabel } from "@/lib/registration";
@@ -101,6 +101,26 @@ export default function RegisterCta() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* CME CREDIT. Applied for, not granted — the wording stays conditional
+            until the council confirms. It sits on its own rather than in the
+            includes list because a delegate reading the fee table is deciding
+            whether the days count towards their registration renewal. */}
+        <div
+          className="mt-[clamp(2rem,4vh,3rem)] border-t-2 border-[#b3122a] pt-7"
+          data-r
+        >
+          <p className="u-eyebrow text-gold-lift">CME credit points</p>
+          <p className="mt-3 max-w-[62ch] text-[clamp(1.02rem,1.3vw,1.2rem)] font-medium leading-[1.7] text-[#160a0d]">
+            {creditPoints.abbreviation} credit points have been applied for:{" "}
+            {creditPoints.perDay} points per day across all {creditPoints.days} days,
+            the pre-conference workshop included, for a total of{" "}
+            <span className="font-bold text-[#b3122a]">{creditPoints.total} points</span>.
+          </p>
+          <p className="mt-2 text-[0.8rem] leading-[1.7] text-faint">
+            {creditPoints.authority}. Award is subject to the council&rsquo;s approval.
+          </p>
         </div>
 
         <div className="mt-[clamp(2rem,4vh,3rem)] flex flex-wrap items-center gap-3" data-r>

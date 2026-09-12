@@ -283,6 +283,29 @@ export const registrationIncludes = [
 ] as const;
 
 /**
+ * CME credit. APPLIED FOR, not granted — the council has not confirmed, so the
+ * wording here stays conditional and must not be upgraded to "accredited" or
+ * "approved" until it does. Two points per day across all three days, the
+ * pre-conference workshop day included, so six in total.
+ *
+ * `days` is derived from the conference dates rather than typed, so the total
+ * cannot drift if the programme ever gains or loses a day.
+ */
+const conferenceDayCount =
+  Math.round(
+    (Date.parse(conference.dates.end) - Date.parse(conference.dates.start)) / 86_400_000,
+  ) + 1;
+
+export const creditPoints = {
+  authority: "Telangana State Medical Council",
+  abbreviation: "TSMC",
+  status: "applied" as const,
+  perDay: 2,
+  days: conferenceDayCount,
+  total: 2 * conferenceDayCount,
+} as const;
+
+/**
  * Registration helpline, supplied by the committee on 9 September 2026.
  * This is the number a delegate rings about registration itself — distinct
  * from the secretariat's scientific contacts above.
