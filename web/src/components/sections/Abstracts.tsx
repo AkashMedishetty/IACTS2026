@@ -16,7 +16,7 @@ export default function Abstracts() {
         <p className="u-eyebrow flex items-center gap-3" data-r>
           <span className="text-gold">05</span> Abstracts
         </p>
-        <h2 className="mt-5 text-[clamp(1.6rem,3.6vw,2.8rem)] font-extrabold leading-[1.05] tracking-[-0.025em]" data-r>
+        <h2 className="mt-5 u-heading" data-r>
           Abstract submission
         </h2>
         <p className="mt-4 text-[clamp(.95rem,1.1vw,1.1rem)] leading-[1.72] text-muted-foreground" data-r>

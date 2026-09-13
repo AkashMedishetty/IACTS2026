@@ -27,7 +27,7 @@ export default function Programme() {
     <section id="programme" className="u-shell py-[clamp(4rem,10vh,9rem)]">
       <header className="max-w-3xl">
         <h2
-          className="text-[clamp(2.2rem,5.6vw,4.4rem)] font-extrabold uppercase leading-[1.02] tracking-[-0.03em]"
+          className="u-heading uppercase"
           data-r
         >
           <span className="u-word">Programme Overview</span>

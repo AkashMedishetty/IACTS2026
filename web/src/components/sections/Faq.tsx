@@ -82,7 +82,7 @@ export default function Faq() {
           <span className="text-gold">09</span> Questions
         </p>
         <h2
-          className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
+          className="mt-5 u-heading"
           data-r
         >
           Frequently asked <span className="u-serif">questions</span>

@@ -51,7 +51,7 @@ export default function Hyderabad() {
         <p className="u-eyebrow flex items-center gap-3" data-r>
           <span aria-hidden className="h-px w-8 bg-[#b3122a]" /> The host city
         </p>
-        <h2 className="mt-5 max-w-3xl text-[clamp(1.8rem,4.2vw,3.2rem)] font-extrabold leading-[1.04] tracking-[-0.025em]" data-r>
+        <h2 className="mt-5 max-w-3xl u-heading" data-r>
           Explore <span className="u-serif">Hyderabad</span>
         </h2>
         <p className="mt-4 max-w-[58ch] text-[clamp(.9rem,1.05vw,1.05rem)] leading-[1.72] text-muted-foreground" data-r>

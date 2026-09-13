@@ -33,7 +33,7 @@ export default function About() {
 
       <div className="relative mx-auto max-w-3xl">
         <h2
-          className="text-[clamp(2.4rem,6vw,4.6rem)] font-extrabold leading-[1.02] tracking-[-0.03em]"
+          className="u-heading"
           data-r
         >
           <span className="u-word">About the CME</span>

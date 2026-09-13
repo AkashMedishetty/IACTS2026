@@ -22,7 +22,7 @@ export default function Messages() {
         {messages.map((message) => (
           <article key={message.id} data-r>
             <h2
-              className="text-[clamp(1.7rem,4vw,3rem)] font-extrabold leading-[1.05] tracking-[-0.028em]"
+              className="u-heading"
               data-r
             >
               <span className="u-word">{message.role}&rsquo;s Message</span>

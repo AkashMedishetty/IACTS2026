@@ -183,11 +183,81 @@ export default function BrochurePage() {
 
   return (
     <div className="bro">
-      {/* 01 · COVER — supplied artwork, nothing on top of it. */}
+      {/* 02 · COVER — supplied artwork, nothing on top of it. */}
       <Page cover />
 
-      {/* 02 · CHAIRMAN */}
-      <Page n="02" section="Welcome" msg>
+      {/* 03 · IACTS EXECUTIVE COMMITTEE
+          The association's national leadership, in the order and with the
+          photographs iacts.org publishes. Its own page: page 13 already carries
+          eighteen portraits and has no room for fourteen more. */}
+      <Page n="02" section="Leadership">
+        <Head kicker="The association">
+          IACTS executive <span className="bro-em">committee</span>
+        </Head>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(5, 1fr)", gap: "6mm 4mm", marginTop: "4mm" }}
+        >
+          {iactsExecutiveCommittee.map((m) => (
+            <Person key={m.name} src={m.portrait} name={m.name} role={m.role} />
+          ))}
+        </div>
+        <p className="bro-note" style={{ marginTop: "5mm" }}>
+          Indian Association of Cardiovascular-Thoracic Surgeons
+        </p>
+      </Page>
+
+      {/* 04 · THE WHOLE COMMITTEE ON ONE PAGE
+          Patrons, office-bearers and the executive committee together — 18
+          portraits. Each tier gets its own portrait width rather than one shared
+          size, because seniority should read from the page: patrons largest,
+          office-bearers (who also carry an institutional designation) middle,
+          executive committee smallest at six-up. The heading is full size like every
+          other page; the spacing between tiers is tightened to make room. */}
+      <Page n="03" section="Leadership">
+        <p className="bro-kicker" style={{ marginBottom: "2mm" }}>Leadership</p>
+        <hr className="bro-rule-c" style={{ marginBottom: "2mm" }} />
+        <p className="bro-display" style={{ marginBottom: "3mm" }}>
+          Organising <span className="bro-em">committee</span>
+        </p>
+
+        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Patrons</p>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: "58mm", marginInline: "auto", marginBottom: "2.5mm", gap: "4mm" }}
+        >
+          {patrons.map((p) => (
+            <Person key={p.name} src={p.portrait} name={p.name} role={p.title} title={p.role} />
+          ))}
+        </div>
+
+        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Office-bearers</p>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "2.5mm", gap: "4mm" }}
+        >
+          {leadership.map((l) => (
+            <Person key={l.name} src={l.portrait} name={l.name} role={l.role} title={l.title} />
+          ))}
+        </div>
+
+        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Executive committee</p>
+        <div
+          className="bro-people bro-people-sm"
+          style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: "3mm" }}
+        >
+          {executiveCommittee.map((m) => (
+            <Person key={m.name} src={m.portrait} name={m.name} />
+          ))}
+        </div>
+
+        <p className="bro-note" style={{ marginTop: "2.5mm" }}>
+          Conference Secretariat · {secretariat.department}, {secretariat.city}
+        </p>
+      </Page>
+
+      {/* 05 · CHAIRMAN */}
+      <Page n="04" section="Welcome" msg>
         <Head kicker="Organising Chairman's Message">
           A mindset of adaptability, innovation and <span className="bro-em">lifelong learning</span>
         </Head>
@@ -207,8 +277,8 @@ export default function BrochurePage() {
         ))}
       </Page>
 
-      {/* 03 · SECRETARY */}
-      <Page n="03" section="Welcome" msg>
+      {/* 06 · SECRETARY */}
+      <Page n="05" section="Welcome" msg>
         <Head kicker="Organising Secretary's Message">
           The future is no longer something we are <span className="bro-em">waiting for</span>
         </Head>
@@ -228,8 +298,8 @@ export default function BrochurePage() {
         ))}
       </Page>
 
-      {/* 04 · ABOUT THE CME */}
-      <Page n="04" section="About">
+      {/* 07 · ABOUT THE CME */}
+      <Page n="06" section="About">
         <Head kicker="About the CME">{about.heading}</Head>
         <p className="bro-lede">{about.lede}</p>
         {about.programmeNote.map((para) => (
@@ -245,8 +315,8 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 05 · SCIENTIFIC HIGHLIGHTS */}
-      <Page n="05" section="Programme">
+      {/* 08 · SCIENTIFIC HIGHLIGHTS */}
+      <Page n="07" section="Programme">
         <Head kicker="Scientific Highlights">
           Eight <span className="bro-em">highlights</span>
         </Head>
@@ -279,8 +349,8 @@ export default function BrochurePage() {
         </div>
       </Page>
 
-      {/* 06 · PROGRAMME — agenda forthcoming */}
-      <Page n="06" section="Programme">
+      {/* 09 · PROGRAMME — agenda forthcoming */}
+      <Page n="08" section="Programme">
         <Head kicker="Programme Overview">
           Three days, <span className="bro-em">two venues</span>
         </Head>
@@ -326,14 +396,14 @@ export default function BrochurePage() {
         </div>
       </Page>
 
-      {/* 07 · WORKSHOPS — mirrors the website's /workshops route.
+      {/* 10 · WORKSHOPS — mirrors the website's /workshops route.
           This was MISSING: the rewrite that removed the session-by-session agenda
           also took the workshop tracks with it, so the five pre-conference tracks
           — including MICS CABG, which the committee added on 10 September — were
           nowhere in the brochure while Workshops sits in the site's primary nav.
           Found by diffing the site's nav and data exports against the rendered
           PDF rather than by re-reading the source. */}
-      <Page n="07" section="Workshops">
+      <Page n="09" section="Workshops">
         <Head kicker="Pre-Conference Workshops">
           Day 0 · <span className="bro-em">23 October</span>
         </Head>
@@ -374,8 +444,8 @@ export default function BrochurePage() {
         </div>
       </Page>
 
-      {/* 08 · FEES */}
-      <Page n="08" section="Registration">
+      {/* 11 · FEES */}
+      <Page n="10" section="Registration">
         <Head kicker="Registration">
           Registration <span className="bro-em">fees</span>
         </Head>
@@ -430,8 +500,8 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 08 · HOW TO REGISTER */}
-      <Page n="09" section="Registration">
+      {/* 12 · HOW TO REGISTER */}
+      <Page n="11" section="Registration">
         <Head kicker="Registration">
           How to <span className="bro-em">register</span>
         </Head>
@@ -476,8 +546,8 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 09 · ABSTRACTS */}
-      <Page n="10" section="Abstracts">
+      {/* 13 · ABSTRACTS */}
+      <Page n="12" section="Abstracts">
         <Head kicker="Abstracts">
           Abstract <span className="bro-em">submission</span>
         </Head>
@@ -509,8 +579,8 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 10 · VENUES */}
-      <Page n="11" section="Venue">
+      {/* 14 · VENUES */}
+      <Page n="13" section="Venue">
         <Head kicker="Where it happens">
           The <span className="bro-em">venues</span>
         </Head>
@@ -535,8 +605,8 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 11 · HYDERABAD */}
-      <Page n="12" section="Host City">
+      {/* 15 · HYDERABAD */}
+      <Page n="14" section="Host City">
         <Head kicker="Explore Hyderabad">
           A city of heritage — and of <span className="bro-em">medicine</span>
         </Head>
@@ -556,77 +626,7 @@ export default function BrochurePage() {
         </div>
       </Page>
 
-      {/* 12 · THE WHOLE COMMITTEE ON ONE PAGE
-          Patrons, office-bearers and the executive committee together — 18
-          portraits. Each tier gets its own portrait width rather than one shared
-          size, because seniority should read from the page: patrons largest,
-          office-bearers (who also carry an institutional designation) middle,
-          executive committee smallest at six-up. The heading is deliberately
-          compact here; on a page of eighteen faces the faces are the content. */}
-      <Page n="13" section="Leadership">
-        <p className="bro-kicker" style={{ marginBottom: "3mm" }}>Leadership</p>
-        <hr className="bro-rule-c" style={{ marginBottom: "3mm" }} />
-        <p className="bro-display" style={{ fontSize: "20pt", marginBottom: "3mm" }}>
-          Organising <span className="bro-em">committee</span>
-        </p>
-
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Patrons</p>
-        <div
-          className="bro-people bro-people-md"
-          style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: "58mm", marginInline: "auto", marginBottom: "4mm", gap: "4mm" }}
-        >
-          {patrons.map((p) => (
-            <Person key={p.name} src={p.portrait} name={p.name} role={p.title} title={p.role} />
-          ))}
-        </div>
-
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Office-bearers</p>
-        <div
-          className="bro-people bro-people-md"
-          style={{ gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "4mm", gap: "4mm" }}
-        >
-          {leadership.map((l) => (
-            <Person key={l.name} src={l.portrait} name={l.name} role={l.role} title={l.title} />
-          ))}
-        </div>
-
-        <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Executive committee</p>
-        <div
-          className="bro-people bro-people-sm"
-          style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: "3mm" }}
-        >
-          {executiveCommittee.map((m) => (
-            <Person key={m.name} src={m.portrait} name={m.name} />
-          ))}
-        </div>
-
-        <p className="bro-note" style={{ marginTop: "4mm" }}>
-          Conference Secretariat · {secretariat.department}, {secretariat.city}
-        </p>
-      </Page>
-
-      {/* 14 · IACTS EXECUTIVE COMMITTEE
-          The association's national leadership, in the order and with the
-          photographs iacts.org publishes. Its own page: page 13 already carries
-          eighteen portraits and has no room for fourteen more. */}
-      <Page n="14" section="Leadership">
-        <Head kicker="The association">
-          IACTS executive <span className="bro-em">committee</span>
-        </Head>
-        <div
-          className="bro-people bro-people-md"
-          style={{ gridTemplateColumns: "repeat(5, 1fr)", gap: "6mm 4mm", marginTop: "4mm" }}
-        >
-          {iactsExecutiveCommittee.map((m) => (
-            <Person key={m.name} src={m.portrait} name={m.name} role={m.role} />
-          ))}
-        </div>
-        <p className="bro-note" style={{ marginTop: "5mm" }}>
-          Indian Association of Cardiovascular-Thoracic Surgeons
-        </p>
-      </Page>
-
-      {/* 15 · CONTACT */}
+      {/* 16 · CONTACT */}
       <Page n="15" section="Contact">
         <Head kicker="Join us in Hyderabad">
           The future <span className="bro-em">is now</span>

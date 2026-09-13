@@ -114,13 +114,16 @@ export const highlights = [
       "Rewarding impactful contributions",
     ],
   },
+  /* Replaced "Patient Centric Care" on the committee's instruction, 13 September
+     2026. Only the title was supplied; the lines below describe the format and
+     make no claim about prizes, rounds or eligibility. */
   {
-    title: "Patient Centric Care",
-    sub: "Quality outcomes & patient safety",
+    title: "PG Quiz",
+    sub: "For postgraduate trainees",
     points: [
-      "Focus on quality outcomes & patient safety",
-      "Translating science into better patient care",
-      "Patient-first approach in every decision",
+      "Quiz for postgraduate trainees",
+      "Test your knowledge of cardiothoracic surgery",
+      "Compete with peers from across the country",
     ],
   },
   {

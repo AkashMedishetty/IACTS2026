@@ -21,7 +21,7 @@ export default function Strata() {
             <span className="text-gold">03</span> Scientific Highlights
           </p>
           <h2
-            className="mt-5 text-[clamp(1.7rem,3.6vw,3rem)] font-extrabold leading-[1.05] tracking-[-0.025em]"
+            className="mt-5 u-heading"
             data-r
           >
             Eight scientific <span className="u-serif">highlights</span>

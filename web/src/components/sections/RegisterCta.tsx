@@ -31,7 +31,7 @@ export default function RegisterCta() {
       <div className="relative u-shell py-[clamp(4rem,10vh,8rem)]">
         <p className="u-eyebrow" data-r>{EVENT_INFO.dateLabel} · {EVENT_INFO.city}</p>
 
-        <h2 className="mt-6 max-w-4xl text-[clamp(2.2rem,6.5vw,5rem)] font-extrabold leading-[0.95] tracking-[-0.035em]" data-r>
+        <h2 className="mt-6 max-w-4xl u-heading" data-r>
           Registration is
           <span className="u-serif block"> open.</span>
         </h2>

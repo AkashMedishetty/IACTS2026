@@ -28,7 +28,7 @@ export default function Awards() {
             <span className="text-gold">06</span> Recognition
           </p>
           <h2
-            className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
+            className="mt-5 u-heading"
             data-r
           >
             Awards and <span className="u-serif">recognition</span>

@@ -1,6 +1,8 @@
 import type { CSSProperties } from "react";
 import { patrons, leadership, executiveCommittee, iactsExecutiveCommittee } from "@/data/conference";
 
+const PORTRAIT_TOKEN = { "--portrait-w": "clamp(120px,13vw,168px)" } as CSSProperties;
+
 /**
  * Committee, with portraits.
  *
@@ -105,14 +107,14 @@ export default function Committee() {
     <section
       id="committee"
       className="u-shell py-[clamp(4rem,10vh,9rem)]"
-      style={{ "--portrait-w": "clamp(120px,13vw,168px)" } as CSSProperties}
+      style={PORTRAIT_TOKEN}
     >
       <header className="max-w-3xl">
         <p className="u-eyebrow flex items-center gap-3" data-r>
           <span className="text-gold">03</span> Organising Committee
         </p>
         <h2
-          className="mt-5 text-[clamp(1.9rem,4.4vw,3.6rem)] font-extrabold leading-[1.02] tracking-[-0.025em]"
+          className="mt-5 u-heading"
           data-r
         >
           Organising <span className="u-serif">committee</span>
@@ -175,23 +177,39 @@ export default function Committee() {
         </ul>
       </div>
 
-      {/* IACTS EXECUTIVE COMMITTEE — the association's national leadership, in
-          the order iacts.org publishes it. Same Plate and the same portrait
-          token as everyone above, so every photograph stays one size. */}
-      <div id="iacts-executive-committee" className="mt-[clamp(2.5rem,6vh,4.5rem)]">
-        <p className="u-eyebrow" data-r>
-          IACTS Executive Committee
-        </p>
-        <div className={`mt-6 ${PLATE_GRID}`}>
-          {iactsExecutiveCommittee.map((m) => (
-            <Plate key={m.name} name={m.name} role={m.role} portrait={m.portrait} />
-          ))}
-        </div>
-      </div>
-
       <p className="mt-10 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
         Faculty list to be announced
       </p>
+    </section>
+  );
+}
+
+/**
+ * IACTS national Executive Committee — its own section so it can lead the home
+ * page and the committee page, ahead of the organising committee. Order, roles
+ * and photographs as iacts.org publishes them. Same Plate, grid and portrait
+ * token as the organising committee, so every photograph stays one size.
+ */
+export function IactsCommittee() {
+  return (
+    <section
+      id="iacts-executive-committee"
+      className="u-shell py-[clamp(4rem,10vh,9rem)]"
+      style={PORTRAIT_TOKEN}
+    >
+      <header className="max-w-3xl">
+        <p className="u-eyebrow" data-r>
+          Indian Association of Cardiovascular-Thoracic Surgeons
+        </p>
+        <h2 className="mt-5 u-heading" data-r>
+          IACTS Executive <span className="u-serif">Committee</span>
+        </h2>
+      </header>
+      <div className={`mt-[clamp(2.5rem,6vh,4.5rem)] ${PLATE_GRID}`}>
+        {iactsExecutiveCommittee.map((m) => (
+          <Plate key={m.name} name={m.name} role={m.role} portrait={m.portrait} />
+        ))}
+      </div>
     </section>
   );
 }
