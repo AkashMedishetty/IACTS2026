@@ -233,6 +233,36 @@ export const executiveCommittee: readonly { name: string; portrait: string | nul
   { name: "Dr. M. Tribhuvan", portrait: "/committee/tribhuvan.jpg" },
 ];
 
+/**
+ * IACTS national Executive Committee — the association's elected leadership,
+ * distinct from the NIMS organising committee above.
+ *
+ * Order, roles and photographs are exactly as published at
+ * https://iacts.org/association/executive-committee (fetched 13 September 2026).
+ * Photographs are the association's own files, saved locally so neither the
+ * site nor the brochure depends on iacts.org being up. Names take the site's
+ * "Dr." house style and normalised capitalisation; nothing else is changed.
+ *
+ * Field order is name, portrait, role so scripts/verify-brochure-content.py
+ * (which matches `name: "…", portrait`) checks these names in the PDF too.
+ */
+export const iactsExecutiveCommittee: readonly { name: string; portrait: string; role: string }[] = [
+  { name: "Dr. Satyajit Bose", portrait: "/committee/iacts/satyajit-bose.webp", role: "President" },
+  { name: "Dr. Jacob Jamesraj", portrait: "/committee/iacts/jacob-jamesraj.webp", role: "Secretary" },
+  { name: "Dr. Bijoy Kutty", portrait: "/committee/iacts/bijoy-kutty.webp", role: "Joint Secretary & Treasurer" },
+  { name: "Dr. Pradeep Narayan", portrait: "/committee/iacts/pradeep-narayan.webp", role: "Editor-in-Chief" },
+  { name: "Dr. C. S. Hiremath", portrait: "/committee/iacts/cs-hiremath.webp", role: "Senior Vice President" },
+  { name: "Dr. O. P. Yadava", portrait: "/committee/iacts/op-yadava.webp", role: "Junior Vice President" },
+  { name: "Dr. Devagourou Velayoudam", portrait: "/committee/iacts/devagourou-velayoudam.webp", role: "Junior Past President" },
+  { name: "Dr. Manoj Durairaj", portrait: "/committee/iacts/manoj-durairaj.webp", role: "Senior Past President" },
+  { name: "Dr. Gunturu Varun", portrait: "/committee/iacts/gunturu-varun.webp", role: "Member" },
+  { name: "Dr. Siva Muthukumar", portrait: "/committee/iacts/siva-muthukumar.webp", role: "Member" },
+  { name: "Dr. Ramprasath S", portrait: "/committee/iacts/ramprasath-s.webp", role: "Member" },
+  { name: "Dr. Mohammed Idhrees", portrait: "/committee/iacts/mohammed-idhrees.webp", role: "Member" },
+  { name: "Dr. Rakesh Naik L", portrait: "/committee/iacts/rakesh-naik-l.webp", role: "Member" },
+  { name: "Dr. Vinitha V Nair", portrait: "/committee/iacts/vinitha-v-nair.webp", role: "Member" },
+];
+
 export const venues = [
   {
     id: "nims",

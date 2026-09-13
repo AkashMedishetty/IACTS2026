@@ -7,6 +7,7 @@ import {
   days,
   executiveCommittee,
   highlights,
+  iactsExecutiveCommittee,
   leadership,
   messages,
   patrons,
@@ -604,8 +605,29 @@ export default function BrochurePage() {
         </p>
       </Page>
 
-      {/* 13 · CONTACT */}
-      <Page n="14" section="Contact">
+      {/* 14 · IACTS EXECUTIVE COMMITTEE
+          The association's national leadership, in the order and with the
+          photographs iacts.org publishes. Its own page: page 13 already carries
+          eighteen portraits and has no room for fourteen more. */}
+      <Page n="14" section="Leadership">
+        <Head kicker="The association">
+          IACTS executive <span className="bro-em">committee</span>
+        </Head>
+        <div
+          className="bro-people bro-people-md"
+          style={{ gridTemplateColumns: "repeat(5, 1fr)", gap: "6mm 4mm", marginTop: "4mm" }}
+        >
+          {iactsExecutiveCommittee.map((m) => (
+            <Person key={m.name} src={m.portrait} name={m.name} role={m.role} />
+          ))}
+        </div>
+        <p className="bro-note" style={{ marginTop: "5mm" }}>
+          Indian Association of Cardiovascular-Thoracic Surgeons
+        </p>
+      </Page>
+
+      {/* 15 · CONTACT */}
+      <Page n="15" section="Contact">
         <Head kicker="Join us in Hyderabad">
           The future <span className="bro-em">is now</span>
         </Head>

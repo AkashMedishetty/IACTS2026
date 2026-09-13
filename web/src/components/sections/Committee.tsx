@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { patrons, leadership, executiveCommittee } from "@/data/conference";
+import { patrons, leadership, executiveCommittee, iactsExecutiveCommittee } from "@/data/conference";
 
 /**
  * Committee, with portraits.
@@ -173,6 +173,20 @@ export default function Committee() {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* IACTS EXECUTIVE COMMITTEE — the association's national leadership, in
+          the order iacts.org publishes it. Same Plate and the same portrait
+          token as everyone above, so every photograph stays one size. */}
+      <div id="iacts-executive-committee" className="mt-[clamp(2.5rem,6vh,4.5rem)]">
+        <p className="u-eyebrow" data-r>
+          IACTS Executive Committee
+        </p>
+        <div className={`mt-6 ${PLATE_GRID}`}>
+          {iactsExecutiveCommittee.map((m) => (
+            <Plate key={m.name} name={m.name} role={m.role} portrait={m.portrait} />
+          ))}
+        </div>
       </div>
 
       <p className="mt-10 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
