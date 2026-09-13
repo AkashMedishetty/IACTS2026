@@ -215,16 +215,14 @@ export default function BrochurePage() {
           executive committee smallest at six-up. The heading is full size like every
           other page; the spacing between tiers is tightened to make room. */}
       <Page n="03" section="Leadership">
-        <p className="bro-kicker" style={{ marginBottom: "2mm" }}>Leadership</p>
-        <hr className="bro-rule-c" style={{ marginBottom: "2mm" }} />
-        <p className="bro-display" style={{ marginBottom: "3mm" }}>
+        <p className="bro-display" style={{ marginBottom: "2mm" }}>
           Organising <span className="bro-em">committee</span>
         </p>
 
         <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Patrons</p>
         <div
           className="bro-people bro-people-md"
-          style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: "58mm", marginInline: "auto", marginBottom: "2.5mm", gap: "4mm" }}
+          style={{ gridTemplateColumns: "repeat(2, 1fr)", maxWidth: "58mm", marginInline: "auto", marginBottom: "1.5mm", gap: "3mm" }}
         >
           {patrons.map((p) => (
             <Person key={p.name} src={p.portrait} name={p.name} role={p.title} title={p.role} />
@@ -234,7 +232,7 @@ export default function BrochurePage() {
         <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Office-bearers</p>
         <div
           className="bro-people bro-people-md"
-          style={{ gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "2.5mm", gap: "4mm" }}
+          style={{ gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "1.5mm", gap: "4mm" }}
         >
           {leadership.map((l) => (
             <Person key={l.name} src={l.portrait} name={l.name} role={l.role} title={l.title} />
@@ -244,16 +242,12 @@ export default function BrochurePage() {
         <p className="bro-label bro-label-ink" style={{ marginBottom: "2mm" }}>Executive committee</p>
         <div
           className="bro-people bro-people-sm"
-          style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: "3mm" }}
+          style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: "1mm 3mm" }}
         >
           {executiveCommittee.map((m) => (
             <Person key={m.name} src={m.portrait} name={m.name} />
           ))}
         </div>
-
-        <p className="bro-note" style={{ marginTop: "2.5mm" }}>
-          Conference Secretariat · {secretariat.department}, {secretariat.city}
-        </p>
       </Page>
 
       {/* 05 · CHAIRMAN */}
@@ -300,8 +294,15 @@ export default function BrochurePage() {
 
       {/* 07 · ABOUT THE CME */}
       <Page n="06" section="About">
-        <Head kicker="About the CME">{about.heading}</Head>
-        <p className="bro-lede">{about.lede}</p>
+        {/* Mirrors the website: "About the CME" is the big heading and the old
+            display sentence is a bold lead-in, per the 10 September review. It
+            also keeps the page from overflowing at the full heading size. */}
+        <Head kicker="About">
+          About the <span className="bro-em">CME</span>
+        </Head>
+        <p className="bro-lede">
+          <strong style={{ color: "var(--ink)" }}>{about.heading.replace(/\.$/, "")}</strong> — {about.lede}
+        </p>
         {about.programmeNote.map((para) => (
           <p key={para.slice(0, 36)} className="bro-p">{para}</p>
         ))}

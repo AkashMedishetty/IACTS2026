@@ -145,7 +145,7 @@ body::before {
      than a section heading. Raised and the tracking eased slightly, because wide
      tracking on small type is what made it feel weak — the letters were further
      apart than they were tall. */
-  font-size: 11pt;
+  font-size: 13pt;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -157,7 +157,7 @@ body::before {
 .bro-display {
   font-family: var(--font-display, Georgia, serif);
   /* Big and bold on every page, on the committee's instruction. */
-  font-size: 46pt;
+  font-size: 58pt;
   line-height: 0.94;
   letter-spacing: -0.022em;
   font-weight: 900;
@@ -165,7 +165,7 @@ body::before {
   color: var(--ink);
   text-wrap: balance;
 }
-.bro-display-sm { font-size: 34pt; line-height: 0.98; }
+.bro-display-sm { font-size: 42pt; line-height: 0.98; }
 .bro-em { font-style: italic; color: var(--crimson); }
 
 .bro-h2 {
@@ -503,7 +503,9 @@ body::before {
 .bro-c .bro-btn-row { justify-content: center; }
 
 /* Generous, unhurried scale for the centred mode. */
-.bro-c .bro-display { font-size: 34pt; margin-bottom: 8mm; }
+/* The page-level heading size. This rule, not .bro-display, is what content
+   pages actually render at, so this is the one to change. */
+.bro-c .bro-display { font-size: 56pt; font-weight: 900; margin-bottom: 8mm; }
 .bro-c .bro-lede { font-size: 11.6pt; line-height: 1.62; margin-bottom: 6mm; }
 .bro-c .bro-p { font-size: 9.6pt; line-height: 1.78; margin-bottom: 4.5mm; }
 
@@ -560,13 +562,15 @@ body::before {
 .bro-people .bro-por { max-width: 34mm; }
 .bro-people-md .bro-por,
 .bro-people-md .bro-por-ph { max-width: 25mm; }
-.bro-people-md .bro-photo-name { font-size: 9pt; margin-top: 1.4mm; }
+/* !important because Person() sets an inline 10pt name size, which silently
+   beat these tier sizes — names on the committee pages wrapped to three lines. */
+.bro-people-md .bro-photo-name { font-size: 9pt !important; margin-top: 1.4mm; }
 
 /* Executive committee tier on the single combined committee page: smaller
    portraits and a tighter name, so eighteen faces fit one A4 without any tier
    losing its hierarchy. */
 .bro-people-sm .bro-por { max-width: 17mm; }
-.bro-people-sm .bro-photo-name { font-size: 7.2pt; margin-top: 1mm; }
+.bro-people-sm .bro-photo-name { font-size: 7.2pt !important; margin-top: 1mm; }
 .bro-people-sm .bro-por-ph { max-width: 17mm; }
 
 
@@ -574,7 +578,7 @@ body::before {
 /* The two welcome pages carry five verbatim paragraphs each plus a portrait, and
    clipped at the centred mode's generous 9.6pt/1.78. They get their own slightly
    tighter tier rather than trimming the office-bearers' signed words. */
-.bro-msg .bro-display { font-size: 25pt; margin-bottom: 5mm; }
+.bro-msg .bro-display { font-size: 40pt; font-weight: 900; margin-bottom: 5mm; }
 .bro-msg .bro-p { font-size: 8.9pt; line-height: 1.66; margin-bottom: 3.2mm; max-width: 132mm; }
 .bro-msg .bro-kicker { margin-bottom: 3.5mm; }
 .bro-msg .bro-rule-c { margin-bottom: 4mm; }
