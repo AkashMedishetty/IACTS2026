@@ -94,6 +94,8 @@ export function LoginForm({ callbackUrl = "/dashboard" }: LoginFormProps) {
                   redirectUrl = '/reviewer';
                 } else if (userRole === 'admin') {
                   redirectUrl = '/admin';
+                } else if (userRole === 'manager') {
+                  redirectUrl = '/manager';
                 } else if (userRole === 'sponsor') {
                   redirectUrl = '/sponsor/dashboard';
                 } else {

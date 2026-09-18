@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed:manager": "tsx scripts/seed-manager.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -1,5 +1,5 @@
 /**
- * Admin and Reviewer User Seeder
+ * Admin, Reviewer and Manager User Seeder
  *
  * Credentials are supplied through the environment — never hardcoded. Seeding
  * refuses to run without them rather than creating a well-known default login.
@@ -38,7 +38,7 @@ function addressFrom(config: ConferenceConfig) {
 async function seedStaffUser(
   config: ConferenceConfig,
   opts: {
-    role: 'admin' | 'reviewer'
+    role: 'admin' | 'reviewer' | 'manager'
     emailEnv: string
     passwordEnv: string
     phoneEnv: string
@@ -116,6 +116,25 @@ export async function seedReviewerUser(config: ConferenceConfig) {
     firstName: 'Reviewer',
     lastName: 'User',
     designation: 'Abstract Reviewer',
+  })
+}
+
+/**
+ * Manager — registration desk access (/manager): view and approve
+ * registrations, issue badges and certificates. No admin settings.
+ * Run on its own with `pnpm seed:manager`; it touches nothing else.
+ */
+export async function seedManagerUser(config: ConferenceConfig) {
+  return seedStaffUser(config, {
+    role: 'manager',
+    emailEnv: 'SEED_MANAGER_EMAIL',
+    passwordEnv: 'SEED_MANAGER_PASSWORD',
+    phoneEnv: 'SEED_MANAGER_PHONE',
+    registrationId: `${config.registrationPrefix}-MANAGER-001`,
+    title: 'Mr.',
+    firstName: 'Manager',
+    lastName: 'User',
+    designation: 'Registration Manager',
   })
 }
 
