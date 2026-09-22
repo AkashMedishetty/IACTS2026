@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { findDelegateByPhone } from '@/lib/duplicatePhone'
+import { registrationHelpline } from '@/data/conference'
 import bcrypt from 'bcryptjs'
 import connectDB from '@/lib/mongodb'
 import User from '@/lib/models/User'
@@ -197,6 +199,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: false,
         message: 'User with this email already exists'
+      }, { status: 409 })
+    }
+
+    // One registration per mobile. The email check alone let the same delegate
+    // register twice under two addresses (.com and .in). See lib/duplicatePhone.
+    if (await findDelegateByPhone(profile?.phone, email)) {
+      console.log('❌ Phone already registered')
+      return NextResponse.json({
+        success: false,
+        message: `This mobile number is already registered. If you registered earlier with a different email, sign in with that email instead, or call the ${registrationHelpline.label.toLowerCase()} on +91 ${registrationHelpline.number}.`,
       }, { status: 409 })
     }
     console.log('✅ Email is available')

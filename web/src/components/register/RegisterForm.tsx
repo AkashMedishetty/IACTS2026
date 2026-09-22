@@ -77,6 +77,7 @@ export default function RegisterForm() {
   const [screenshot, setScreenshot] = useState<{ url: string; name: string } | null>(null);
   const [emailTaken, setEmailTaken] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
+  const [phoneTaken, setPhoneTaken] = useState(false);
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<null | { registrationId: string; name: string; amount: number; emailDelivered: boolean }>(null);
 
@@ -103,6 +104,26 @@ export default function RegisterForm() {
       setEmailTaken(false);
     } finally {
       setCheckingEmail(false);
+    }
+  }
+
+  /* Same idea for the mobile number: one registration per phone, so the same
+     delegate cannot register again under a second email address. */
+  async function checkPhoneAvailable(value: string) {
+    const phone = normalisePhone(value || "");
+    if (!PHONE_RE.test(phone)) { setPhoneTaken(false); return; }
+    try {
+      const res = await fetch("/api/auth/check-phone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, email: (v.email || "").trim().toLowerCase() }),
+      });
+      const data = await res.json();
+      // As with email: anything unclear counts as available, so a network blip
+      // never blocks a real registration. The server check still decides.
+      setPhoneTaken(data?.available === false);
+    } catch {
+      setPhoneTaken(false);
     }
   }
 
@@ -170,6 +191,7 @@ export default function RegisterForm() {
     if (v.password && v.password !== v.confirmPassword) e.push("Passwords do not match");
     if (!v.consent) e.push("Please accept the terms to continue");
     if (emailTaken) e.push("That email is already registered — please sign in instead");
+    if (phoneTaken) e.push("That mobile number is already registered — sign in with the email you used before");
     return e;
   }
 
@@ -258,7 +280,9 @@ export default function RegisterForm() {
       ? "Phone number is required"
       : !PHONE_RE.test(normalisePhone(v.phone))
         ? "Enter a valid 10-digit Indian mobile number"
-        : "",
+        : phoneTaken
+          ? "This mobile number is already registered — sign in with the email you used before."
+          : "",
     password: !v.password
       ? "Password is required"
       : v.password.length < 8
@@ -402,7 +426,7 @@ export default function RegisterForm() {
               onBlur={(e) => { touch("email"); checkEmailAvailable(e.target.value); }}
             />
           </Field>
-          <Field label="Phone" required error={showErr("phone")} onBlur={() => touch("phone")} hint="10-digit mobile number."><input type="tel" inputMode="numeric" autoComplete="tel" maxLength={10} className={inputCls} value={v.phone || ""} onChange={(e) => set("phone", e.target.value.replace(/\D/g, "").slice(0, 10))} placeholder="9876543210" /></Field>
+          <Field label="Phone" required error={showErr("phone")} onBlur={() => { touch("phone"); checkPhoneAvailable(v.phone || ""); }} hint="10-digit mobile number."><input type="tel" inputMode="numeric" autoComplete="tel" maxLength={10} className={inputCls} value={v.phone || ""} onChange={(e) => { set("phone", e.target.value.replace(/\D/g, "").slice(0, 10)); if (phoneTaken) setPhoneTaken(false); }} placeholder="9876543210" /></Field>
           <Field label="Password" required error={showErr("password")} onBlur={() => touch("password")} hint="At least 8 characters."><input type="password" autoComplete="new-password" className={inputCls} value={v.password || ""} onChange={(e) => set("password", e.target.value)} /></Field>
           <Field label="Confirm password" required error={showErr("confirmPassword")} onBlur={() => touch("confirmPassword")}><input type="password" autoComplete="new-password" className={inputCls} value={v.confirmPassword || ""} onChange={(e) => set("confirmPassword", e.target.value)} /></Field>
         </Section>
