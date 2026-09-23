@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { GATED_FREE_CATEGORIES, isValidFacultyKey } from '@/lib/facultyRegistration'
 import { findDelegateByPhone } from '@/lib/duplicatePhone'
 import { registrationHelpline } from '@/data/conference'
 import bcrypt from 'bcryptjs'
@@ -50,7 +51,8 @@ export async function POST(request: NextRequest) {
       password,
       profile,
       registration,
-      payment
+      payment,
+      facultyKey
     } = body
 
     console.log('📧 Email:', email)
@@ -68,6 +70,19 @@ export async function POST(request: NextRequest) {
         message: validationErrors[0],
         errors: validationErrors,
       }, { status: 400 })
+    }
+
+    // FREE CATEGORIES ARE GATED. "complimentary" and "sponsored" cost nothing,
+    // and this route takes the category from the request body, so without this
+    // check anyone could register free by naming one. Only the faculty link,
+    // which carries the secret key, may use them.
+    const isFacultyRegistration = GATED_FREE_CATEGORIES.includes(registration?.type)
+    if (isFacultyRegistration && !isValidFacultyKey(facultyKey)) {
+      console.log('❌ Free category requested without a valid faculty key')
+      return NextResponse.json({
+        success: false,
+        message: 'This registration link is not valid. Please use the link sent to you, or contact the secretariat.',
+      }, { status: 403 })
     }
 
     // Validate email format
@@ -316,7 +331,10 @@ export async function POST(request: NextRequest) {
       registration: {
         registrationId,
         type: registration?.type || 'delegate',
-        status: 'pending' as const,
+        // Faculty owe nothing, so their registration is not waiting on a
+        // payment: it is confirmed on submission.
+        status: (isFacultyRegistration ? 'confirmed' : 'pending') as 'confirmed' | 'pending',
+        paymentType: isFacultyRegistration ? 'complimentary' : undefined,
         tier: tierLabel(getCurrentTierKey()),
         membershipNumber: registration?.membershipNumber || '',
         workshopSelections: registration?.workshopSelections || [],
@@ -329,7 +347,7 @@ export async function POST(request: NextRequest) {
         accommodation: serverAccommodation,
         registrationDate: new Date()
       },
-      payment: payment ? {
+      payment: isFacultyRegistration ? undefined : payment ? {
         method: payment.method || 'bank-transfer',
         status: 'pending' as const,
         // Amount is recomputed server-side; a client-supplied value is ignored.

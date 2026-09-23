@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { conferenceConfig } from "@/config/conference.config";
+import { FACULTY_CATEGORY_KEY } from "@/lib/facultyRegistration";
 import { computeRegistrationAmount, getCurrentTierKey, tierLabel, gstBreakdown } from "@/lib/registration";
 import { Arrow } from "@/components/site/SiteHeader";
 import {
@@ -48,7 +49,15 @@ function Section({ n, title, children }: { n: string; title: string; children: R
   );
 }
 
-export default function RegisterForm() {
+export default function RegisterForm({
+  variant = "delegate",
+  facultyKey,
+}: {
+  /** "faculty" is the invited, complimentary variant: same form, no payment. */
+  variant?: "delegate" | "faculty";
+  facultyKey?: string;
+} = {}) {
+  const isFaculty = variant === "faculty";
   const tierKey = useMemo(() => getCurrentTierKey(), []);
   const tier = tierLabel(tierKey);
   const acc = conferenceConfig.accommodation;
@@ -62,7 +71,7 @@ export default function RegisterForm() {
   const [v, setV] = useState<Values>({
     title: conferenceConfig.registration.formFields.titles[0],
     country: "India",
-    type: categories[0]?.key,
+    type: isFaculty ? FACULTY_CATEGORY_KEY : categories[0]?.key,
     paymentMethod: "bank-transfer",
     workshopOptIn: false,
     accommodationRequired: false,
@@ -147,7 +156,7 @@ export default function RegisterForm() {
     }
   }
 
-  const selectedCategory = categories.find((c) => c.key === v.type);
+  const selectedCategory = conferenceConfig.registration.categories.find((c) => c.key === v.type);
   const singleRate = acc.singleRoomPerNight || 0;
   const nights = useMemo(() => {
     if (!v.accommodationRequired || !v.checkIn || !v.checkOut) return 0;
@@ -181,11 +190,13 @@ export default function RegisterForm() {
         address: { pincode: v.pincode },
       },
       registration: { type: v.type, membershipNumber: v.membershipNumber },
-      payment: {
-        method: v.paymentMethod,
-        bankTransferUTR: v.utr,
-        screenshotUrl: screenshot?.url,
-      },
+      payment: isFaculty
+        ? {}
+        : {
+            method: v.paymentMethod,
+            bankTransferUTR: v.utr,
+            screenshotUrl: screenshot?.url,
+          },
     });
     // Browser-only concerns the API cannot check
     if (v.password && v.password !== v.confirmPassword) e.push("Passwords do not match");
@@ -238,11 +249,17 @@ export default function RegisterForm() {
               ? { required: true, roomType: v.roomType, checkIn: v.checkIn, checkOut: v.checkOut }
               : { required: false },
           },
-          payment: {
-            method: v.paymentMethod,
-            bankTransferUTR: v.paymentMethod === "bank-transfer" ? (v.utr || "").trim() : undefined,
-            screenshotUrl: v.paymentMethod === "bank-transfer" ? screenshot?.url : undefined,
-          },
+          // Faculty owe nothing, so no payment block is sent at all. The key
+          // is what entitles this submission to the free category; the server
+          // checks it and ignores anything else the browser claims.
+          facultyKey: isFaculty ? facultyKey : undefined,
+          payment: isFaculty
+            ? undefined
+            : {
+                method: v.paymentMethod,
+                bankTransferUTR: v.paymentMethod === "bank-transfer" ? (v.utr || "").trim() : undefined,
+                screenshotUrl: v.paymentMethod === "bank-transfer" ? screenshot?.url : undefined,
+              },
         }),
       });
       const data = await res.json();
@@ -454,7 +471,16 @@ export default function RegisterForm() {
           <Field label="Medical registration no. (MCI/NMC)" error={showErr("mciNumber")} onBlur={() => touch("mciNumber")}><input className={inputCls} value={v.mciNumber || ""} onChange={(e) => set("mciNumber", e.target.value)} /></Field>
         </Section>
 
-        <Section n="04" title="Registration category">
+        <Section n="04" title={isFaculty ? "Registration" : "Registration category"}>
+          {isFaculty ? (
+            <div className="sm:col-span-2 border-l-4 border-[#b3122a] bg-[#f8e9ed] px-5 py-4">
+              <p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#b3122a]">Category</p>
+              <p className="mt-1 text-[17px] font-bold text-[#160a0d]">Faculty — complimentary</p>
+              <p className="mt-1 text-[13px] leading-[1.6] text-[#614d53]">
+                Your registration is covered. There is nothing to pay.
+              </p>
+            </div>
+          ) : (
           <Field label="Category" required error={showErr("type")} onBlur={() => touch("type")}>
             <select className={inputCls} value={v.type} onChange={(e) => set("type", e.target.value)}>
               {categories.map((c) => {
@@ -463,7 +489,8 @@ export default function RegisterForm() {
               })}
             </select>
           </Field>
-          {selectedCategory?.requiresMembership ? (
+          )}
+          {!isFaculty && selectedCategory?.requiresMembership ? (
             <Field label="IACTS membership number" required><input className={inputCls} value={v.membershipNumber || ""} onChange={(e) => set("membershipNumber", e.target.value)} /></Field>
           ) : <div className="hidden sm:block" />}
           <div className="sm:col-span-2">
@@ -529,9 +556,14 @@ export default function RegisterForm() {
           </Section>
         ) : null}
 
-        <Section n={accommodationOffered ? "06" : "05"} title="Payment">
+        <Section n={accommodationOffered ? "06" : "05"} title={isFaculty ? "Confirm" : "Payment"}>
           <div className="sm:col-span-2 grid gap-3">
-            {conferenceConfig.payment.methods.bankTransfer ? (
+            {isFaculty ? (
+              <p className="border-l-4 border-[#b3122a] bg-[#f8e9ed] px-5 py-4 text-[14px] leading-[1.7] text-[#160a0d]">
+                No payment is required. Submitting this form confirms your faculty registration.
+              </p>
+            ) : null}
+            {!isFaculty && conferenceConfig.payment.methods.bankTransfer ? (
               <label className="flex cursor-pointer items-start gap-3 border border-[#b3122a]/20 bg-white p-4">
                 <input type="radio" name="pm" className="mt-0.5 size-4 accent-[#b3122a]" checked={v.paymentMethod === "bank-transfer"} onChange={() => set("paymentMethod", "bank-transfer")} />
                 <span>
@@ -542,7 +574,7 @@ export default function RegisterForm() {
                 </span>
               </label>
             ) : null}
-            {v.paymentMethod === "bank-transfer" && bankReady ? (
+            {!isFaculty && v.paymentMethod === "bank-transfer" && bankReady ? (
               <div className="border-l-4 border-[#b3122a] bg-[#f8e9ed] p-5">
                 <p className="font-mono text-[10px] uppercase tracking-[.18em] text-[#b3122a]">Pay to this account</p>
                 <div className="mt-3 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-start">
@@ -571,7 +603,7 @@ export default function RegisterForm() {
                 </div>
               </div>
             ) : null}
-            {v.paymentMethod === "bank-transfer" ? (
+            {!isFaculty && v.paymentMethod === "bank-transfer" ? (
               <div className="grid gap-4 border border-[#b3122a]/15 bg-white p-4 sm:grid-cols-2">
                 <p className="sm:col-span-2 font-mono text-[10px] uppercase tracking-[.16em] text-[#6a545a]">
                   Proof of payment
@@ -649,9 +681,9 @@ export default function RegisterForm() {
 
           <div className="mt-4 flex items-baseline justify-between">
             <span className="text-[13px] font-bold uppercase tracking-[.08em] text-[#5f0717]">Total payable</span>
-            <span className="text-[clamp(1.7rem,3.4vw,2.3rem)] font-black tabular-nums text-[#b3122a]">₹{payable.toLocaleString("en-IN")}</span>
+            <span className="text-[clamp(1.7rem,3.4vw,2.3rem)] font-black tabular-nums text-[#b3122a]">{isFaculty ? "₹0" : `₹${payable.toLocaleString("en-IN")}`}</span>
           </div>
-          {tax.enabled ? (
+          {!isFaculty && tax.enabled ? (
             <p className="mt-1.5 text-right font-mono text-[10px] uppercase tracking-[.12em] text-[#7d656c]">
               incl. {tax.label.replace(" (included)", "")} · ₹{tax.gst.toLocaleString("en-IN")}
             </p>
@@ -663,10 +695,12 @@ export default function RegisterForm() {
           ) : null}
 
           <button type="submit" disabled={busy} className="mt-5 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-full bg-[#b3122a] px-6 py-3.5 text-[14px] font-bold uppercase tracking-[.08em] text-white transition-transform hover:-translate-y-0.5 disabled:opacity-60">
-            {busy ? "Submitting…" : <>Complete registration <Arrow /></>}
+            {busy ? "Submitting…" : <>{isFaculty ? "Confirm faculty registration" : "Complete registration"} <Arrow /></>}
           </button>
           <p className="mt-3 text-[11px] leading-[1.6] text-[#7d656c]">
-            The final amount is confirmed by the secretariat. Prices are per the {tier.toLowerCase()} window.
+            {isFaculty
+              ? "Faculty registration is complimentary. You will receive a confirmation email with your registration ID."
+              : `The final amount is confirmed by the secretariat. Prices are per the ${tier.toLowerCase()} window.`}
           </p>
         </div>
       </aside>
