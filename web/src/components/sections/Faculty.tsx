@@ -1,11 +1,11 @@
-import { days } from "@/data/conference";
+import { days, faculty } from "@/data/conference";
 
 /**
  * Faculty.
  *
- * There is NO faculty list in the source material — the flyer says "Keynote
- * Lectures by Eminent Faculty" and names nobody. So this section does not
- * pretend to a roster. What is genuinely confirmed is the shape of the podium:
+ * The committee published the faculty list on 24 September 2026; it lives on
+ * /faculty, and this section links to it rather than repeating it. What this
+ * section carries is the shape of the podium:
  * which formats the invited faculty will actually occupy, and the two that are
  * filled by submitted work instead. Those come straight from days[1].
  *
@@ -34,15 +34,17 @@ export default function Faculty() {
           </h2>
           <p className="mt-5 max-w-md text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
             Five of the seven scientific formats are filled by invited faculty.
-            The invitation list is not published yet — what is settled is the
-            standard those sessions are held to.
+            {" "}
+            {faculty.national.length + faculty.international.length} are confirmed
+            so far, and the list grows as invitations are accepted.
           </p>
-          <p
-            className="mt-6 inline-block border border-[var(--hair-crimson)] px-4 py-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-crimson-lift"
+          <a
+            href="/faculty"
+            className="mt-6 inline-block border border-[var(--hair-crimson)] px-4 py-2 font-mono text-[0.66rem] uppercase tracking-[0.16em] text-crimson-lift no-underline"
             data-r
           >
-            Invited faculty to be announced
-          </p>
+            See the faculty list
+          </a>
         </header>
 
         <div>

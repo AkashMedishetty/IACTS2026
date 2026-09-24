@@ -9,9 +9,10 @@ import { isValidFacultyKey } from "@/lib/facultyRegistration";
 /**
  * Faculty registration — the delegate form, with no payment.
  *
- * Reached only through the invited link, which carries the key. Without a
- * valid key the form is not rendered at all, and the API refuses the free
- * category as well, so the page cannot be bypassed by posting directly.
+ * The code sits in the path (/faculty-register/<code>) so the link is short
+ * enough to send in a message or read out. It is the same check either way:
+ * without it the form is not rendered, and the API refuses the free category,
+ * so the page cannot be bypassed by posting directly.
  */
 export const metadata: Metadata = {
   title: `Faculty registration — ${conference.name}`,
@@ -19,12 +20,12 @@ export const metadata: Metadata = {
 };
 
 export default async function FacultyRegisterPage({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<{ key?: string }>;
+  params: Promise<{ code: string }>;
 }) {
-  const { key } = await searchParams;
-  const valid = isValidFacultyKey(key);
+  const { code } = await params;
+  const valid = isValidFacultyKey(decodeURIComponent(code));
 
   return (
     <div className="conference-site relative isolate min-h-svh">
@@ -53,7 +54,7 @@ export default async function FacultyRegisterPage({
 
           {valid ? (
             <div className="pt-8">
-              <RegisterForm variant="faculty" facultyKey={key as string} />
+              <RegisterForm variant="faculty" facultyKey={code} />
             </div>
           ) : (
             <div className="pt-10">

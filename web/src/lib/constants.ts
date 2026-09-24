@@ -74,14 +74,14 @@ export const NAV_ITEMS = [
  * not, and NEITHER listed Committee — a real page the committee spent an entire
  * review on. Two literals meant to agree will always drift, so there is now one.
  *
- * Faculty is deliberately absent until it has content: pointing the primary nav
- * at an "announcing soon" page spends a nav slot to tell someone nothing. Add it
- * back here once the faculty list is published and both navs pick it up together.
+ * Faculty was held back while it was an "announcing soon" placeholder. The
+ * committee published the list on 24 September 2026, so it is in the nav.
  */
 export const PRIMARY_NAV_LABELS = [
   "About",
   "Programme",
   "Workshops",
+  "Faculty",
   "Committee",
   "Abstracts",
   "Registration",

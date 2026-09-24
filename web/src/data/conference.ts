@@ -30,13 +30,20 @@ export const days = [
     stage: "Approach",
     blurb:
       "Hands-on sessions for postgraduate trainees, each with limited capacity.",
+    /* Replaced with the committee's wet-lab / dry-lab breakdown, "Changes -
+       Faculty and workshops", 24 September 2026. Two dry-lab items on that
+       sheet carry a leading "?" (Liva Nova — ECMO and Cell Saver; Abbott —
+       CentriMag and LVAD) and are NOT listed here: a question mark is not a
+       confirmed session. Industry partners named against each station are held
+       back until those credits are agreed. */
     items: [
-      { title: "Young Innovators Forum", tag: "Forum" },
-      { title: "Coronary Anastomosis Contest", tag: "Contest" },
-      { title: "Advanced Aortic Workshop", tag: "Workshop" },
-      { title: "Coronary anastomosis and valve anastomosis wet lab", tag: "Wet lab" },
-      /* Added from New_additions.pdf, 10 September 2026. */
-      { title: "MICS CABG planning and demo workshop", tag: "Workshop" },
+      { title: "Applied Anatomy of the Heart", tag: "Wet lab", lead: "Dr. Anil Tendolkar" },
+      { title: "Coronary Anastomosis", tag: "Wet lab" },
+      { title: "Valve Replacement", tag: "Wet lab" },
+      { title: "Proximal Coronary Anastomosis Contest", tag: "Wet lab" },
+      { title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection", tag: "Dry lab" },
+      { title: "Deployment of FET", tag: "Dry lab" },
+      { title: "MICS CABG Planning & Demo Workshop", tag: "Dry lab" },
     ],
   },
   {
@@ -265,6 +272,63 @@ export const iactsExecutiveCommittee: readonly { name: string; portrait: string;
   { name: "Dr. Rakesh Naik L", portrait: "/committee/iacts/rakesh-naik-l.webp", role: "Member" },
   { name: "Dr. Vinitha V Nair", portrait: "/committee/iacts/vinitha-v-nair.webp", role: "Member" },
 ];
+
+/**
+ * Faculty, from the committee's "Changes - Faculty and workshops" sheet,
+ * 24 September 2026. Source order is kept.
+ *
+ * The sheet lists international faculty as "to be confirmed"; Dr. Vitaly A
+ * Sorokin was named separately by the organising office on the same day.
+ *
+ * The last five national names arrived without the "Dr." prefix and, in two
+ * cases, without a full name ("Dr. Naresh" and "P V Naresh" may be one person).
+ * They are listed as supplied, with capitalisation normalised — nothing is
+ * invented and nobody is merged.
+ */
+export const faculty = {
+  international: ["Dr. Vitaly A Sorokin"],
+  national: [
+    "Dr. Alla Gopala Krishna Gokhale",
+    "Dr. Anita Bhalla",
+    "Dr. Anil Tendolkar",
+    "Dr. Aravind Mutharevula",
+    "Dr. Balasubramoniam K R",
+    "Dr. Balram Airan",
+    "Dr. C S Hiremath",
+    "Dr. Debasis Das",
+    "Dr. Devagourou Velayoudam",
+    "Dr. Gopichand Mannam",
+    "Dr. Harish Badami",
+    "Dr. Lokeshwar Rao Sajja",
+    "Dr. Manoj Durairaj",
+    "Dr. Manjunath Bale",
+    "Dr. Maruti Haranal",
+    "Dr. Mohammed Idhrees",
+    "Dr. Nagesh Ayalasomayajula",
+    "Dr. Naresh",
+    "Dr. Niranjan Hiremath",
+    "Dr. Nitin Kumar Rajput",
+    "Dr. P. Rajashekhar",
+    "Dr. Prasanna Simha",
+    "Dr. Praveen Varma",
+    "Dr. Ramprassath",
+    "Dr. Ritwick Raj Bhuyan",
+    "Dr. Sai Kiran",
+    "Dr. Sandeep Attawar",
+    "Dr. Satyajit Bose",
+    "Dr. Smriti Ranjan Mohanty",
+    "Dr. Tushar Dhopade",
+    "Dr. Vikram Reddy",
+    "Dr. Vinayak Shukla",
+    "Dr. Vinitha Nair",
+    "Dr. Vishal Khante",
+    "Nageshwar Rao",
+    "Sanjeeva Rao",
+    "Satya Sridhar",
+    "Usha Rani",
+    "P V Naresh",
+  ],
+} as const;
 
 export const venues = [
   {

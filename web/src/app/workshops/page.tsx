@@ -29,37 +29,48 @@ export default function Page() {
           className="border-l-2 border-[#b3122a] bg-white/70 px-5 py-4 text-[clamp(0.98rem,1.15vw,1.08rem)] font-semibold leading-[1.7] text-[#160a0d]"
           data-r
         >
-          Workshop schedule yet to be finalised. The tracks and skills below are confirmed; timings and faculty will be
-          published here once the committee confirms them.
+          Workshop schedule yet to be finalised. The stations below are confirmed; timings and the remaining faculty
+          will be published here once the committee confirms them.
         </p>
 
         <p className="mt-7 max-w-2xl text-[clamp(1rem,1.2vw,1.12rem)] leading-[1.8] text-muted-foreground" data-r>
           {dayZero.body}
         </p>
 
-        <h2
-          className="mt-[clamp(2.5rem,6vh,4rem)] text-[clamp(1.5rem,3.4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.025em]"
-          data-r
-        >
-          The tracks
-        </h2>
-        <ul className="mt-6 list-none border-t border-[var(--hair)] p-0">
-          {workshop.items.map((item, i) => (
-            <li
-              key={item.title}
-              data-r
-              className="group grid grid-cols-[auto_1fr_auto] items-baseline gap-x-[clamp(0.9rem,2.5vw,2.5rem)] border-b border-[var(--hair)] py-[clamp(0.9rem,2.4vh,1.5rem)]"
-            >
-              <span className="font-mono text-[0.74rem] tabular-nums text-gold">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-[clamp(1.02rem,1.7vw,1.35rem)] font-medium transition-colors duration-500 group-hover:text-crimson-lift">
-                {item.title}
-              </span>
-              <span className="u-eyebrow text-faint">{item.tag}</span>
-            </li>
-          ))}
-        </ul>
+        {/* Grouped wet lab / dry lab, as the committee's 24 September 2026 sheet
+            sets them out. `lead` is printed only where a name was supplied. */}
+        {(["Wet lab", "Dry lab"] as const).map((group) => {
+          const items = workshop.items.filter((i) => i.tag === group);
+          if (!items.length) return null;
+          return (
+            <div key={group}>
+              <h2 className="mt-[clamp(2.5rem,6vh,4rem)] u-heading" data-r>
+                {group === "Wet lab" ? "Wet lab" : "Dry lab"} <span className="u-serif">hands-on</span>
+              </h2>
+              <ul className="mt-6 list-none border-t border-[var(--hair)] p-0">
+                {items.map((item, i) => (
+                  <li
+                    key={item.title}
+                    data-r
+                    className="group grid grid-cols-[auto_1fr] items-baseline gap-x-[clamp(0.9rem,2.5vw,2.5rem)] border-b border-[var(--hair)] py-[clamp(0.9rem,2.4vh,1.5rem)]"
+                  >
+                    <span className="font-mono text-[0.74rem] tabular-nums text-gold">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span>
+                      <span className="block text-[clamp(1.02rem,1.7vw,1.35rem)] font-medium transition-colors duration-500 group-hover:text-crimson-lift">
+                        {item.title}
+                      </span>
+                      {"lead" in item && item.lead ? (
+                        <span className="mt-1 block text-[0.92rem] text-muted-foreground">{item.lead}</span>
+                      ) : null}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
 
         <h2
           className="mt-[clamp(2.5rem,6vh,4rem)] text-[clamp(1.5rem,3.4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.025em]"
