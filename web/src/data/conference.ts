@@ -403,14 +403,15 @@ export const creditPoints = {
 } as const;
 
 /**
- * Registration helpline, supplied by the committee on 9 September 2026.
+ * Registration helpline. Number updated by the committee on 28 September 2026
+ * (was 9014772432).
  * This is the number a delegate rings about registration itself — distinct
  * from the secretariat's scientific contacts above.
  */
 export const registrationHelpline = {
   label: "Registration helpline",
   name: "Virinchi",
-  number: "9014772432",
+  number: "9059546296",
 } as const;
 
 /**

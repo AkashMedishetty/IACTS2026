@@ -52,7 +52,7 @@ export const pricingTiers: Record<string, PricingTier> = {
     name: 'Early Bird',
     description: 'Includes complimentary twin-sharing accommodation at the venue',
     startDate: conferenceConfig.payment.tiers.earlyBird?.startDate || '2026-01-01',
-    endDate: conferenceConfig.payment.tiers.earlyBird?.endDate || '2026-09-27',
+    endDate: conferenceConfig.payment.tiers.earlyBird?.endDate || '2026-10-04',
     isActive: true,
     categories: {
       'resident': { key: 'resident', label: 'Resident / Trainee', amount: 3000, currency: 'INR', description: 'Includes free twin-sharing accommodation' },
@@ -66,7 +66,7 @@ export const pricingTiers: Record<string, PricingTier> = {
     id: 'standard',
     name: 'Standard',
     description: 'Standard registration',
-    startDate: conferenceConfig.payment.tiers.regular?.startDate || '2026-09-28',
+    startDate: conferenceConfig.payment.tiers.regular?.startDate || '2026-10-05',
     endDate: conferenceConfig.payment.tiers.regular?.endDate || '2026-10-11',
     isActive: true,
     categories: {

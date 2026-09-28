@@ -49,6 +49,14 @@ function Section({ n, title, children }: { n: string; title: string; children: R
   );
 }
 
+/** "2026-10-04" -> "4 October 2026". Parsed as UTC so the day never shifts. */
+function longDate(iso?: string) {
+  if (!iso) return "";
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+  });
+}
+
 export default function RegisterForm({
   variant = "delegate",
   facultyKey,
@@ -657,7 +665,7 @@ export default function RegisterForm({
           <div className="mb-4 border-l-4 border-[#b3122a] bg-[#f8e9ed] px-5 py-4">
             <p className="font-mono text-[10px] uppercase tracking-[.16em] text-[#b3122a]">Early Bird rate active</p>
             <p className="mt-1 text-[clamp(1rem,1.6vw,1.25rem)] font-black uppercase leading-tight tracking-[-.01em] text-[#160a0d]">
-              Until 27 September 2026
+              Until {longDate(conferenceConfig.payment.tiers.earlyBird?.endDate)}
             </p>
           </div>
         ) : null}

@@ -1,4 +1,5 @@
 import { conference, days, pending, secretariat, venues } from "@/data/conference";
+import { conferenceConfig } from "@/config/conference.config";
 
 /**
  * FAQ.
@@ -14,6 +15,14 @@ import { conference, days, pending, secretariat, venues } from "@/data/conferenc
  * from the open list by itself — nobody has to remember to edit this file. A
  * hand-written list of unknowns would rot the first time a fact landed.
  */
+/** Tier windows are printed from config, never typed into the answer text. */
+function faqDate(iso?: string) {
+  if (!iso) return "the published date";
+  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+  });
+}
+
 const LABELS: Record<string, string> = {
   registrationFees: "What does registration cost?",
   delegateCategories: "Which delegate category do I fall into?",
@@ -54,7 +63,7 @@ export default function Faq() {
     ],
     [
       "Is registration open?",
-      "Yes. Early Bird rates run until 27 September 2026, Standard until 11 October 2026, and Spot registration is available at the venue. Early Bird registrations include complimentary twin-sharing accommodation.",
+      `Yes. Early Bird rates run until ${faqDate(conferenceConfig.payment.tiers.earlyBird?.endDate)}, Standard until ${faqDate(conferenceConfig.payment.tiers.regular?.endDate)}, and Spot registration is available at the venue. Early Bird registrations include complimentary twin-sharing accommodation.`,
     ],
     [
       "What does registration cost?",
