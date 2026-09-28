@@ -371,12 +371,12 @@ export const conferenceConfig: ConferenceConfig = {
       regular: {
         enabled: true,
         startDate: "2026-10-05",
-        endDate: "2026-10-11",
+        endDate: "2026-10-15",
         label: "Standard"
       },
       onsite: {
         enabled: true,
-        startDate: "2026-10-12",
+        startDate: "2026-10-16",
         endDate: "2026-10-25",
         label: "Spot Registration"
       }

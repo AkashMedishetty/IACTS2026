@@ -67,7 +67,7 @@ export const pricingTiers: Record<string, PricingTier> = {
     name: 'Standard',
     description: 'Standard registration',
     startDate: conferenceConfig.payment.tiers.regular?.startDate || '2026-10-05',
-    endDate: conferenceConfig.payment.tiers.regular?.endDate || '2026-10-11',
+    endDate: conferenceConfig.payment.tiers.regular?.endDate || '2026-10-15',
     isActive: true,
     categories: {
       'resident': { key: 'resident', label: 'Resident / Trainee', amount: 5000, currency: 'INR' },
@@ -81,7 +81,7 @@ export const pricingTiers: Record<string, PricingTier> = {
     id: 'spot',
     name: 'Spot Registration',
     description: 'On-site registration at the venue',
-    startDate: conferenceConfig.payment.tiers.onsite?.startDate || '2026-10-12',
+    startDate: conferenceConfig.payment.tiers.onsite?.startDate || '2026-10-16',
     endDate: conferenceConfig.payment.tiers.onsite?.endDate || '2026-10-25',
     isActive: true,
     categories: {

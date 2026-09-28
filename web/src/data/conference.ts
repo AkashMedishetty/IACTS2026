@@ -280,13 +280,17 @@ export const iactsExecutiveCommittee: readonly { name: string; portrait: string;
  * The sheet lists international faculty as "to be confirmed"; Dr. Vitaly A
  * Sorokin was named separately by the organising office on the same day.
  *
- * The last five national names arrived without the "Dr." prefix and, in two
- * cases, without a full name ("Dr. Naresh" and "P V Naresh" may be one person).
- * They are listed as supplied, with capitalisation normalised — nothing is
- * invented and nobody is merged.
+ * The last five national names arrived without the "Dr." prefix; it was added
+ * on the committee's instruction, 28 September 2026. "Dr. Naresh" and
+ * "Dr. P V Naresh" may be one person — both are listed as supplied, since
+ * merging them is the committee's call, not ours.
  */
 export const faculty = {
-  international: ["Dr. Vitaly A Sorokin"],
+  international: [
+    "Dr. Vitaly A Sorokin",
+    "Dr. Paneer Selvam Krishnamoorthy",
+    "Dr. Randolph Wong",
+  ],
   national: [
     "Dr. Alla Gopala Krishna Gokhale",
     "Dr. Anita Bhalla",
@@ -295,8 +299,11 @@ export const faculty = {
     "Dr. Balasubramoniam K R",
     "Dr. Balram Airan",
     "Dr. C S Hiremath",
+    "Dr. Chirag Doshi",
     "Dr. Debasis Das",
     "Dr. Devagourou Velayoudam",
+    "Dr. Devika Krishnakumar",
+    "Dr. Dhaval Naik",
     "Dr. Gopichand Mannam",
     "Dr. Harish Badami",
     "Dr. Lokeshwar Rao Sajja",
@@ -322,11 +329,11 @@ export const faculty = {
     "Dr. Vinayak Shukla",
     "Dr. Vinitha Nair",
     "Dr. Vishal Khante",
-    "Nageshwar Rao",
-    "Sanjeeva Rao",
-    "Satya Sridhar",
-    "Usha Rani",
-    "P V Naresh",
+    "Dr. Nageshwar Rao",
+    "Dr. Sanjeeva Rao",
+    "Dr. Satya Sridhar",
+    "Dr. Usha Rani",
+    "Dr. P V Naresh",
   ],
 } as const;
 
