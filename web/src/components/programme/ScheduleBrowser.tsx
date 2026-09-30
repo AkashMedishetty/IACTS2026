@@ -184,13 +184,19 @@ export default function ScheduleBrowser() {
   const rows = useRows();
   const [query, setQuery] = useState("");
   const [dayFilter, setDayFilter] = useState<string>("all");
+  /* 23 October runs two halls in parallel, plus the Breakthrough Sessions, so
+     the workshop needs its own filter — a delegate is in one hall, not both. */
+  const [streamFilter, setStreamFilter] = useState<string>("all");
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return rows.filter(
-      (r) => (dayFilter === "all" || r.dayId === dayFilter) && (!q || r.haystack.includes(q)),
+      (r) =>
+        (dayFilter === "all" || r.dayId === dayFilter) &&
+        (streamFilter === "all" || (r.dayId === WORKSHOP_ID && r.item.track === streamFilter)) &&
+        (!q || r.haystack.includes(q)),
     );
-  }, [rows, query, dayFilter]);
+  }, [rows, query, dayFilter, streamFilter]);
 
   const groups = useMemo(() => {
     const order = [WORKSHOP_ID, ...scheduleDays.map((d) => d.id)];
@@ -204,6 +210,22 @@ export default function ScheduleBrowser() {
     { id: WORKSHOP_ID, label: `23 Oct · Workshop` },
     ...scheduleDays.map((d) => ({ id: d.id, label: `${d.date.replace(" 2026", "")} · ${d.label}` })),
   ];
+
+  const streams = [
+    { id: "all", label: "Both halls" },
+    ...workshopHalls.map((h) => ({ id: h.hall, label: h.hall })),
+    { id: "Breakthrough", label: "Breakthrough" },
+  ];
+
+  /* Choosing a hall means the workshop day; choosing another day clears it. */
+  function pickStream(id: string) {
+    setStreamFilter(id);
+    if (id !== "all") setDayFilter(WORKSHOP_ID);
+  }
+  function pickDay(id: string) {
+    setDayFilter(id);
+    if (id !== WORKSHOP_ID && id !== "all") setStreamFilter("all");
+  }
 
   return (
     <section id="schedule" className="u-shell py-[clamp(3rem,8vh,6rem)]">
@@ -240,7 +262,7 @@ export default function ScheduleBrowser() {
             <button
               key={t.id}
               type="button"
-              onClick={() => setDayFilter(t.id)}
+              onClick={() => pickDay(t.id)}
               className={`min-h-9 border px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[.14em] transition-colors ${
                 dayFilter === t.id
                   ? "border-[#b3122a] bg-[#b3122a] text-white"
@@ -254,6 +276,26 @@ export default function ScheduleBrowser() {
             {filtered.length} {filtered.length === 1 ? "session" : "sessions"}
           </span>
         </div>
+
+        {dayFilter === "all" || dayFilter === WORKSHOP_ID ? (
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            <span className="font-mono text-[0.62rem] uppercase tracking-[.16em] text-[#9c8a8f]">23 Oct</span>
+            {streams.map((st) => (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => pickStream(st.id)}
+                className={`min-h-9 border px-3 py-1.5 font-mono text-[0.64rem] uppercase tracking-[.14em] transition-colors ${
+                  streamFilter === st.id
+                    ? "border-[#72091a] bg-[#f8e9ed] text-[#72091a]"
+                    : "border-[var(--hair)] bg-white text-[#6a545a] hover:border-[#b3122a] hover:text-[#b3122a]"
+                }`}
+              >
+                {st.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
 
       {groups.length === 0 ? (
