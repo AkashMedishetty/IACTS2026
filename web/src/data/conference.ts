@@ -30,20 +30,18 @@ export const days = [
     stage: "Approach",
     blurb:
       "Hands-on sessions for postgraduate trainees, each with limited capacity.",
-    /* Replaced with the committee's wet-lab / dry-lab breakdown, "Changes -
-       Faculty and workshops", 24 September 2026. Two dry-lab items on that
-       sheet carry a leading "?" (Liva Nova — ECMO and Cell Saver; Abbott —
-       CentriMag and LVAD) and are NOT listed here: a question mark is not a
-       confirmed session. Industry partners named against each station are held
-       back until those credits are agreed. */
+    /* The committee's final sheet, 30 September 2026, runs the workshop in two
+       parallel halls. Full detail — including the Breakthrough Sessions — is on
+       /programme; this is the summary the home page and brochure show. */
     items: [
-      { title: "Applied Anatomy of the Heart", tag: "Wet lab", lead: "Dr. Anil Tendolkar" },
-      { title: "Coronary Anastomosis", tag: "Wet lab" },
-      { title: "Valve Replacement", tag: "Wet lab" },
-      { title: "Proximal Coronary Anastomosis Contest", tag: "Wet lab" },
-      { title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection", tag: "Dry lab" },
-      { title: "Deployment of FET", tag: "Dry lab" },
-      { title: "MICS CABG Planning & Demo Workshop", tag: "Dry lab" },
+      { title: "Applied Anatomy of Heart", tag: "Hall A", lead: "Dr. Anil Tendolkar" },
+      { title: "Coronary Anastomosis", tag: "Hall A" },
+      { title: "Valve Replacement", tag: "Hall A" },
+      { title: "Proximal Coronary Anastomosis Contest", tag: "Hall A" },
+      { title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection", tag: "Hall B" },
+      { title: "Deployment of FET", tag: "Hall B" },
+      { title: "MICS CABG Planning & Demo Workshop Simulator", tag: "Hall B" },
+      { title: "Endoscopic Saphenous Vein and Radial Artery Harvest Simulation", tag: "Hall B" },
     ],
   },
   {

@@ -37,15 +37,15 @@ export default function Page() {
           {dayZero.body}
         </p>
 
-        {/* Grouped wet lab / dry lab, as the committee's 24 September 2026 sheet
-            sets them out. `lead` is printed only where a name was supplied. */}
-        {(["Wet lab", "Dry lab"] as const).map((group) => {
+        {/* Two parallel halls, as the committee's 30 September 2026 sheet sets
+            them out. `lead` is printed only where a name was supplied. */}
+        {(["Hall A", "Hall B"] as const).map((group) => {
           const items = workshop.items.filter((i) => i.tag === group);
           if (!items.length) return null;
           return (
             <div key={group}>
               <h2 className="mt-[clamp(2.5rem,6vh,4rem)] u-heading" data-r>
-                {group === "Wet lab" ? "Wet lab" : "Dry lab"} <span className="u-serif">hands-on</span>
+                {group} <span className="u-serif">hands-on</span>
               </h2>
               <ul className="mt-6 list-none border-t border-[var(--hair)] p-0">
                 {items.map((item, i) => (

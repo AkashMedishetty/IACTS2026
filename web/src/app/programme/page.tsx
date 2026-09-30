@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/site/PageShell";
+import ScheduleBrowser from "@/components/programme/ScheduleBrowser";
 import ProgrammeStructure from "@/components/sections/ProgrammeStructure";
 import Programme from "@/components/sections/Programme";
 import { conference } from "@/data/conference";
@@ -12,6 +13,7 @@ export default function Page() {
       title="Programme"
       lede="A hands-on pre-conference workshop on 23 October at NIMS, followed by two days of scientific sessions on 24 & 25 October at the Dr. MCR HRD Institute Auditorium."
     >
+      <ScheduleBrowser />
       <ProgrammeStructure />
       <Programme />
     </PageShell>
