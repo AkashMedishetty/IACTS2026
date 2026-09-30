@@ -20,8 +20,12 @@
  *    Mutharevula, Nithin → Nitin Kumar Rajput, Smirti → Smriti Ranjan Mohanty,
  *    Dopade → Dhopade, Rajashekar → Rajashekhar, Kutti → Kutty, and the missing
  *    space in "Dr.Vitaly").
- *  - One time reads "3.30 - 3.15pm" (High Tea, day two): the end precedes the
- *    start. It is left exactly as supplied — correcting it would be a guess.
+ *  - One supplied time ran backwards ("3.30 - 3.15pm", High Tea on day two) and
+ *    clashed with the panel that followed. Corrected on the committee's
+ *    instruction, 30 September 2026: High Tea is 3:30 – 3:45 pm and everything
+ *    after it moves 30 minutes later, so day two now closes at 5:10 pm.
+ *  - "Dr. Balasubramanyam" and "Dr. Balasubramoniam K R" are one person; the
+ *    faculty-list spelling is used for both talks, on the same instruction.
  */
 
 export type ScheduleKind = "talk" | "panel" | "break" | "ceremony" | "special";
@@ -105,7 +109,7 @@ const day1: ScheduleDay = {
     { n: 16, time: "3:05 – 3:25 pm", track: "Transplant", speaker: "Dr. Alla Gopala Krishna Gokhale", title: "Heart Transplant in Borderline Recipients", kind: "talk" },
     { n: 17, time: "3:25 – 3:45 pm", track: "Transplant", speaker: "Dr. Dhaval Naik", title: "Starting an LVAD Program", kind: "talk" },
     { time: "3:45 – 4:00 pm", title: "High Tea Break", kind: "break" },
-    { n: 18, time: "4:00 – 4:20 pm", speaker: "Dr. Balasubramanyam", title: "Workflow of Lung Transplant", kind: "talk" },
+    { n: 18, time: "4:00 – 4:20 pm", speaker: "Dr. Balasubramoniam K R", title: "Workflow of Lung Transplant", kind: "talk" },
     { n: 19, time: "4:20 – 4:40 pm", speaker: "Dr. C S Hiremath", title: "Evolution of Homograft Valve Bank in India", kind: "talk" },
     { n: 20, time: "4:40 – 5:00 pm", speaker: "Dr. Bijoy Kutty", title: "Subject To Confirmation", kind: "talk" },
     { n: 21, time: "5:00 – 5:20 pm", speaker: "International Zoom Meeting", title: "Subject To Confirmation", kind: "talk" },
@@ -157,18 +161,18 @@ const day2: ScheduleDay = {
     { n: 39, time: "2:30 – 2:50 pm", track: "Thoracic", speaker: "Dr. Ramprassath", title: "No Robo? — Start an Endoscopic Cardiac Surgery", kind: "talk" },
     { n: 40, time: "2:50 – 3:10 pm", track: "Thoracic", speaker: "Dr. Manjunath Bale", title: "How to Start Robotic Thoracic Surgery Programme", kind: "talk" },
     { n: 41, time: "3:10 – 3:30 pm", track: "Thoracic", speaker: "Dr. Aravind Mutharevula", title: "Building the Future Surgeon: Robotics, Reconstruction, and Beyond", kind: "talk" },
-    { time: "3:30 – 3:15 pm", title: "High Tea Break", kind: "break" },
+    { time: "3:30 – 3:45 pm", title: "High Tea Break", kind: "break" },
     {
       n: 42,
-      time: "3:15 – 3:55 pm",
+      time: "3:45 – 4:25 pm",
       speaker: "Dr. Vishal Khante",
       title: "Panel Discussion — Robotic Cardiac Surgery: Future Gold Standard or Mere Hype?",
       kind: "panel",
       chairpersons: ["Dr. Alla Gopala Krishna Gokhale", "Dr. Nitin Kumar Rajput", "Dr. Nagesh Ayalasomayajula", "Dr. Ritwick Raj Bhuyan"],
     },
-    { n: 43, time: "3:55 – 4:15 pm", speaker: "Dr. Randolph Wong", title: "The Commando Procedure — Video Presentation", kind: "talk" },
-    { time: "4:15 – 4:25 pm", speaker: "TSMC", title: "Medical Ethics / Good Clinical Practice / Lab Practice / Legal Issues", kind: "special" },
-    { time: "4:25 – 4:40 pm", title: "Valedictory", kind: "ceremony" },
+    { n: 43, time: "4:25 – 4:45 pm", speaker: "Dr. Randolph Wong", title: "The Commando Procedure — Video Presentation", kind: "talk" },
+    { time: "4:45 – 4:55 pm", speaker: "TSMC", title: "Medical Ethics / Good Clinical Practice / Lab Practice / Legal Issues", kind: "special" },
+    { time: "4:55 – 5:10 pm", title: "Valedictory", kind: "ceremony" },
   ],
 };
 
