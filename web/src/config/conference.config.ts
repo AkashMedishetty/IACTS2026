@@ -308,7 +308,11 @@ export const conferenceConfig: ConferenceConfig = {
 
     formFields: {
       titles: ['Dr.', 'Prof.', 'Mr.', 'Mrs.', 'Ms.'],
-      designations: ['Consultant', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
+      /* 'Faculty' added 2 October 2026: the admin registration form offers it,
+         and the User schema builds its designation enum from THIS list, so every
+         faculty registration created from the admin panel failed validation
+         with a 500. Anything offered as a designation anywhere must be here. */
+      designations: ['Consultant', 'Faculty', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
       relationshipTypes: ['Spouse', 'Child', 'Parent', 'Friend', 'Colleague', 'Other'],
       paymentMethods: ['bank-transfer', 'online', 'pay-now', 'cash']
     },
