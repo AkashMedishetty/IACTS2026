@@ -31,8 +31,9 @@ export const days = [
     blurb:
       "Hands-on sessions for postgraduate trainees, each with limited capacity.",
     /* The committee's final sheet, 30 September 2026, runs the workshop in two
-       parallel halls. Full detail — including the Breakthrough Sessions — is on
-       /programme; this is the summary the home page and brochure show. */
+       parallel halls. Full detail is on /programme; this is the summary the home
+       page and brochure show. The Breakthrough Sessions moved to 24 October on
+       2 October 2026 and are no longer part of this day. */
     items: [
       { title: "Applied Anatomy of Heart", tag: "Hall A", lead: "Dr. Anil Tendolkar" },
       { title: "Coronary Anastomosis", tag: "Hall A" },

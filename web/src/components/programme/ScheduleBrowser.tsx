@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import {
+  breakthroughDayId,
+  breakthroughNote,
   breakthroughTopics,
   scheduleDays,
   scheduleStatus,
@@ -30,6 +32,9 @@ type Row = {
   dayDate: string;
   venue: string;
   item: ScheduleItem;
+  /** Which parallel strand this belongs to: a workshop hall, the main
+      programme, or the Breakthrough Sessions that run alongside it. */
+  stream: string;
   haystack: string;
 };
 
@@ -54,21 +59,9 @@ function useRows(): Row[] {
           dayDate: days[0].date,
           venue: days[0].venue,
           item: it,
+          stream: hall.hall,
           haystack: [it.title, it.speaker, hall.hall, "workshop"].filter(Boolean).join(" ").toLowerCase(),
         });
-      });
-    });
-
-    breakthroughTopics.forEach((topic, i) => {
-      const it: ScheduleItem = { title: topic, track: "Breakthrough", kind: "special" };
-      rows.push({
-        key: `breakthrough-${i}`,
-        dayId: WORKSHOP_ID,
-        dayLabel: "Pre-conference workshop",
-        dayDate: days[0].date,
-        venue: days[0].venue,
-        item: it,
-        haystack: `${topic} breakthrough session`.toLowerCase(),
       });
     });
 
@@ -81,6 +74,7 @@ function useRows(): Row[] {
           dayDate: day.date,
           venue: day.venue,
           item,
+          stream: "Main programme",
           haystack: [
             item.title,
             item.speaker,
@@ -97,6 +91,22 @@ function useRows(): Row[] {
         });
       });
     });
+
+    const btDay = scheduleDays.find((d) => d.id === breakthroughDayId);
+    if (btDay) {
+      breakthroughTopics.forEach((topic, i) => {
+        rows.push({
+          key: `breakthrough-${i}`,
+          dayId: btDay.id,
+          dayLabel: btDay.label,
+          dayDate: btDay.date,
+          venue: btDay.venue,
+          item: { title: topic, track: "Breakthrough", kind: "special" },
+          stream: "Breakthrough",
+          haystack: `${topic} breakthrough session parallel`.toLowerCase(),
+        });
+      });
+    }
 
     return rows;
   }, []);
@@ -130,9 +140,18 @@ const KIND_LABEL: Record<ScheduleItem["kind"], string> = {
   special: "Session",
 };
 
-function Item({ row, query }: { row: Row; query: string }) {
+function Item({ row, query, bare = false }: { row: Row; query: string; bare?: boolean }) {
   const { item } = row;
   const quiet = item.kind === "break";
+  /* Inside the Breakthrough block the heading already says what these are, and
+     they carry no times, so the time column and the chips are dropped. */
+  if (bare) {
+    return (
+      <li className="border-b border-[var(--hair)] py-2.5 text-[clamp(1rem,1.35vw,1.12rem)] font-semibold leading-snug text-[#160a0d] last:border-b-0">
+        <Mark text={item.title} query={query} />
+      </li>
+    );
+  }
   return (
     <li
       className={`grid grid-cols-1 gap-x-[clamp(1rem,2.5vw,2.5rem)] gap-y-1 border-b border-[var(--hair)] py-[clamp(0.85rem,2vh,1.15rem)] sm:grid-cols-[10.5rem_1fr] ${
@@ -193,7 +212,7 @@ export default function ScheduleBrowser() {
     return rows.filter(
       (r) =>
         (dayFilter === "all" || r.dayId === dayFilter) &&
-        (streamFilter === "all" || (r.dayId === WORKSHOP_ID && r.item.track === streamFilter)) &&
+        (streamFilter === "all" || r.stream === streamFilter) &&
         (!q || r.haystack.includes(q)),
     );
   }, [rows, query, dayFilter, streamFilter]);
@@ -211,20 +230,23 @@ export default function ScheduleBrowser() {
     ...scheduleDays.map((d) => ({ id: d.id, label: `${d.date.replace(" 2026", "")} · ${d.label}` })),
   ];
 
+  /* The parallel strands, each tied to the day it runs on. */
   const streams = [
-    { id: "all", label: "Both halls" },
-    ...workshopHalls.map((h) => ({ id: h.hall, label: h.hall })),
-    { id: "Breakthrough", label: "Breakthrough" },
+    { id: "all", label: "All streams", day: "all" },
+    ...workshopHalls.map((h) => ({ id: h.hall, label: `${h.hall} · 23 Oct`, day: WORKSHOP_ID })),
+    { id: "Breakthrough", label: "Breakthrough · 24 Oct", day: breakthroughDayId },
   ];
 
-  /* Choosing a hall means the workshop day; choosing another day clears it. */
-  function pickStream(id: string) {
+  /* Choosing a strand selects the day it runs on; choosing a day that has no
+     strands clears the strand. */
+  function pickStream(id: string, day: string) {
     setStreamFilter(id);
-    if (id !== "all") setDayFilter(WORKSHOP_ID);
+    if (id !== "all") setDayFilter(day);
   }
   function pickDay(id: string) {
     setDayFilter(id);
-    if (id !== WORKSHOP_ID && id !== "all") setStreamFilter("all");
+    const current = streams.find((st) => st.id === streamFilter);
+    if (current && current.day !== id) setStreamFilter("all");
   }
 
   return (
@@ -277,25 +299,23 @@ export default function ScheduleBrowser() {
           </span>
         </div>
 
-        {dayFilter === "all" || dayFilter === WORKSHOP_ID ? (
-          <div className="mt-2.5 flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[0.62rem] uppercase tracking-[.16em] text-[#9c8a8f]">23 Oct</span>
-            {streams.map((st) => (
-              <button
-                key={st.id}
-                type="button"
-                onClick={() => pickStream(st.id)}
-                className={`min-h-9 border px-3 py-1.5 font-mono text-[0.64rem] uppercase tracking-[.14em] transition-colors ${
-                  streamFilter === st.id
-                    ? "border-[#72091a] bg-[#f8e9ed] text-[#72091a]"
-                    : "border-[var(--hair)] bg-white text-[#6a545a] hover:border-[#b3122a] hover:text-[#b3122a]"
-                }`}
-              >
-                {st.label}
-              </button>
-            ))}
-          </div>
-        ) : null}
+        <div className="mt-2.5 flex flex-wrap items-center gap-2">
+            <span className="font-mono text-[0.62rem] uppercase tracking-[.16em] text-[#9c8a8f]">Parallel</span>
+          {streams.map((st) => (
+            <button
+              key={st.id}
+              type="button"
+              onClick={() => pickStream(st.id, st.day)}
+              className={`min-h-9 border px-3 py-1.5 font-mono text-[0.64rem] uppercase tracking-[.14em] transition-colors ${
+                streamFilter === st.id
+                  ? "border-[#72091a] bg-[#f8e9ed] text-[#72091a]"
+                  : "border-[var(--hair)] bg-white text-[#6a545a] hover:border-[#b3122a] hover:text-[#b3122a]"
+              }`}
+            >
+              {st.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {groups.length === 0 ? (
@@ -313,11 +333,34 @@ export default function ScheduleBrowser() {
                 </h3>
                 <p className="m-0 font-mono text-[0.68rem] uppercase tracking-[.14em] text-[#6a545a]">{first.venue}</p>
               </div>
-              <ul className="m-0 list-none p-0">
-                {g.rows.map((r) => (
-                  <Item key={r.key} row={r} query={query} />
-                ))}
-              </ul>
+              {g.rows.some((r) => r.stream !== "Breakthrough") ? (
+                <ul className="m-0 list-none p-0">
+                  {g.rows
+                    .filter((r) => r.stream !== "Breakthrough")
+                    .map((r) => (
+                      <Item key={r.key} row={r} query={query} />
+                    ))}
+                </ul>
+              ) : null}
+
+              {/* The Breakthrough Sessions are not a slot in the running order:
+                  they run alongside the main programme all day, so they get
+                  their own heading at the end of the day rather than a time. */}
+              {g.rows.some((r) => r.stream === "Breakthrough") ? (
+                <div className="mt-[clamp(1.75rem,4vh,2.5rem)] border-l-2 border-[#b3122a] bg-[#fdf6f8]/70 p-[clamp(1rem,2.5vw,1.75rem)]">
+                  <h4 className="m-0 text-[clamp(1.05rem,1.9vw,1.35rem)] font-extrabold tracking-[-0.015em] text-[#160a0d]">
+                    Breakthrough Sessions
+                  </h4>
+                  <p className="m-0 mt-1.5 text-[0.95rem] leading-[1.6] text-[#72091a]">{breakthroughNote}</p>
+                  <ul className="m-0 mt-3 list-none p-0">
+                    {g.rows
+                      .filter((r) => r.stream === "Breakthrough")
+                      .map((r) => (
+                        <Item key={r.key} row={r} query={query} bare />
+                      ))}
+                  </ul>
+                </div>
+              ) : null}
             </div>
           );
         })

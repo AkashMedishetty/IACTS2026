@@ -74,7 +74,14 @@ export const workshopHalls = [
   },
 ] as const;
 
-/** Breakthrough Sessions, now named by the committee. */
+/**
+ * Breakthrough Sessions. They sit on 24 October, not on the workshop day, and
+ * run alongside the main scientific programme rather than after it — moved and
+ * labelled on the committee's instruction, 2 October 2026.
+ */
+export const breakthroughNote = "Runs in parallel with the main scientific programme.";
+export const breakthroughDayId = "day-1";
+
 export const breakthroughTopics = [
   "Young Surgeon's Forum",
   "Women in Cardiothoracic Surgery",
