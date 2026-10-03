@@ -49,8 +49,9 @@ export function validateRegistration(input: RegistrationInput): string[] {
   if (!p.firstName?.trim()) e.push('First name is required')
   else if (!NAME_RE.test(p.firstName.trim())) e.push('First name should contain letters only')
 
-  if (!p.lastName?.trim()) e.push('Last name is required')
-  else if (!NAME_RE.test(p.lastName.trim())) e.push('Last name should contain letters only')
+  // Last name is optional (single-name delegates); checked only when given.
+  if (p.lastName?.trim() && !NAME_RE.test(p.lastName.trim()))
+    e.push('Last name should contain letters only')
 
   if (!p.phone?.trim()) e.push('Phone number is required')
   else if (!PHONE_RE.test(normalisePhone(p.phone))) e.push('Enter a valid 10-digit Indian mobile number')

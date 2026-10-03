@@ -138,9 +138,7 @@ export function ProfileForm() {
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required"
     }
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required"
-    }
+    // Last name is optional — some delegates use a single name.
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required"
     }

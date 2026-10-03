@@ -323,11 +323,7 @@ export default function RegisterForm({
       : !NAME_RE.test(v.firstName.trim())
         ? "Letters only"
         : "",
-    lastName: !v.lastName?.trim()
-      ? "Last name is required"
-      : !NAME_RE.test(v.lastName.trim())
-        ? "Letters only"
-        : "",
+    lastName: v.lastName?.trim() && !NAME_RE.test(v.lastName.trim()) ? "Letters only" : "",
     designation: !v.designation ? "Designation is required" : "",
     specialization: !v.specialization?.trim()
       ? "Specialization is required"
@@ -460,7 +456,7 @@ export default function RegisterForm({
           <Field label="Title"><select className={inputCls} value={v.title} onChange={(e) => set("title", e.target.value)}>{conferenceConfig.registration.formFields.titles.map((t) => <option key={t}>{t}</option>)}</select></Field>
           <div className="hidden sm:block" />
           <Field label="First name" required error={showErr("firstName")} onBlur={() => touch("firstName")}><input className={inputCls} value={v.firstName || ""} onChange={(e) => set("firstName", e.target.value)} /></Field>
-          <Field label="Last name" required error={showErr("lastName")} onBlur={() => touch("lastName")}><input className={inputCls} value={v.lastName || ""} onChange={(e) => set("lastName", e.target.value)} /></Field>
+          <Field label="Last name" hint="Leave blank if you use a single name." error={showErr("lastName")} onBlur={() => touch("lastName")}><input className={inputCls} value={v.lastName || ""} onChange={(e) => set("lastName", e.target.value)} /></Field>
           <Field label="City"><input className={inputCls} value={v.city || ""} onChange={(e) => set("city", e.target.value)} /></Field>
           <Field label="State"><input className={inputCls} value={v.state || ""} onChange={(e) => set("state", e.target.value)} /></Field>
         </Section>

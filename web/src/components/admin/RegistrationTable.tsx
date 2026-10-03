@@ -704,12 +704,12 @@ export function RegistrationTable() {
         if (value.length < 8) return 'Password must be at least 8 characters'
         return ''
       case 'firstName':
-        if (!value) return 'First name is required'
-        if (value.length < 2) return 'First name must be at least 2 characters'
+        // Trimmed, so spaces alone no longer count as a name.
+        if (!value?.trim()) return 'First name is required'
+        if (value.trim().length < 2) return 'First name must be at least 2 characters'
         return ''
       case 'lastName':
-        if (!value) return 'Last name is required'
-        if (value.length < 2) return 'Last name must be at least 2 characters'
+        // Optional: leave blank for people who use a single name.
         return ''
       case 'phone':
         if (!value) return 'Phone number is required'
@@ -1645,12 +1645,12 @@ export function RegistrationTable() {
             </div>
 
             <div>
-              <Label htmlFor="reg-lastName">Last Name *</Label>
+              <Label htmlFor="reg-lastName">Last Name</Label>
               <Input
                 id="reg-lastName"
                 value={newRegistration.lastName}
                 onChange={(e) => handleFieldChange('lastName', e.target.value)}
-                placeholder="Last name"
+                placeholder="Leave blank for a single name"
                 className={formErrors.lastName ? 'border-red-500' : ''}
               />
               {formErrors.lastName && <p className="text-xs text-red-500 mt-1">{formErrors.lastName}</p>}

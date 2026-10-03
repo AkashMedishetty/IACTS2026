@@ -166,9 +166,14 @@ const UserSchema = new Schema<IUser>({
       required: true,
       trim: true
     },
+    /* Optional. Many people register with one name — the faculty list alone has
+       Dr. Archana, Dr. Naresh and Dr. Ramprassath — and requiring a surname made
+       the admin enter spaces to get past the form, which the server then trimmed
+       to nothing and rejected with a 500 (3 October 2026). */
     lastName: {
       type: String,
-      required: true,
+      required: false,
+      default: '',
       trim: true
     },
     phone: {

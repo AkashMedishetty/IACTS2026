@@ -350,6 +350,15 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error("Create registration error:", error)
+    // A schema validation failure is bad input, not a server fault: say which
+    // field is wrong instead of a bare 500 the admin cannot act on.
+    if ((error as any)?.name === 'ValidationError') {
+      const fields = Object.values((error as any).errors || {}).map((e: any) => e.message)
+      return NextResponse.json(
+        { success: false, message: fields.join(' ') || 'Some details are invalid.' },
+        { status: 400 }
+      )
+    }
     return NextResponse.json(
       { success: false, message: "Internal server error" },
       { status: 500 }
