@@ -61,12 +61,7 @@ export function sanitizeAccommodation(
   const cfg = conferenceConfig.accommodation
   const none: AccommodationRecord = { required: false, nights: 0, totalAmount: 0 }
 
-  if (!cfg?.enabled || !input?.required) return none
-
-  // Accommodation is offered only to the configured tiers (Early Bird).
-  if (cfg.availableForTiers?.length && !cfg.availableForTiers.includes(String(opts.tierKey))) {
-    return none
-  }
+  if (!accommodationAvailableFor(opts.tierKey) || !input?.required) return none
 
   const { from, to } = accommodationWindow()
   const checkIn = clampDay(input.checkIn, from, to) ?? from

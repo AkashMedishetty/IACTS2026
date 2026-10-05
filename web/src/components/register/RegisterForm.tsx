@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { conferenceConfig } from "@/config/conference.config";
+import { accommodationAvailableFor } from "@/lib/accommodation";
 import { FACULTY_CATEGORY_KEY } from "@/lib/facultyRegistration";
 import { computeRegistrationAmount, getCurrentTierKey, tierLabel, gstBreakdown } from "@/lib/registration";
 import { Arrow } from "@/components/site/SiteHeader";
@@ -69,7 +70,7 @@ export default function RegisterForm({
   const tierKey = useMemo(() => getCurrentTierKey(), []);
   const tier = tierLabel(tierKey);
   const acc = conferenceConfig.accommodation;
-  const accommodationOffered = acc.enabled && acc.availableForTiers.includes(tierKey);
+  const accommodationOffered = accommodationAvailableFor(tierKey);
   const complimentaryStay = acc.complimentaryForTiers.includes(tierKey);
 
   const categories = conferenceConfig.registration.categories.filter(

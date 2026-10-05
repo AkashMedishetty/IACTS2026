@@ -524,7 +524,7 @@ export const conferenceConfig: ConferenceConfig = {
     checkOutBy: "2026-10-26",
     roomTypes: ["sharing", "single"],
     defaultRoomType: "sharing",
-    availableForTiers: ["earlyBird"],
+    availableForTiers: ["earlyBird", "regular"],
     complimentaryForTiers: ["earlyBird"],
     complimentaryRoomType: "sharing",
     /** Single occupancy is chargeable per night, even for tiers whose

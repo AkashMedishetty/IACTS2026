@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import SiteHeader from "@/components/site/SiteHeader";
 import RegisterForm from "@/components/register/RegisterForm";
 import Footer from "@/components/sections/Footer";
 import { conference, creditPoints } from "@/data/conference";
-import { getCurrentTierKey, tierLabel } from "@/lib/registration";
-import { conferenceConfig } from "@/config/conference.config";
 
 export const metadata: Metadata = {
   title: `Register — ${conference.name}`,
   description: `Delegate registration for ${conference.name}, ${conference.dates.label}, ${conference.city}.`,
 };
 
-export default function RegisterPage() {
-  const tier = tierLabel(getCurrentTierKey());
-  const window = conferenceConfig.payment.tiers[getCurrentTierKey()];
+export default async function RegisterPage() {
+  // Resolve the form's date-sensitive tier per request, not at build time.
+  await connection();
 
   return (
     <div className="conference-site relative isolate min-h-svh">
@@ -31,9 +30,6 @@ export default function RegisterPage() {
             </h1>
             <p className="mt-4 max-w-[54ch] text-[15px] leading-[1.7] text-[#614d53]">
               {conference.name} — {conference.organisedBy}. Complete the form below to reserve your place.
-            </p>
-            <p className="mt-5 inline-flex items-center gap-2 border-l-4 border-[#b3122a] bg-[#f8e9ed] px-5 py-3 text-[clamp(1rem,1.8vw,1.35rem)] font-black uppercase tracking-[-.01em] text-[#b3122a]">
-              {tier} rate active{window?.endDate ? ` · until ${window.endDate.split("-").reverse().join("/")}` : ""}
             </p>
             {/* Applied for, not granted — keep the wording conditional. */}
             <p className="mt-5 max-w-[62ch] text-[15px] leading-[1.7] text-[#614d53]">
