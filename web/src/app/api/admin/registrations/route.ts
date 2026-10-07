@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { SETTLED_STATUSES, sendConfirmationWithQR } from '@/lib/email/confirmation'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 import connectDB from "@/lib/mongodb"
@@ -339,8 +340,17 @@ export async function POST(request: NextRequest) {
       // Don't fail the registration if email fails
     }
 
+    // Created already paid (complimentary, sponsored, or settled at the desk):
+    // there will be no later "marked paid" change to trigger the QR pass, so
+    // send it now.
+    const confirmation = SETTLED_STATUSES.includes(user.registration.status)
+      ? await sendConfirmationWithQR(user)
+      : { sent: false, error: null }
+
     return NextResponse.json({
       success: true,
+      paymentEmailSent: confirmation.sent,
+      paymentEmailError: confirmation.error,
       message: "Registration created successfully",
       data: {
         ...user.toObject(),

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { sendConfirmationWithQR } from '@/lib/email/confirmation'
 import { GATED_FREE_CATEGORIES, isValidFacultyKey } from '@/lib/facultyRegistration'
 import { findDelegateByPhone } from '@/lib/duplicatePhone'
 import { registrationHelpline } from '@/data/conference'
@@ -595,6 +596,16 @@ export async function POST(request: NextRequest) {
       }
     } else {
       console.log('ℹ️ Skipping confirmation email - will send after payment confirmation')
+    }
+
+    // Faculty are confirmed on submission with nothing to pay, so their QR
+    // entry pass goes out now — no admin will ever "mark them paid".
+    if (isFacultyRegistration) {
+      const confirmation = await sendConfirmationWithQR(newUser)
+      if (!confirmation.sent && confirmation.error) {
+        emailDelivered = false
+        emailFailureReason = confirmation.error
+      }
     }
 
     const elapsed = Date.now() - startTime
