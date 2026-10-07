@@ -223,7 +223,9 @@ export interface ConferenceConfig {
     /** Early Bird delegates receive complimentary twin-sharing at the venue. */
     complimentaryForTiers: string[]
     complimentaryRoomType: string
-    singleRoomPerNight: number
+    /** INR per night, by fee tier, then room type. A tier with no entry here
+     *  is not offered accommodation — a missing rate must never mean free. */
+    ratesPerNight: Record<string, Record<string, number>>
     note: string
   }
 
@@ -527,9 +529,14 @@ export const conferenceConfig: ConferenceConfig = {
     availableForTiers: ["earlyBird", "regular"],
     complimentaryForTiers: ["earlyBird"],
     complimentaryRoomType: "sharing",
-    /** Single occupancy is chargeable per night, even for tiers whose
-     *  twin-sharing is complimentary. */
-    singleRoomPerNight: 1000,
+    /* Per night. Early Bird: twin sharing complimentary, single a ₹1,000
+       supplement. Standard: ₹2,000 twin sharing, ₹3,000 single — supplied by
+       the committee on 7 October 2026. This table is the ONLY place room rates
+       live; the form, the server, the fee calculator and invoices read it. */
+    ratesPerNight: {
+      earlyBird: { sharing: 0, single: 1000 },
+      regular: { sharing: 2000, single: 3000 },
+    },
     note: "All Early Bird registrations include complimentary twin-sharing accommodation at the venue."
   },
 

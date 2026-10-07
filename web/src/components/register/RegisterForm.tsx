@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { conferenceConfig } from "@/config/conference.config";
-import { accommodationAvailableFor } from "@/lib/accommodation";
+import { accommodationAvailableFor, accommodationRate } from "@/lib/accommodation";
 import { FACULTY_CATEGORY_KEY } from "@/lib/facultyRegistration";
 import { computeRegistrationAmount, getCurrentTierKey, tierLabel, gstBreakdown } from "@/lib/registration";
 import { Arrow } from "@/components/site/SiteHeader";
@@ -166,15 +166,15 @@ export default function RegisterForm({
   }
 
   const selectedCategory = conferenceConfig.registration.categories.find((c) => c.key === v.type);
-  const singleRate = acc.singleRoomPerNight || 0;
+  const rateFor = (room: string) => (accommodationOffered ? accommodationRate(tierKey, room) : 0);
+  const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
   const nights = useMemo(() => {
     if (!v.accommodationRequired || !v.checkIn || !v.checkOut) return 0;
     const ms = Date.parse(`${v.checkOut}T00:00:00Z`) - Date.parse(`${v.checkIn}T00:00:00Z`);
     return Math.max(0, Math.round(ms / 86_400_000));
   }, [v.accommodationRequired, v.checkIn, v.checkOut]);
 
-  const roomCharge =
-    v.accommodationRequired && v.roomType !== acc.complimentaryRoomType ? nights * singleRate : 0;
+  const roomCharge = accommodationOffered && v.accommodationRequired ? nights * rateFor(v.roomType) : 0;
 
   const price = useMemo(
     () => computeRegistrationAmount({ categoryKey: v.type }),
@@ -530,7 +530,11 @@ export default function RegisterForm({
                 <input type="checkbox" className="mt-0.5 size-6 shrink-0 accent-[#b3122a] sm:size-5" checked={!!v.accommodationRequired} onChange={(e) => set("accommodationRequired", e.target.checked)} />
                 <span>
                   <span className="block text-[14px] font-semibold text-[#160a0d]">I require accommodation at the venue</span>
-                  <span className="mt-1 block text-[12px] leading-[1.6] text-[#614d53]">{acc.note}</span>
+                  <span className="mt-1 block text-[12px] leading-[1.6] text-[#614d53]">
+                    {complimentaryStay
+                      ? acc.note
+                      : `Twin sharing ${inr(rateFor("sharing"))} and single ${inr(rateFor("single"))} per night, added to your total.`}
+                  </span>
                 </span>
               </label>
             </div>
@@ -542,16 +546,12 @@ export default function RegisterForm({
                 <Field label="Check-out" hint={`Not after ${acc.checkOutBy}`}>
                   <input type="date" className={inputCls} min={acc.checkInFrom} max={acc.checkOutBy} value={v.checkOut} onChange={(e) => set("checkOut", e.target.value)} />
                 </Field>
-                <Field label="Room type" hint={singleRate ? `Single occupancy is ₹${singleRate.toLocaleString("en-IN")} per night extra.` : undefined}>
+                <Field label="Room type" hint="Charged per night of your stay.">
                   <select className={inputCls} value={v.roomType} onChange={(e) => set("roomType", e.target.value)}>
                     {acc.roomTypes.map((r) => (
                       <option key={r} value={r}>
                         {r === "sharing" ? "Twin sharing" : "Single"}
-                        {complimentaryStay && r === acc.complimentaryRoomType
-                          ? " — complimentary"
-                          : r !== acc.complimentaryRoomType && singleRate
-                            ? ` — ₹${singleRate.toLocaleString("en-IN")}/night`
-                            : ""}
+                        {rateFor(r) === 0 && complimentaryStay ? " — complimentary" : ` — ${inr(rateFor(r))}/night`}
                       </option>
                     ))}
                   </select>
@@ -679,7 +679,9 @@ export default function RegisterForm({
           </ul>
           {roomCharge > 0 ? (
             <div className="mt-2 flex items-baseline justify-between gap-3 border-b border-[var(--hair)] pb-2 text-[13px]">
-              <span className="text-[#614d53]">Single room · {nights} night{nights === 1 ? "" : "s"}</span>
+              <span className="text-[#614d53]">
+                {v.roomType === "single" ? "Single room" : "Twin sharing"} · {nights} night{nights === 1 ? "" : "s"}
+              </span>
               <span className="font-semibold tabular-nums text-[#160a0d]">₹{roomCharge.toLocaleString("en-IN")}</span>
             </div>
           ) : null}

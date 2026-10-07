@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { accommodationRate } from '@/lib/accommodation'
+import { getCurrentTierKey } from '@/lib/registration'
 import connectDB from '@/lib/mongodb'
 import Configuration from '@/lib/models/Configuration'
 import Workshop from '@/lib/models/Workshop'
@@ -234,7 +236,9 @@ export async function POST(request: NextRequest) {
       const checkIn = new Date(accommodation.checkIn)
       const checkOut = new Date(accommodation.checkOut)
       accommodationNights = Math.max(0, Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)))
-      const perNight = accommodation.roomType === 'single' ? 10000 : 7500
+      // From the conference rate table for the current tier (was a hardcoded
+      // ₹10,000 / ₹7,500 left over from the system this was ported from).
+      const perNight = accommodationRate(getCurrentTierKey(), accommodation.roomType)
       accommodationFees = accommodationNights * perNight
       accommodationBreakdown = {
         roomType: accommodation.roomType,

@@ -32,8 +32,20 @@ export interface AccommodationRecord {
 export function accommodationAvailableFor(tierKey?: string): boolean {
   const cfg = conferenceConfig.accommodation
   if (!cfg?.enabled) return false
-  if (!cfg.availableForTiers?.length) return true
-  return cfg.availableForTiers.includes(String(tierKey))
+  if (cfg.availableForTiers?.length && !cfg.availableForTiers.includes(String(tierKey))) return false
+  // A tier without a complete rate table is not offered accommodation, so a
+  // missing rate can never quietly price a room at zero.
+  const rates = cfg.ratesPerNight?.[String(tierKey)]
+  return Boolean(rates) && cfg.roomTypes.every((r) => typeof rates[r] === 'number')
+}
+
+/** INR per night for this tier and room type, from the single rate table. */
+export function accommodationRate(tierKey: string | undefined, roomType: string): number {
+  const rate = conferenceConfig.accommodation.ratesPerNight?.[String(tierKey)]?.[roomType]
+  if (typeof rate !== 'number') {
+    throw new Error(`No accommodation rate for tier "${tierKey}", room "${roomType}"`)
+  }
+  return rate
 }
 
 export const accommodationWindow = () => ({
@@ -77,16 +89,10 @@ export function sanitizeAccommodation(
     ? String(input.roomType)
     : cfg.defaultRoomType
 
-  const complimentary = Boolean(
-    opts.tierKey &&
-      cfg.complimentaryForTiers.includes(opts.tierKey) &&
-      roomType === cfg.complimentaryRoomType,
-  )
-
-  // Twin sharing is complimentary for the eligible tiers; single occupancy is
-  // chargeable per night. The amount is computed here, never taken from the client.
-  const perNight = roomType === cfg.complimentaryRoomType ? 0 : (cfg.singleRoomPerNight || 0)
+  // Priced from the rate table for the delegate's tier — never from the client.
+  const perNight = accommodationRate(opts.tierKey, roomType)
   const totalAmount = perNight * nights
+  const complimentary = perNight === 0 && cfg.complimentaryForTiers.includes(String(opts.tierKey))
 
   return { required: true, roomType, checkIn, checkOut, nights, totalAmount, complimentary }
 }

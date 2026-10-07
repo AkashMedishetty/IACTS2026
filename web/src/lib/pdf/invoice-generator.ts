@@ -661,7 +661,8 @@ export class InvoiceGenerator {
     // Add accommodation if present
     if (user.registration?.accommodation?.required) {
       const acc = user.registration.accommodation;
-      const perNight = acc.roomType === 'single' ? 10000 : 7500;
+      // What was actually charged at registration, not a hardcoded rate.
+      const perNight = acc.nights ? Math.round((acc.totalAmount || 0) / acc.nights) : 0;
       invoiceData.accommodation = {
         roomType: acc.roomType || 'single',
         checkIn: acc.checkIn || '',
@@ -780,7 +781,8 @@ export class InvoiceGenerator {
     // Add accommodation if present
     if (user.registration?.accommodation?.required) {
       const acc = user.registration.accommodation;
-      const perNight = acc.roomType === 'single' ? 10000 : 7500;
+      // What was actually charged at registration, not a hardcoded rate.
+      const perNight = acc.nights ? Math.round((acc.totalAmount || 0) / acc.nights) : 0;
       invoiceData.accommodation = {
         roomType: acc.roomType || 'single',
         checkIn: acc.checkIn || '',
