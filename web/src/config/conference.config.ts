@@ -396,7 +396,11 @@ export const conferenceConfig: ConferenceConfig = {
     submissionWindow: {
       enabled: true,
       start: "2026-01-01",
-      end: "2026-10-11"
+      /* Extended to 15 October on the committee's instruction, 11 October
+         2026. Written as the END of that day in India: a bare "2026-10-15"
+         parses as midnight UTC — 5:30 am IST — and closed submissions on the
+         morning of the last day instead of at night. */
+      end: "2026-10-15T23:59:59+05:30"
     },
     /** The scientific committee assigns paper vs poster after review, so the
      *  submitter is never asked to choose a presentation format. */
@@ -412,7 +416,7 @@ export const conferenceConfig: ConferenceConfig = {
       "The abstracts should not have been presented or published in any other conference.",
       "Only the presenting author will be entitled to get a certificate.",
       "Abstracts/case reports submitted will be sent to the scientific committee for review and acceptance.",
-      "Final date for submission is 11 October 2026.",
+      "Final date for submission is 15 October 2026.",
     ],
     maxAbstractsPerUser: 3,
     wordLimit: 500,

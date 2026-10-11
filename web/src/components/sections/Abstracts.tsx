@@ -31,7 +31,8 @@ export default function Abstracts() {
             Last date for submission
           </span>
           <span className="text-[clamp(1.2rem,2.4vw,1.8rem)] font-black tracking-[-.02em] text-[#b3122a]">
-            {deadline.split("-").reverse().join("/")}
+            {/* The deadline carries a time and zone; show only its date. */}
+            {deadline.slice(0, 10).split("-").reverse().join("/")}
           </span>
         </div>
       ) : null}

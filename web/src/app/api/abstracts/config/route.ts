@@ -67,10 +67,10 @@ export async function GET(request: NextRequest) {
      * the compiled config outranks the legacy AbstractsConfig row.
      *
      * Why: the AbstractsConfig record carries 3 Sep - 3 Oct 2026, but the
-     * committee's published rule 10 says "Final date for submission is
-     * 11 October 2026" — and that rule renders on this very page. Trusting the
-     * stored row would have the page contradict itself AND close submissions
-     * eight days early. The 11 Oct date is version-controlled in two places
+     * committee's published rule 10 gives the final date for submission, and
+     * that rule renders on this very page. Trusting the stored row would have
+     * the page contradict itself AND close submissions early. The published
+     * date (now 15 October 2026) is version-controlled in two places
      * (submissionWindow.end and submissionRules), so it is the committee's
      * actual decision; the stored row is leftover from the synthetic
      * `now + 90 days` defaults.
