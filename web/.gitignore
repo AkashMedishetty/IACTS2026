@@ -42,3 +42,6 @@ next-env.d.ts
 
 # keep the env template
 !.env.example
+
+# generated trade brochure page
+/scripts/trade-brochure/out/
