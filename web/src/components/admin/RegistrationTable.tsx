@@ -267,6 +267,7 @@ function typeForDesignation(designation?: string): string {
     case 'PG/Student': return 'resident'
     case 'Faculty': return 'faculty'
     case 'Special Invitee': return 'special-invitee'
+    case 'Organising Committee': return 'organising-committee'
     default: return 'delegate'
   }
 }
@@ -1623,6 +1624,7 @@ export function RegistrationTable() {
                   <SelectItem value="PG/Student">PG/Student</SelectItem>
                   <SelectItem value="Faculty">Faculty</SelectItem>
                   <SelectItem value="Special Invitee">Special Invitee</SelectItem>
+                  <SelectItem value="Organising Committee">Organising Committee</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1753,6 +1755,8 @@ export function RegistrationTable() {
                   ? 'Registered as Faculty. Choose Complimentary below if they pay nothing.'
                   : newRegistration.designation === 'Special Invitee'
                   ? 'Registered as a Special Invitee — their emails and pass say so. Choose Complimentary below if they pay nothing.'
+                  : newRegistration.designation === 'Organising Committee'
+                  ? 'Registered as Organising Committee — their emails and pass say so. Choose Complimentary below if they pay nothing.'
                   : 'Consultants are registered as Delegates'}
               </p>
             </div>

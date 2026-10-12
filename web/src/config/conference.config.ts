@@ -319,7 +319,7 @@ export const conferenceConfig: ConferenceConfig = {
          and the User schema builds its designation enum from THIS list, so every
          faculty registration created from the admin panel failed validation
          with a 500. Anything offered as a designation anywhere must be here. */
-      designations: ['Consultant', 'Faculty', 'Special Invitee', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
+      designations: ['Consultant', 'Faculty', 'Special Invitee', 'Organising Committee', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
       relationshipTypes: ['Spouse', 'Child', 'Parent', 'Friend', 'Colleague', 'Other'],
       paymentMethods: ['bank-transfer', 'online', 'pay-now', 'cash']
     },
@@ -336,6 +336,7 @@ export const conferenceConfig: ConferenceConfig = {
          2026 on the committee's instruction. */
       { key: "faculty", label: "Faculty", adminOnly: true },
       { key: "special-invitee", label: "Special Invitee", adminOnly: true },
+      { key: "organising-committee", label: "Organising Committee", adminOnly: true },
       { key: "delegate", label: "Delegate", adminOnly: true }
     ],
 

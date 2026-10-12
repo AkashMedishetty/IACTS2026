@@ -465,7 +465,8 @@ export default function RegisterForm({
             <select className={inputCls} value={v.designation || ""} onChange={(e) => { set("designation", e.target.value); touch("designation"); }}>
               <option value="">Select…</option>
               {conferenceConfig.registration.formFields.designations
-                .filter((d) => d !== "Special Invitee") /* an admin-panel category, not a public choice */
+                /* admin-panel categories, not public choices */
+                .filter((d) => !["Special Invitee", "Organising Committee"].includes(d))
                 .map((d) => <option key={d}>{d}</option>)}
             </select>
           </Field>
