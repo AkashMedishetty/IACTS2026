@@ -190,3 +190,17 @@ export function gstBreakdown(total: number): GstBreakdown {
   const gst = Math.round(total * rate)
   return { enabled: true, ratePercent: g.ratePercent, inclusive: false, base: total, gst, total: total + gst, label: g.label }
 }
+
+
+/**
+ * The display name for a registration category, from the single category list
+ * in conference.config. Screens used to hard-code names from the system this
+ * was ported from ("Regular", "Student", "International"), so most delegates
+ * saw a blank type. Anything not in the list is shown title-cased.
+ */
+export function categoryLabel(key?: string | null): string {
+  if (!key) return ''
+  const hit = conferenceConfig.registration.categories.find((c) => c.key === key)
+  if (hit) return hit.label
+  return key.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+}

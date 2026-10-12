@@ -30,6 +30,7 @@ import { SponsoredImportDialog } from "./SponsoredImportDialog"
 import { RegistrationDetailsModal } from "./RegistrationDetailsModal"
 import { conferenceConfig, getCategoryLabel } from "@/config/conference.config"
 import { SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
+import { categoryLabel } from "@/lib/registration"
 
 // Theme colors from config
 const theme = conferenceConfig.theme
@@ -260,6 +261,16 @@ function TypeBadge({ type }: { type: string }) {
 }
 
 // Main Component
+/** Admin form: the registration category that follows from a designation. */
+function typeForDesignation(designation?: string): string {
+  switch (designation) {
+    case 'PG/Student': return 'resident'
+    case 'Faculty': return 'faculty'
+    case 'Special Invitee': return 'special-invitee'
+    default: return 'delegate'
+  }
+}
+
 export function RegistrationTable() {
   // State
   const [registrations, setRegistrations] = useState<Registration[]>([])
@@ -1600,7 +1611,7 @@ export function RegistrationTable() {
                 value={newRegistration.designation} 
                 onValueChange={(v) => {
                   // Auto-select registration type based on designation
-                  const regType = v === 'PG/Student' ? 'resident' : v === 'Faculty' ? 'faculty' : 'delegate'
+                  const regType = typeForDesignation(v)
                   setNewRegistration(prev => ({ ...prev, designation: v, registrationType: regType }))
                 }}
               >
@@ -1611,6 +1622,7 @@ export function RegistrationTable() {
                   <SelectItem value="Consultant">Consultant</SelectItem>
                   <SelectItem value="PG/Student">PG/Student</SelectItem>
                   <SelectItem value="Faculty">Faculty</SelectItem>
+                  <SelectItem value="Special Invitee">Special Invitee</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1728,28 +1740,19 @@ export function RegistrationTable() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {newRegistration.designation === 'Faculty' ? (
-                    <SelectItem value="faculty">Faculty (TAS Member rate)</SelectItem>
-                  ) : (
-                    conferenceConfig.registration.categories
-                      .filter(cat => {
-                        // Filter based on designation
-                        if (newRegistration.designation === 'PG/Student') {
-                          return cat.key === 'resident'
-                        }
-                        return cat.key === 'delegate'
-                      })
-                      .map(cat => (
-                        <SelectItem key={cat.key} value={cat.key}>{cat.label}</SelectItem>
-                      ))
-                  )}
+                  {/* The category follows the designation; labels come from config. */}
+                  <SelectItem value={typeForDesignation(newRegistration.designation)}>
+                    {categoryLabel(typeForDesignation(newRegistration.designation))}
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground mt-1">
-                {newRegistration.designation === 'PG/Student' 
-                  ? 'PG/Students are registered as Residents' 
+                {newRegistration.designation === 'PG/Student'
+                  ? 'PG/Students are registered as Residents'
                   : newRegistration.designation === 'Faculty'
-                  ? 'Faculty are charged at the TAS Member rate'
+                  ? 'Registered as Faculty. Choose Complimentary below if they pay nothing.'
+                  : newRegistration.designation === 'Special Invitee'
+                  ? 'Registered as a Special Invitee — their emails and pass say so. Choose Complimentary below if they pay nothing.'
                   : 'Consultants are registered as Delegates'}
               </p>
             </div>

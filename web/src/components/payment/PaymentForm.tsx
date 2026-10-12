@@ -27,6 +27,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { WorkshopSelectionEditor } from "@/components/payment/WorkshopSelectionEditor"
 import { AccompanyingPersonsEditor } from "@/components/payment/AccompanyingPersonsEditor"
 import { conferenceConfig } from "@/config/conference.config"
+import { categoryLabel } from "@/lib/registration"
 
 declare global {
   interface Window {
@@ -385,10 +386,7 @@ export function PaymentForm() {
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Registration Type:</span>
                     <span className="text-sm font-medium">
-                      {userData.registration.type === "regular" && "Regular Delegate"}
-                      {userData.registration.type === "student" && "Student/Resident"}
-                      {userData.registration.type === "international" && "International"}
-                      {userData.registration.type === "faculty" && "Faculty Member"}
+                      {categoryLabel(userData.registration.type)}
                     </span>
                   </div>
                   

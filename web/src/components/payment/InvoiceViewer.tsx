@@ -19,6 +19,7 @@ import {
 } from "lucide-react"
 import { useToast } from "../ui/use-toast"
 import { conferenceConfig } from "../../config/conference.config"
+import { categoryLabel } from "@/lib/registration"
 
 interface InvoiceData {
   _id: string
@@ -159,13 +160,7 @@ export function InvoiceViewer({ invoiceData, onDownload }: InvoiceViewerProps) {
   }
 
   const getRegistrationTypeLabel = (type: string) => {
-    switch (type) {
-      case "regular": return "Regular Delegate"
-      case "student": return "Student/Resident"
-      case "international": return "International Delegate"
-      case "faculty": return "Faculty Member"
-      default: return type.charAt(0).toUpperCase() + type.slice(1)
-    }
+    return categoryLabel(type)
   }
 
   return (

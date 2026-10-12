@@ -85,6 +85,11 @@ export interface ConferenceConfig {
       description?: string
       requiresMembership?: boolean
       membershipField?: string
+      /** Created from the admin panel (or the faculty link) only. Hidden from
+       *  the public form, and refused by the public API without the faculty
+       *  key — an admin-only category has no public price, so it must never be
+       *  self-selectable. */
+      adminOnly?: boolean
     }[]
     
     // Workshop Configuration
@@ -314,7 +319,7 @@ export const conferenceConfig: ConferenceConfig = {
          and the User schema builds its designation enum from THIS list, so every
          faculty registration created from the admin panel failed validation
          with a 500. Anything offered as a designation anywhere must be here. */
-      designations: ['Consultant', 'Faculty', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
+      designations: ['Consultant', 'Faculty', 'Special Invitee', 'Senior Resident', 'Junior Resident', 'PG/Student', 'Other'],
       relationshipTypes: ['Spouse', 'Child', 'Parent', 'Friend', 'Colleague', 'Other'],
       paymentMethods: ['bank-transfer', 'online', 'pay-now', 'cash']
     },
@@ -323,8 +328,15 @@ export const conferenceConfig: ConferenceConfig = {
       { key: "resident", label: "Resident / Trainee" },
       { key: "iacts-member", label: "IACTS Member" },
       { key: "non-member", label: "Non-Member" },
-      { key: "complimentary", label: "Complimentary Registration" },
-      { key: "sponsored", label: "Sponsored Registration" }
+      { key: "complimentary", label: "Complimentary Registration", adminOnly: true },
+      { key: "sponsored", label: "Sponsored Registration", adminOnly: true },
+      /* Admin-panel categories. "faculty" and "delegate" were already in use on
+         existing records but were missing here, so emails, filters and
+         dashboards could not label them. "special-invitee" added 12 October
+         2026 on the committee's instruction. */
+      { key: "faculty", label: "Faculty", adminOnly: true },
+      { key: "special-invitee", label: "Special Invitee", adminOnly: true },
+      { key: "delegate", label: "Delegate", adminOnly: true }
     ],
 
     workshopsEnabled: true,

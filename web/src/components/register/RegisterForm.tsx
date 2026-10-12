@@ -73,9 +73,7 @@ export default function RegisterForm({
   const accommodationOffered = accommodationAvailableFor(tierKey);
   const complimentaryStay = acc.complimentaryForTiers.includes(tierKey);
 
-  const categories = conferenceConfig.registration.categories.filter(
-    (c) => !["complimentary", "sponsored"].includes(c.key),
-  );
+  const categories = conferenceConfig.registration.categories.filter((c) => !c.adminOnly);
 
   const [v, setV] = useState<Values>({
     title: conferenceConfig.registration.formFields.titles[0],
@@ -466,7 +464,9 @@ export default function RegisterForm({
           <Field label="Designation" required error={showErr("designation")} onBlur={() => touch("designation")}>
             <select className={inputCls} value={v.designation || ""} onChange={(e) => { set("designation", e.target.value); touch("designation"); }}>
               <option value="">Select…</option>
-              {conferenceConfig.registration.formFields.designations.map((d) => <option key={d}>{d}</option>)}
+              {conferenceConfig.registration.formFields.designations
+                .filter((d) => d !== "Special Invitee") /* an admin-panel category, not a public choice */
+                .map((d) => <option key={d}>{d}</option>)}
             </select>
           </Field>
           <Field label="Specialization" required error={showErr("specialization")} onBlur={() => touch("specialization")}>

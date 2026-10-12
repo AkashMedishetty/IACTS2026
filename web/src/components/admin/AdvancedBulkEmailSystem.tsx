@@ -679,10 +679,9 @@ export function AdvancedBulkEmailSystem() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="regular">Regular</SelectItem>
-                    <SelectItem value="student">Student</SelectItem>
-                    <SelectItem value="faculty">Faculty</SelectItem>
-                    <SelectItem value="international">International</SelectItem>
+                    {conferenceConfig.registration.categories.map((c) => (
+                      <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

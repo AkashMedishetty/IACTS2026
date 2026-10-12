@@ -29,6 +29,7 @@ import {
   AlertTriangle
 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
+import { categoryLabel } from "@/lib/registration"
 
 interface AccompanyingPerson {
   name: string
@@ -311,10 +312,7 @@ export function RegistrationCard({ userData, onUpdate }: RegistrationCardProps) 
                 <div className="flex justify-between">
                   <span className="text-gray-600">Type:</span>
                   <span>
-                    {userData.registration.type === "regular" && "Regular Delegate"}
-                    {userData.registration.type === "student" && "Student/Resident"}
-                    {userData.registration.type === "international" && "International"}
-                    {userData.registration.type === "faculty" && "Faculty Member"}
+                    {categoryLabel(userData.registration.type)}
                   </span>
                 </div>
                 <div className="flex justify-between">

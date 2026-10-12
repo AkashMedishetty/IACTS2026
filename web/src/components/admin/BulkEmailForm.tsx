@@ -26,6 +26,7 @@ import {
 import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { conferenceConfig } from "@/config/conference.config"
+import { categoryLabel } from "@/lib/registration"
 
 interface Recipient {
   _id: string
@@ -277,13 +278,7 @@ export function BulkEmailForm() {
   }
 
   const getTypeLabel = (type: string) => {
-    switch (type) {
-      case "regular": return "Regular"
-      case "student": return "Student"
-      case "international": return "International"
-      case "faculty": return "Faculty"
-      default: return type.charAt(0).toUpperCase() + type.slice(1)
-    }
+    return categoryLabel(type)
   }
 
   const getStatusColor = (status: string) => {
@@ -420,10 +415,9 @@ export function BulkEmailForm() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="regular">Regular</SelectItem>
-                  <SelectItem value="student">Student</SelectItem>
-                  <SelectItem value="international">International</SelectItem>
-                  <SelectItem value="faculty">Faculty</SelectItem>
+                  {conferenceConfig.registration.categories.map((c) => (
+                    <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
