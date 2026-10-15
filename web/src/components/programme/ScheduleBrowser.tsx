@@ -8,6 +8,7 @@ import {
   scheduleDays,
   scheduleStatus,
   workshopHalls,
+  workshopLunch,
   type ScheduleItem,
 } from "@/data/schedule";
 import { days } from "@/data/conference";
@@ -47,8 +48,9 @@ function useRows(): Row[] {
     workshopHalls.forEach((hall) => {
       hall.items.forEach((item, i) => {
         const it: ScheduleItem = {
+          time: item.time,
           title: item.title,
-          speaker: "speaker" in item ? item.speaker : undefined,
+          speaker: item.faculty.join(", "),
           track: hall.hall,
           kind: "talk",
         };
@@ -60,10 +62,31 @@ function useRows(): Row[] {
           venue: days[0].venue,
           item: it,
           stream: hall.hall,
-          haystack: [it.title, it.speaker, hall.hall, "workshop"].filter(Boolean).join(" ").toLowerCase(),
+          haystack: [it.title, it.speaker, it.time, hall.hall, "workshop"].filter(Boolean).join(" ").toLowerCase(),
         });
       });
     });
+    rows.push({
+      key: "workshop-lunch",
+      dayId: WORKSHOP_ID,
+      dayLabel: "Pre-conference workshop",
+      dayDate: days[0].date,
+      venue: days[0].venue,
+      item: { time: workshopLunch, title: "Lunch", kind: "break" },
+      stream: "Both halls",
+      haystack: `lunch ${workshopLunch} workshop`.toLowerCase(),
+    });
+    /* The two halls run side by side, so list the day in time order. */
+    const startMin = (t?: string) => {
+      const m = t?.match(/^(\d{1,2}):(\d{2})\s*(am|pm)?/i);
+      if (!m) return 0;
+      let h = +m[1];
+      const ap = (m[3] || t!.match(/(am|pm)/i)?.[1] || "").toLowerCase();
+      if (ap === "pm" && h !== 12) h += 12;
+      return h * 60 + +m[2];
+    };
+    const ws = rows.filter((r) => r.dayId === WORKSHOP_ID).sort((a, b) => startMin(a.item.time) - startMin(b.item.time));
+    rows.splice(0, ws.length, ...ws);
 
     scheduleDays.forEach((day) => {
       day.items.forEach((item, i) => {

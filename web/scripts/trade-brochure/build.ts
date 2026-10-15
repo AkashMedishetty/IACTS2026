@@ -27,7 +27,7 @@ import {
   secretariat,
   venues,
 } from '../../src/data/conference'
-import { scheduleDays, scheduleStatus, workshopHalls, breakthroughTopics, breakthroughNote, type ScheduleItem } from '../../src/data/schedule'
+import { scheduleDays, scheduleStatus, workshopHalls, workshopLunch, breakthroughTopics, breakthroughNote, type ScheduleItem } from '../../src/data/schedule'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(HERE, 'out/index.html')
@@ -153,9 +153,10 @@ const day0 = page(`
     ${workshopHalls.map((h) => `
       <div class="card hall">
         <div class="ct">${h.hall}</div>
-        <ol class="hl">${h.items.map((i) => `<li><span class="it">${esc(i.title)}</span>${'speaker' in i && i.speaker ? `<span class="fac">${esc(i.speaker)}</span>` : ''}</li>`).join('')}</ol>
+        <div class="hl">${h.items.map((i) => `<div class="hrow"><div class="htime">${esc(i.time)}</div><div><div class="it">${esc(i.title)}</div><div class="fac">${esc(i.faculty.join(' · '))}</div></div></div>`).join('')}</div>
       </div>`).join('')}
   </div>
+  <div class="lunch"><b>Lunch</b> · ${esc(workshopLunch)} · both halls</div>
   <div class="panel" style="margin-top:5mm"><div class="pt">Seats</div><div class="pb">Workshop places are limited and allocated with registration; delegates are written to confirm their place.</div></div>
 `)
 
@@ -251,8 +252,12 @@ const EXTRA = `
 .flow .fd{font-size:8.6pt;line-height:1.4;color:#33291f;margin-top:.8mm}
 .dayline{display:flex;align-items:center;gap:3mm}
 .hall .ct{font-family:'Anton';font-size:15pt;color:var(--red);font-weight:400}
-.hl{margin:2mm 0 0 4.5mm}.hl li{font-size:9.6pt;line-height:1.3;padding:1.2mm 0;color:#241d18;font-weight:600}
-.hl .fac{display:block;font-size:8pt;color:var(--gold);font-weight:600}
+.hl{margin-top:2mm}.hrow{display:flex;gap:2.5mm;padding:1.6mm 0;border-top:.18mm solid var(--line)}
+.hrow:first-child{border-top:0}.htime{flex:0 0 22mm;font-family:'BarlowCondensed';font-weight:600;font-size:8.8pt;color:var(--crimson);padding-top:.2mm}
+.hl .it{font-size:9.4pt;line-height:1.25;color:#241d18;font-weight:600}
+.hl .fac{display:block;font-size:7.9pt;color:var(--gold);font-weight:600;margin-top:.4mm;line-height:1.3}
+.lunch{margin-top:3mm;font-family:'BarlowCondensed';font-weight:600;font-size:10pt;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);text-align:center}
+.lunch b{color:var(--red)}
 .status{font-size:8.4pt;color:var(--crimson);font-weight:600;margin:-.6mm 0 1.2mm}
 .trk{font-family:'BarlowCondensed';font-weight:700;font-size:8.4pt;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:2.4mm 0 .6mm 31mm}
 .rail{margin-top:.6mm}.railline{display:none}

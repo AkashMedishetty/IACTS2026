@@ -52,27 +52,36 @@ export interface ScheduleDay {
 export const scheduleStatus =
   "Tentative schedule — sessions, speakers and timings may change.";
 
-/** 23 October, NIMS. Two halls run in parallel. */
+/**
+ * 23 October, NIMS. Two halls run in parallel. Faculty and timings from the
+ * committee's revised "Workshop_Breakthrough_Final" sheet, 15 October 2026.
+ * Names follow the committee list's spelling where it is the same person
+ * (Dr. B. Kaladhar, Dr. P. S. S. Gopal, Dr. P. Sai Surabhi, Dr. D. Praveen);
+ * "Dr. Naresh K L" is as supplied.
+ */
 export const workshopHalls = [
   {
     hall: "Hall A",
     items: [
-      { title: "Applied Anatomy of Heart", speaker: "Dr. Anil Tendolkar" },
-      { title: "Coronary Anastomosis" },
-      { title: "Valve Replacement" },
-      { title: "Proximal Coronary Anastomosis Contest" },
+      { time: "9:00 – 11:00 am", title: "Applied Anatomy of Heart", faculty: ["Dr. Anil Tendolkar"] },
+      { time: "11:00 am – 1:00 pm", title: "Coronary Anastomosis", faculty: ["Dr. P. S. S. Gopal", "Dr. B. Kaladhar"] },
+      { time: "2:00 – 4:00 pm", title: "Valve Replacement", faculty: ["Dr. P. Sai Surabhi", "Dr. D. Praveen"] },
+      { time: "4:00 – 6:00 pm", title: "Proximal Coronary Anastomosis Contest", faculty: ["Dr. Abhijeet M Dashetwar", "Dr. Vinayak Shukla"] },
     ],
   },
   {
     hall: "Hall B",
     items: [
-      { title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection" },
-      { title: "Deployment of FET" },
-      { title: "MICS CABG Planning & Demo Workshop Simulator" },
-      { title: "Endoscopic Saphenous Vein and Radial Artery Harvest Simulation" },
+      { time: "9:00 – 11:00 am", title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection", faculty: ["Dr. Niranjan Hiremath"] },
+      { time: "11:00 am – 1:00 pm", title: "Deployment of FET", faculty: ["Dr. Niranjan Hiremath"] },
+      { time: "2:00 – 3:00 pm", title: "MICS CABG Planning & Demo Workshop Simulator", faculty: ["Dr. Naresh K L", "Dr. Vishal Khante", "Dr. Nagesh Ayalasomayajula", "Dr. Harish Badami"] },
+      { time: "3:00 – 5:00 pm", title: "Endoscopic Saphenous Vein and Radial Artery Harvest Simulation", faculty: ["Dr. Devika Krishnakumar"] },
     ],
   },
 ] as const;
+
+/** Lunch on the workshop day, shared by both halls. */
+export const workshopLunch = "1:00 – 2:00 pm";
 
 /**
  * Breakthrough Sessions. They sit on 24 October, not on the workshop day, and
