@@ -119,7 +119,7 @@ export async function PUT(
 
     // Update registration fields
     if (registration) {
-      const regFields = ['type', 'status', 'paymentType', 'membershipNumber', 'sponsorId', 'sponsorName']
+      const regFields = ['type', 'status', 'paymentType', 'membershipNumber', 'sponsorId', 'sponsorName', 'paymentRemarks']
       for (const field of regFields) {
         if (registration[field] !== undefined && registration[field] !== user.registration?.[field]) {
           updateObj[`registration.${field}`] = registration[field]

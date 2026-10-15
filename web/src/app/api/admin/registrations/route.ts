@@ -94,7 +94,9 @@ export async function GET(request: NextRequest) {
         { 'profile.lastName': { $regex: escapedSearch, $options: 'i' } },
         { 'registration.registrationId': { $regex: escapedSearch, $options: 'i' } },
         { 'profile.phone': { $regex: escapedSearch, $options: 'i' } },
-        { 'profile.institution': { $regex: escapedSearch, $options: 'i' } }
+        { 'profile.institution': { $regex: escapedSearch, $options: 'i' } },
+        // Admin remarks, so "Meril" or "NIMS Resident" finds those registrations.
+        { 'registration.paymentRemarks': { $regex: escapedSearch, $options: 'i' } }
       ]
     }
 

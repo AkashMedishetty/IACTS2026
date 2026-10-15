@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "../ui/select"
 import { SPECIALTY_OPTIONS, specialtyLabel, DEFAULT_SPECIALTY_KEY } from '@/lib/abstracts-taxonomy'
+import { conferenceConfig } from '@/config/conference.config'
 
 interface Registration {
   _id: string
@@ -220,6 +221,7 @@ export function RegistrationDetailsModal({
     paymentStatus: '',
     paymentAmount: 0,
     // Admin
+    remarks: '',
     adminNotes: ''
   })
   
@@ -318,7 +320,9 @@ export function RegistrationDetailsModal({
         paymentMethod: (registration as any).payment?.method || '',
         paymentStatus: (registration as any).payment?.status || '',
         paymentAmount: (registration as any).payment?.amount || 0,
-        // Admin
+        // Admin. Remarks live on registration.paymentRemarks — the field the
+        // Add Registration form has always written to.
+        remarks: (registration.registration as any).paymentRemarks || '',
         adminNotes: ''
       })
     }
@@ -492,7 +496,8 @@ export function RegistrationDetailsModal({
             sponsorId: editForm.paymentType === 'sponsored' ? editForm.sponsorId : null,
             sponsorName: editForm.paymentType === 'sponsored' ? sponsorName : null,
             membershipNumber: editForm.membershipNumber,
-            workshopSelections: editForm.workshopSelections
+            workshopSelections: editForm.workshopSelections,
+            paymentRemarks: editForm.remarks.trim()
           },
           payment: {
             method: editForm.paymentMethod,
@@ -556,6 +561,7 @@ export function RegistrationDetailsModal({
       paymentStatus: (registration as any).payment?.status || '',
       paymentAmount: (registration as any).payment?.amount || 0,
       // Admin
+      remarks: (registration.registration as any).paymentRemarks || '',
       adminNotes: ''
     })
     setIsEditing(false)
@@ -879,11 +885,11 @@ export function RegistrationDetailsModal({
                           <SelectValue placeholder="Select type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="cvsi-member">TAS Member</SelectItem>
-                          <SelectItem value="non-member">Non-Member</SelectItem>
-                          <SelectItem value="resident">Resident</SelectItem>
-                          <SelectItem value="international">International</SelectItem>
-                          <SelectItem value="complimentary">Complimentary</SelectItem>
+                          {/* Every category, from config — the list here was left
+                              over from the system this was ported from. */}
+                          {conferenceConfig.registration.categories.map((c) => (
+                            <SelectItem key={c.key} value={c.key}>{c.label}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -1088,14 +1094,16 @@ export function RegistrationDetailsModal({
                   )}
                 </div>
 
-                {/* Admin Notes */}
+                {/* Remarks — saved on the registration and shown wherever it is
+                    listed. This box used to be "Admin Notes", which went only to
+                    the activity log and never appeared on the record again. */}
                 <div className="space-y-1">
-                  <Label htmlFor="adminNotes" className="text-xs">Admin Notes (will be logged)</Label>
+                  <Label htmlFor="remarks" className="text-xs">Remarks</Label>
                   <Textarea
-                    id="adminNotes"
-                    value={editForm.adminNotes}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, adminNotes: e.target.value }))}
-                    placeholder="Reason for changes..."
+                    id="remarks"
+                    value={editForm.remarks}
+                    onChange={(e) => setEditForm(prev => ({ ...prev, remarks: e.target.value }))}
+                    placeholder="e.g. Meril, NIMS Resident, Subject to abstract submission"
                     rows={2}
                   />
                 </div>
@@ -1206,6 +1214,10 @@ function ProfileTab({ registration, onCopy }: { registration: Registration, onCo
               <span className="font-medium">{registration.profile.designation}</span>
             </div>
           )}
+          <div className="flex justify-between gap-4">
+            <span className="text-muted-foreground">Remarks</span>
+            <span className="text-right font-medium">{(registration.registration as any).paymentRemarks || '—'}</span>
+          </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Location</span>
             <span className="font-medium">

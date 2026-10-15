@@ -1281,6 +1281,11 @@ export function RegistrationTable() {
                                   <div className="font-medium text-slate-900 dark:text-white truncate">
                                     {reg.profile.title} {reg.profile.firstName} {reg.profile.lastName}
                                   </div>
+                                  {(reg.registration as any).paymentRemarks ? (
+                                    <div className="text-xs italic text-amber-700 dark:text-amber-400 truncate" title={(reg.registration as any).paymentRemarks}>
+                                      {(reg.registration as any).paymentRemarks}
+                                    </div>
+                                  ) : null}
                                   <div className="text-sm text-slate-500 dark:text-slate-400 truncate">{reg.email}</div>
                                   <div className="text-xs text-slate-400 dark:text-slate-500 truncate">{reg.profile.institution}</div>
                                 </div>
