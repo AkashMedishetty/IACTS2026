@@ -6,11 +6,10 @@ IACTS TechnoCollege CME 2026 — abstract presentation templates.
 
 Builds two PowerPoint files, both 20 x 11.69 in and identical in layout — only
 the presentation label differs ("Paper Presentation" / "Poster Presentation").
-Modelled on the client's reference slide (a slim identity banner over a title
-and presenter block):
-  slide 1  title slide — banner, presentation title, presenter block
-           (presenter, designation, authors, institution, registration ID)
-  slide 2  content slide — the same banner, a slide-title line, open space
+One slide: a header banner laid out after the client's reference (emblem, the
+event name and theme, the presenter details — presenter, authors, institution,
+registration ID — and a strip naming the presentation type), then the whole
+body open for the presentation, then a footer.
 
 The layout follows the society's earlier conference templates (header band,
 three-column poster body, footer band) but is built here from nothing — no
@@ -145,27 +144,41 @@ def emblem_png():
     return buf, em.size
 
 
-BANNER_H = 1.62   # identity banner
+BANNER_H = 1.8    # identity banner (layout after the client's reference header)
 STRIP_H = 0.46    # crimson strip under it, carrying the presentation type
 TOP = BANNER_H + STRIP_H
+FIELDS_X = 13.55  # presenter details sit at the banner's right
+
+
+def detail(slide, y, label, hint):
+    """One presenter-detail line in the banner: label, then a click-to-edit hint."""
+    text(slide, FIELDS_X, y, W - FIELDS_X - 0.4, 0.36, [[(label + "  ", BODY, 12.5, CRIMSON, True, False),
+                                                        (hint, BODY, 12.5, HINT, False, True)]], anchor=MSO_ANCHOR.MIDDLE)
+    hline(slide, FIELDS_X + 0.06, y + 0.36, W - 0.4, color=GOLD_SOFT, width=0.75)
 
 
 def banner(slide, kind):
-    """Slim identity banner, after the client's reference slide: emblem at left,
-    the event name centred with its theme, and a full-width strip naming the
-    presentation type. Nothing else — no association marks, dates or venue."""
+    """Slim identity banner after the reference header: emblem at left, the event
+    name and theme, presenter details at right, and a full-width strip naming the
+    presentation type. No association marks, dates or venue."""
     rect(slide, 0, 0, W, BANNER_H, fill=IVORY)
     buf, (ew, eh) = emblem_png()
-    em_h = 1.34
+    em_h = 1.45
     slide.shapes.add_picture(buf, Inches(0.45), Inches((BANNER_H - em_h) / 2), height=Inches(em_h))
-    text(slide, 0, 0.16, W, 0.85, [[
-        ("IACTS ", HEAD, 36, CRIMSON, False, False),
-        ("TECHNOCOLLEGE ", HEAD, 36, INK, False, False),
-        ("CME ", HEAD, 36, CRIMSON, False, False),
-        ("2026", HEAD, 36, GOLD, False, False),
+    name_x, name_w = 2.0, FIELDS_X - 2.0 - 0.3   # centred in the space between emblem and details
+    text(slide, name_x, 0.22, name_w, 0.85, [[
+        ("IACTS ", HEAD, 34, CRIMSON, False, False),
+        ("TECHNOCOLLEGE ", HEAD, 34, INK, False, False),
+        ("CME ", HEAD, 34, CRIMSON, False, False),
+        ("2026", HEAD, 34, GOLD, False, False),
     ]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-    text(slide, 0, 0.98, W, 0.45, [[("THE FUTURE IS NOW", BODY, 18, GOLD, True, False)]],
+    text(slide, name_x, 1.05, name_w, 0.45, [[("THE FUTURE IS NOW", BODY, 18, GOLD, True, False)]],
          align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+    vline(slide, FIELDS_X - 0.2, 0.25, BANNER_H - 0.25, color=GOLD_SOFT, width=1)
+    detail(slide, 0.14, "Presenter:", "name of the presenting author")
+    detail(slide, 0.54, "Author(s):", "all authors, in order")
+    detail(slide, 0.94, "Institution:", "institution, city")
+    detail(slide, 1.34, "Registration ID:", "your IACTS TechnoCollege registration ID")
     rect(slide, 0, BANNER_H, W, STRIP_H, fill=CRIMSON)
     text(slide, 0, BANNER_H, W, STRIP_H, [[(f"{kind.upper()} PRESENTATION", HEAD, 17, WHITE, False, False)]],
          align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
@@ -182,37 +195,12 @@ def footer(slide):
     ]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
 
 
-def detail(slide, y, label, hint):
-    """One line of the presenter block: a right-aligned label, then a
-    click-to-edit placeholder — the layout of the reference slide."""
-    text(slide, 2.4, y, 3.6, 0.55, [[(label, BODY, 22, GREY, True, False)]], align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
-    text(slide, 6.15, y, 11.6, 0.55, [[(hint, BODY, 22, HINT, False, True)]], anchor=MSO_ANCHOR.MIDDLE)
-
-
 def template(out: Path, kind: str):
-    """Paper and poster share one layout; only the presentation label differs."""
-    prs, title_slide = new_deck(f"IACTS TechnoCollege CME 2026 — {kind} Presentation Template")
-
-    # 1 — title slide, after the reference: banner, title, presenter block
-    banner(title_slide, kind)
-    text(title_slide, 1.6, 2.75, 16.8, 2.3, [[
-        ("CLICK TO ADD THE TITLE OF YOUR " + kind.upper(), HEAD, 34, INK, False, False),
-    ]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-    hline(title_slide, 7.5, 5.35, 12.5, color=GOLD, width=1.5)
-    detail(title_slide, 5.85, "Presenter :", "Dr. Name of the presenting author")
-    detail(title_slide, 6.5, "Designation :", "e.g. Senior Resident")
-    detail(title_slide, 7.15, "Author(s) :", "All authors, in order")
-    detail(title_slide, 7.8, "Institution :", "Name of the institution, city")
-    detail(title_slide, 8.45, "Registration ID :", "Your IACTS TechnoCollege registration ID")
-    footer(title_slide)
-
-    # 2 — content slide: same banner, a slide title, then open space
-    content = prs.slides.add_slide(prs.slide_layouts[6])
-    banner(content, kind)
-    text(content, 0.55, TOP + 0.2, 18.9, 0.7, [[("Click to add slide title", HEAD, 24, CRIMSON, False, False)]],
-         anchor=MSO_ANCHOR.MIDDLE)
-    hline(content, 0.6, TOP + 0.95, 19.4, color=GOLD_SOFT, width=1)
-    footer(content)
+    """Paper and poster share one layout; only the presentation label differs.
+    One slide: banner, then the whole body left open for the presentation."""
+    prs, s = new_deck(f"IACTS TechnoCollege CME 2026 — {kind} Presentation Template")
+    banner(s, kind)
+    footer(s)
     prs.save(out)
 
 
