@@ -4,14 +4,16 @@ IACTS TechnoCollege CME 2026 — abstract presentation templates.
     python scripts/abstract-templates/build.py <out_dir>
     (needs python-pptx; Pillow is used by python-pptx for the logo)
 
-Builds two PowerPoint files, both 20 x 11.69 in:
-  IACTS_TechnoCollege_2026_Paper_Template.pptx   framed slide for paper/video talks
-  IACTS_TechnoCollege_2026_Poster_Template.pptx  e-poster with IMRaD sections
+Builds two PowerPoint files, both 20 x 11.69 in and identical in layout — only
+the presentation label differs ("Paper Presentation" / "Poster Presentation"):
+a full-width header with the emblem, "IACTS TechnoCollege CME 2026", the theme,
+the label, and the presenter details (presenter, authors, institution,
+registration ID); then one open area for the content; then a footer.
 
 The layout follows the society's earlier conference templates (header band,
 three-column poster body, footer band) but is built here from nothing — no
 shape, image or metadata is carried over from any other conference's file.
-Branding is IACTS: the event logo, the association seal, crimson and gold.
+Branding is the event's only: its emblem, its name and theme, crimson and gold.
 """
 import sys
 from pathlib import Path
@@ -24,7 +26,6 @@ from pptx.util import Inches, Pt
 
 ROOT = Path(__file__).resolve().parents[2]  # web/
 LOGO = ROOT / "public/brand/iacts-technocollege-2026-logo.png"
-SEAL = ROOT / "public/logo/iacts-mark.png"
 
 IVORY = RGBColor(0xF7, 0xF2, 0xEA)
 GOLD = RGBColor(0xA9, 0x79, 0x3A)
@@ -100,34 +101,6 @@ def text(slide, x, y, w, h, runs, align=PP_ALIGN.LEFT, anchor=MSO_ANCHOR.TOP, sp
     return tb
 
 
-def frame(slide, label):
-    """Header band, double gold rule, footer band — shared by both templates."""
-    rect(slide, 0, 0, W, 2.0, fill=IVORY)
-    # event logo (transparent PNG), left
-    logo_h = 1.62
-    slide.shapes.add_picture(str(LOGO), Inches(0.45), Inches(0.19), height=Inches(logo_h))
-    vline(slide, 3.98, 0.35, 1.65)
-    text(slide, 4.2, 0.28, 8.2, 1.5, [
-        [("INDIAN ASSOCIATION OF CARDIOVASCULAR-THORACIC SURGEONS", BODY, 12, GOLD, True, False)],
-        [(label, HEAD, 30, CRIMSON, False, False)],
-        [("Department of CTVS, Nizam’s Institute of Medical Sciences, Hyderabad", BODY, 14, INK, False, True)],
-    ], spacing=2)
-    # association seal + dates, right
-    slide.shapes.add_picture(str(SEAL), Inches(19.02), Inches(0.18), height=Inches(0.62))
-    text(slide, 11.4, 0.9, 8.15, 0.5, [[("OCTOBER 23 – 25, 2026", HEAD, 20, CRIMSON, False, False)]], align=PP_ALIGN.RIGHT)
-    text(slide, 11.4, 1.38, 8.15, 0.45, [[("NIMS  ·  Dr. MCR HRD Institute Auditorium, Hyderabad", BODY, 14, INK, False, False)]], align=PP_ALIGN.RIGHT)
-    hline(slide, 0, 2.0, W)
-    hline(slide, 0, 2.04, W)
-    # footer
-    rect(slide, 0, 11.12, W, 0.57, fill=IVORY)
-    hline(slide, 0, 11.12, W)
-    hline(slide, 0, 11.16, W)
-    text(slide, 0, 11.2, W, 0.45, [[
-        ("iactstechnocollegecme2026.com", BODY, 13, CRIMSON, True, False),
-        ("     ·     Indian Association of Cardiovascular-Thoracic Surgeons     ·     IACTS TechnoCollege CME 2026", BODY, 12, GREY, False, True),
-    ]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-
-
 def new_deck(title):
     prs = Presentation()
     prs.slide_width = Inches(W)
@@ -144,73 +117,90 @@ def new_deck(title):
     return prs, prs.slides.add_slide(blank)
 
 
-def section(slide, x, y, w, title):
-    rect(slide, x, y, w, 0.42, fill=CRIMSON)
-    rect(slide, x, y, 0.4, 0.42, fill=GOLD)
-    text(slide, x + 0.4, y, w - 0.4, 0.42, [[(title, HEAD, 15, WHITE, False, False)]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+def emblem_png():
+    """The emblem alone (heart, lungs, ring) — the logo minus its wordmark, which
+    the header now sets as live text at full width. Cut at the thin gold rule
+    that separates the two in the logo."""
+    import io
+    from PIL import Image
+    im = Image.open(LOGO).convert("RGBA")
+    a = im.getchannel("A")
+    w, h = im.size
+    # The emblem ends where the first run of fully transparent columns begins
+    # (between the ring's right tick mark and the gold rule).
+    empty = [all(a.getpixel((x, y)) < 16 for y in range(0, h, 2)) for x in range(w)]
+    cut, run = None, 0
+    for x in range(int(w * 0.2), int(w * 0.7)):
+        run = run + 1 if empty[x] else 0
+        if run >= 4:
+            cut = x - run + 1
+            break
+    em = im.crop((0, 0, cut or int(w * 0.45), h))
+    em = em.crop(em.getbbox())
+    buf = io.BytesIO()
+    em.save(buf, "PNG")
+    buf.seek(0)
+    return buf, em.size
 
 
-def hint(slide, x, y, w, h, paras):
-    text(slide, x, y, w, h, [[(p, BODY, 12, GREY, False, True)] for p in paras], spacing=8)
+HEADER_H = 2.35
 
 
-def paper(out: Path):
-    prs, s = new_deck("IACTS TechnoCollege CME 2026 — Paper Presentation Template")
-    frame(s, "Scientific Paper Presentation")
-    prs.save(out)
+def field(slide, x, y, w, label, hint):
+    """One presenter-detail line: label, then a click-to-edit placeholder."""
+    text(slide, x, y, w, 0.42, [[(label + "  ", BODY, 14, CRIMSON, True, False), (hint, BODY, 14, HINT, False, True)]],
+         anchor=MSO_ANCHOR.MIDDLE)
+    hline(slide, x + 0.06, y + 0.42, x + w, color=GOLD_SOFT, width=1)
 
 
-def poster(out: Path):
-    prs, s = new_deck("IACTS TechnoCollege CME 2026 — E-Poster Template")
-    frame(s, "E-Poster Presentation")
-    text(s, 0.55, 2.09, 18.9, 0.42, [[
-        ("POSTER TITLE:  ", HEAD, 17, CRIMSON, False, False),
-        ("double-click to add your abstract / poster title", BODY, 17, HINT, False, True),
+def template(out: Path, kind: str):
+    """Paper and poster share one layout; only the presentation label differs."""
+    prs, s = new_deck(f"IACTS TechnoCollege CME 2026 — {kind} Presentation Template")
+    # header band, full width
+    rect(s, 0, 0, W, HEADER_H, fill=IVORY)
+    buf, (ew, eh) = emblem_png()
+    em_h = 1.95
+    s.shapes.add_picture(buf, Inches(0.4), Inches((HEADER_H - em_h) / 2), height=Inches(em_h))
+    em_w = em_h * ew / eh
+    x0 = 0.4 + em_w + 0.25
+    vline(s, x0, 0.35, HEADER_H - 0.35)
+    tx = x0 + 0.22
+    text(s, tx, 0.22, 9.3, 0.8, [[
+        ("IACTS ", HEAD, 29, CRIMSON, False, False),
+        ("TECHNOCOLLEGE ", HEAD, 29, INK, False, False),
+        ("CME ", HEAD, 29, CRIMSON, False, False),
+        ("2026", HEAD, 29, GOLD, False, False),
     ]], anchor=MSO_ANCHOR.MIDDLE)
-    text(s, 0.55, 2.5, 18.9, 0.3, [[
-        ("Presenter: ", BODY, 12.5, DEEP, True, False), ("________________      ", BODY, 12.5, HINT, False, False),
-        ("Registration ID: ", BODY, 12.5, DEEP, True, False), ("____________      ", BODY, 12.5, HINT, False, False),
-        ("Abstract ID: ", BODY, 12.5, DEEP, True, False), ("________________      ", BODY, 12.5, HINT, False, False),
-        ("Institution: ", BODY, 12.5, DEEP, True, False), ("________________________", BODY, 12.5, HINT, False, False),
-    ]])
-    hline(s, 0, 2.85, W)
-    vline(s, 6.77, 2.98, 11.02, color=GOLD_SOFT, width=1)
-    vline(s, 13.23, 2.98, 11.02, color=GOLD_SOFT, width=1)
-
-    # column 1
-    section(s, 0.5, 2.98, 6.07, "INTRODUCTION")
-    hint(s, 0.56, 3.5, 5.95, 1.65, ["Provide the background and rationale. Describe the clinical problem, the relevant anatomy or physiology, and the gap your study or case addresses."])
-    section(s, 0.5, 5.35, 6.07, "AIM & OBJECTIVES")
-    hint(s, 0.56, 5.87, 5.95, 0.95, ["State the primary aim and any secondary objectives or hypotheses of the work in one or two lines."])
-    section(s, 0.5, 7.05, 6.07, "MATERIALS & METHODS")
-    hint(s, 0.56, 7.57, 5.95, 3.3, [
-        "Outline study design, setting and time-frame; patient or sample selection with inclusion and exclusion criteria; the surgical technique or intervention; outcome measures; and statistical analysis.",
-        "For a case report, describe the presentation, examination findings and investigations performed.",
-    ])
-    # column 2
-    section(s, 6.97, 2.98, 6.07, "RESULTS")
-    hint(s, 7.03, 3.5, 5.95, 1.45, ["Report the key findings with numbers, outcome measures and any statistics (p-values, confidence intervals). Refer to the figure(s) below."])
-    rect(s, 6.97, 5.15, 6.07, 5.05, fill=PAPER, line=GOLD, dash=True)
-    text(s, 6.97, 7.05, 6.07, 0.7, [[("+", BODY, 44, GOLD, True, False)]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
-    text(s, 6.97, 7.7, 6.07, 0.4, [[("Insert figure / clinical image here", BODY, 13, HINT, False, False)]], align=PP_ALIGN.CENTER)
-    text(s, 7.03, 10.24, 5.95, 0.4, [[("Figure. ", BODY, 10.5, DEEP, True, False), ("Add a short caption describing the image.", BODY, 10.5, HINT, False, True)]])
-    # column 3
-    section(s, 13.43, 2.98, 6.07, "DISCUSSION")
-    hint(s, 13.49, 3.5, 5.95, 3.0, [
-        "Interpret your findings and set them against the existing literature. Explain the mechanism or reasoning, highlight the clinical relevance, and acknowledge the strengths and limitations of the work.",
-        "(About 180–220 words.)",
-    ])
-    section(s, 13.43, 6.7, 6.07, "CONCLUSION")
-    hint(s, 13.49, 7.22, 5.95, 1.8, ["State the single most important take-home message and its clinical implication in two or three sentences."])
-    section(s, 13.43, 9.2, 6.07, "REFERENCES")
-    hint(s, 13.49, 9.72, 5.95, 1.2, ["1.  Author AB, Author CD, et al. Title of the article. Journal. Year;Vol(Issue):pages.", "2.  …"])
+    text(s, tx, 0.98, 9.3, 0.42, [[("THE FUTURE IS NOW", BODY, 17, GOLD, True, False)]], anchor=MSO_ANCHOR.MIDDLE)
+    badge = rect(s, tx + 0.06, 1.52, 4.1, 0.5, fill=CRIMSON, shape=MSO_SHAPE.ROUNDED_RECTANGLE)
+    badge.adjustments[0] = 0.5
+    text(s, tx + 0.06, 1.52, 4.1, 0.5, [[(f"{kind.upper()} PRESENTATION", HEAD, 15, WHITE, False, False)]],
+         align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+    # presenter details, right of the title
+    fx, fw = 12.25, 7.35
+    vline(s, fx - 0.25, 0.35, HEADER_H - 0.35, color=GOLD_SOFT, width=1)
+    field(s, fx, 0.2, fw, "Presenter:", "click to add the presenting author")
+    field(s, fx, 0.7, fw, "Author(s):", "click to add all authors")
+    field(s, fx, 1.2, fw, "Institution:", "click to add the institution")
+    field(s, fx, 1.7, fw, "Registration ID:", "click to add your IACTS registration ID")
+    hline(s, 0, HEADER_H, W)
+    hline(s, 0, HEADER_H + 0.04, W)
+    # the rest of the slide is one open area for the presentation itself
+    # footer
+    rect(s, 0, 11.12, W, 0.57, fill=IVORY)
+    hline(s, 0, 11.12, W)
+    hline(s, 0, 11.16, W)
+    text(s, 0, 11.2, W, 0.45, [[
+        ("IACTS TechnoCollege CME 2026", BODY, 13, CRIMSON, True, False),
+        ("     ·     iactstechnocollegecme2026.com", BODY, 12, GREY, False, True),
+    ]], align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
     prs.save(out)
 
 
 if __name__ == "__main__":
     out_dir = Path(sys.argv[1] if len(sys.argv) > 1 else ".").expanduser()
     out_dir.mkdir(parents=True, exist_ok=True)
-    paper(out_dir / "IACTS_TechnoCollege_2026_Paper_Template.pptx")
-    poster(out_dir / "IACTS_TechnoCollege_2026_Poster_Template.pptx")
+    template(out_dir / "IACTS_TechnoCollege_2026_Paper_Template.pptx", "Paper")
+    template(out_dir / "IACTS_TechnoCollege_2026_Poster_Template.pptx", "Poster")
     print("wrote", out_dir / "IACTS_TechnoCollege_2026_Paper_Template.pptx")
     print("wrote", out_dir / "IACTS_TechnoCollege_2026_Poster_Template.pptx")
