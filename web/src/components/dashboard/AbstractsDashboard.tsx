@@ -32,6 +32,7 @@ import {
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { conferenceConfig } from '@/config/conference.config'
+import { upload } from '@vercel/blob/client'
 
 // Note: This function is kept for backwards compatibility but feature check is now dynamic
 const isAbstractSubmissionOpenStatic = (): boolean => {
@@ -192,8 +193,10 @@ export function AbstractsDashboard() {
     return progressMap[status as keyof typeof progressMap] || 0
   }
 
+  /* Final submission is open to every submitted abstract — no acceptance step
+     (committee instruction, 19 October 2026). Only a rejected one is excluded. */
   const canSubmitFinal = (abstract: Abstract) => {
-    return abstract.status === 'accepted' && !abstract.final?.submittedAt
+    return Boolean(conferenceConfig.abstracts.finalSubmissionOpen) && abstract.status !== 'rejected' && !abstract.final?.submittedAt
   }
 
   const downloadFile = async (abstractId: string, fileType: 'initial' | 'final') => {
@@ -314,9 +317,10 @@ export function AbstractsDashboard() {
   }
 
   const submitFinalPresentation = async () => {
-    // Check if submission is open (dynamic feature check + static window check)
-    if (!isFeatureEnabled || !isAbstractSubmissionOpenStatic()) {
-      toast.error('Abstract submission is currently closed')
+    // Final submission has its own switch; the first-round abstract window
+    // (closed 15 October) does not apply to it.
+    if (!conferenceConfig.abstracts.finalSubmissionOpen) {
+      toast.error('Final submission is currently closed')
       return
     }
     
@@ -327,14 +331,26 @@ export function AbstractsDashboard() {
 
     setSubmittingFinal(true)
     try {
-      const formData = new FormData()
-      formData.append('abstractId', finalSubmissionAbstract._id)
-      formData.append('file', finalSubmissionFile)
-      formData.append('notes', finalSubmissionNotes)
+      // Straight to Vercel Blob: presentations are larger than a function's
+      // 4.5 MB request limit. The route below then records the upload.
+      toast.info('Uploading your presentation…')
+      const blob = await upload(finalSubmissionFile.name, finalSubmissionFile, {
+        access: 'public',
+        handleUploadUrl: '/api/abstracts/final-submission/upload',
+        clientPayload: JSON.stringify({ abstractId: finalSubmissionAbstract._id }),
+      })
 
       const response = await fetch('/api/abstracts/final-submission', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          abstractId: finalSubmissionAbstract._id,
+          blobUrl: blob.url,
+          originalName: finalSubmissionFile.name,
+          mimeType: finalSubmissionFile.type,
+          fileSizeBytes: finalSubmissionFile.size,
+          notes: finalSubmissionNotes,
+        })
       })
 
       const data = await response.json()
@@ -348,9 +364,9 @@ export function AbstractsDashboard() {
       } else {
         toast.error(data.message || 'Failed to submit final presentation')
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Final submission error:', error)
-      toast.error('Error submitting final presentation')
+      toast.error(error?.message || 'Error submitting final presentation')
     } finally {
       setSubmittingFinal(false)
     }
@@ -592,14 +608,14 @@ export function AbstractsDashboard() {
                         </div>
                       )}
 
-                      {abstract.status === 'accepted' && !abstract.final?.submittedAt && (
+                      {canSubmitFinal(abstract) && (
                         <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                           <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
                             <CheckCircle className="w-4 h-4" />
-                            <span className="font-medium">Abstract Accepted!</span>
+                            <span className="font-medium">Final submission is open</span>
                           </div>
                           <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                            Congratulations! Your abstract has been accepted. You can now submit your final presentation.
+                            Upload your final presentation, prepared on the IACTS TechnoCollege template.
                           </p>
                         </div>
                       )}
@@ -853,12 +869,12 @@ export function AbstractsDashboard() {
 
             {/* Guidelines */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-800 mb-2">ðŸ“‹ Submission Guidelines</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">Submission Guidelines</h4>
               <ul className="text-sm text-blue-700 space-y-1">
-                <li>â€¢ Abstract title should be concise and descriptive</li>
-                <li>â€¢ Select the most appropriate track for your research</li>
-                <li>â€¢ File upload is optional at this stage</li>
-                <li>â€¢ Ensure your file format is PDF or Word</li>
+                <li>• Abstract title should be concise and descriptive</li>
+                <li>• Select the most appropriate track for your research</li>
+                <li>• File upload is optional at this stage</li>
+                <li>• Ensure your file format is PDF or Word</li>
               </ul>
             </div>
 
@@ -878,7 +894,7 @@ export function AbstractsDashboard() {
 
               return (
                 <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-emerald-800 mb-2">ðŸ“¥ Download Template</h4>
+                  <h4 className="font-semibold text-emerald-800 mb-2">Download Template</h4>
                   <p className="text-sm text-emerald-700 mb-3">
                     {submitTrack && trackTemplate 
                       ? `Use the official template for ${trackLabel} submissions.`
@@ -1008,17 +1024,17 @@ export function AbstractsDashboard() {
 
             {/* Guidelines */}
             <div className="bg-[#f0f3f8] border border-[#b0c1db] rounded-lg p-4">
-              <h4 className="font-semibold text-blue-800 mb-2">ðŸ“‹ Submission Guidelines</h4>
+              <h4 className="font-semibold text-blue-800 mb-2">Submission Guidelines</h4>
               {abstractsConfig?.guidelines?.finalSubmission?.instructions ? (
                 <div className="text-sm text-[#160a0d] whitespace-pre-wrap">
                   {abstractsConfig.guidelines.finalSubmission.instructions}
                 </div>
               ) : (
                 <ul className="text-sm text-[#160a0d] space-y-1">
-                  <li>â€¢ Ensure your presentation follows the conference format guidelines</li>
-                  <li>â€¢ Include all necessary references and citations</li>
-                  <li>â€¢ File size should not exceed 50MB</li>
-                  <li>â€¢ Supported formats: PDF, PowerPoint (.ppt, .pptx), Word (.doc, .docx)</li>
+                  <li>• Ensure your presentation follows the conference format guidelines</li>
+                  <li>• Include all necessary references and citations</li>
+                  <li>• File size should not exceed 100 MB</li>
+                  <li>• Supported formats: PDF, PowerPoint (.ppt, .pptx), Word (.doc, .docx)</li>
                 </ul>
               )}
               {abstractsConfig?.guidelines?.finalSubmission?.requirements?.length > 0 && (
@@ -1026,7 +1042,7 @@ export function AbstractsDashboard() {
                   <p className="font-medium text-[#001B3D] mb-1">Requirements:</p>
                   <ul className="text-sm text-[#160a0d] space-y-1">
                     {abstractsConfig.guidelines.finalSubmission.requirements.map((req: string, idx: number) => (
-                      <li key={idx}>â€¢ {req}</li>
+                      <li key={idx}>• {req}</li>
                     ))}
                   </ul>
                 </div>
@@ -1043,11 +1059,29 @@ export function AbstractsDashboard() {
               const finalTemplateFileName = trackTemplate?.finalTemplateFileName || abstractsConfig?.fileRequirements?.finalTemplateFileName
               const trackLabel = trackTemplate?.trackLabel || finalSubmissionAbstract?.track
 
-              if (!finalTemplateUrl) return null
+              if (!finalTemplateUrl) {
+                const templates = conferenceConfig.abstracts.templates || []
+                if (!templates.length) return null
+                return (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-green-800 mb-2">Download the template</h4>
+                    <p className="text-sm text-green-700 mb-3">Prepare your presentation on the official IACTS TechnoCollege CME 2026 template.</p>
+                    <div className="flex flex-wrap gap-2">
+                      {templates.map((t) => (
+                        <a key={t.href} href={t.href} download={t.fileName}
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm">
+                          <Download className="w-4 h-4" />
+                          {t.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )
+              }
 
               return (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-green-800 mb-2">ðŸ“¥ Download Template</h4>
+                  <h4 className="font-semibold text-green-800 mb-2">Download Template</h4>
                   <p className="text-sm text-green-700 mb-3">
                     Use the official template for <strong>{trackLabel}</strong> to ensure your submission follows the correct format.
                   </p>
@@ -1067,7 +1101,7 @@ export function AbstractsDashboard() {
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={submitFinalPresentation}
-                disabled={!finalSubmissionFile || submittingFinal || !isFeatureEnabled || !isAbstractSubmissionOpenStatic()}
+                disabled={!finalSubmissionFile || submittingFinal}
                 className="flex-1 bg-green-600 hover:bg-green-700"
               >
                 {submittingFinal ? (

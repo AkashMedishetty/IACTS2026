@@ -12,7 +12,7 @@ import { Label } from "../../components/ui/label"
 import { Checkbox } from "../../components/ui/checkbox"
 import { Alert, AlertDescription } from "../../components/ui/alert"
 import { Navigation } from "../../components/Navigation"
-import { Calendar, FileText, Award, Upload, CheckCircle, Bell, Mail, Lock, LogIn, Clock, AlertCircle, UserPlus, User, MapPin, Stethoscope, ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, X } from "lucide-react"
+import { Calendar, Download, FileText, Award, Upload, CheckCircle, Bell, Mail, Lock, LogIn, Clock, AlertCircle, UserPlus, User, MapPin, Stethoscope, ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, X } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { conferenceConfig } from "../../config/conference.config"
@@ -1131,13 +1131,28 @@ export default function AbstractsPage() {
                     any categories as such … just remove it." Restore only if the
                     committee later publishes real categories. */}
 
-                {/* Presentation templates are NOT published. The two download
-                    buttons that used to sit here pointed at
-                    /templates/paper-template.pptx and
-                    /templates/poster-template.pptx — neither file exists (there
-                    is no public/templates directory), so both were 404s
-                    presented as official downloads. Restore this card only when
-                    the committee supplies real files. */}
+                {/* Presentation templates — approved by the committee, 19 October
+                    2026, and served from public/templates. Listed from config so
+                    this page and the dashboard always offer the same files. */}
+                {(conferenceConfig.abstracts.templates || []).length > 0 && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
+                    <Card className="border-[#b3122a]/20">
+                      <CardContent className="p-6">
+                        <h3 className="text-lg font-bold text-[#160a0d] mb-1 flex items-center gap-2"><Download className="w-5 h-5 text-[#b3122a]" />Presentation templates</h3>
+                        <p className="text-sm text-muted-foreground mb-4">Prepare your final presentation on the official IACTS TechnoCollege CME 2026 template, and upload it from the Abstracts section of your dashboard.</p>
+                        <div className="flex flex-wrap gap-3">
+                          {(conferenceConfig.abstracts.templates || []).map((t) => (
+                            <a key={t.href} href={t.href} download={t.fileName}
+                              className="inline-flex items-center gap-2 rounded-lg bg-[#b3122a] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#8c0b20]">
+                              <Download className="w-4 h-4" />
+                              {t.label} (.pptx)
+                            </a>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )}
 
                 {/* Quick Rules */}
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">

@@ -166,6 +166,11 @@ export interface ConferenceConfig {
       end: string
     }
     submitterChoosesFormat?: boolean
+    /** Approved presentation templates, served from public/templates. */
+    templates?: { label: string; href: string; fileName: string }[]
+    /** Final submission: open to every abstract that has not been rejected —
+     *  no acceptance step (committee instruction, 19 October 2026). */
+    finalSubmissionOpen?: boolean
     submissionRules?: string[]
     wordLimit?: number
     maxAbstractsPerUser: number
@@ -405,6 +410,11 @@ export const conferenceConfig: ConferenceConfig = {
   abstracts: {
     enabled: true,
     enableAbstractsWithoutRegistration: false,
+    templates: [
+      { label: "Paper presentation template", href: "/templates/IACTS_TechnoCollege_2026_Paper_Template.pptx", fileName: "IACTS_TechnoCollege_2026_Paper_Template.pptx" },
+      { label: "Poster presentation template", href: "/templates/IACTS_TechnoCollege_2026_Poster_Template.pptx", fileName: "IACTS_TechnoCollege_2026_Poster_Template.pptx" },
+    ],
+    finalSubmissionOpen: true,
     // Deadline not yet announced — window gate stays off until the committee confirms.
     submissionWindow: {
       enabled: true,

@@ -5,8 +5,7 @@ import connectDB from '@/lib/mongodb'
 import Abstract from '@/lib/models/Abstract'
 import User from '@/lib/models/User'
 import { EmailService } from '@/lib/email/service'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { conferenceConfig } from '@/config/conference.config'
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,62 +23,42 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 })
     }
 
-    const formData = await request.formData()
-    const abstractId = formData.get('abstractId') as string
-    const file = formData.get('file') as File
-    const notes = formData.get('notes') as string
+    if (!conferenceConfig.abstracts.finalSubmissionOpen) {
+      return NextResponse.json({ success: false, message: 'Final submission is closed' }, { status: 400 })
+    }
+
+    /* The browser has already uploaded the file to Vercel Blob (signed by
+       /api/abstracts/final-submission/upload). This records it. Files used to
+       be written to the server's own disk, which on Vercel is read-only and
+       discarded between requests — and request bodies are capped at 4.5 MB —
+       so no final presentation could have been stored. */
+    const { abstractId, blobUrl, originalName, mimeType, fileSizeBytes, notes } = await request.json()
 
     if (!abstractId) {
       return NextResponse.json({ success: false, message: 'Abstract ID is required' }, { status: 400 })
     }
-
-    if (!file) {
+    if (!blobUrl || !/^https:\/\/[a-z0-9]+\.public\.blob\.vercel-storage\.com\//i.test(blobUrl)) {
       return NextResponse.json({ success: false, message: 'Final presentation file is required' }, { status: 400 })
     }
 
-    // Find the abstract
     const abstract = await Abstract.findById(abstractId)
     if (!abstract) {
       return NextResponse.json({ success: false, message: 'Abstract not found' }, { status: 404 })
     }
-
-    // Check if user owns this abstract
     if (abstract.userId.toString() !== userId) {
       return NextResponse.json({ success: false, message: 'Access denied' }, { status: 403 })
     }
-
-    // Check if abstract is accepted
-    if (abstract.status !== 'accepted') {
-      return NextResponse.json({ 
-        success: false, 
-        message: 'Final submission is only allowed for accepted abstracts' 
-      }, { status: 400 })
+    // Open to every submitted abstract — no acceptance step (committee
+    // instruction, 19 October 2026). Only a rejected abstract is excluded.
+    if (abstract.status === 'rejected') {
+      return NextResponse.json({ success: false, message: 'This abstract is not eligible for final submission' }, { status: 400 })
     }
 
-    // Validate file type
-    const allowedTypes = ['.pdf', '.ppt', '.pptx', '.doc', '.docx']
-    const fileExtension = path.extname(file.name).toLowerCase()
-    
-    if (!allowedTypes.includes(fileExtension)) {
-      return NextResponse.json(
-        { success: false, message: 'Only PDF, PowerPoint, and Word documents are allowed' },
-        { status: 400 }
-      )
+    const name = String(originalName || 'final-presentation')
+    if (!/\.(pptx?|pdf|docx?)$/i.test(name)) {
+      return NextResponse.json({ success: false, message: 'Only PowerPoint, PDF and Word files are allowed' }, { status: 400 })
     }
-
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(), 'uploads', 'abstracts', 'final')
-    await mkdir(uploadsDir, { recursive: true })
-
-    // Generate unique filename
-    const timestamp = Date.now()
-    const filename = `${abstract.abstractId}-final-${timestamp}${fileExtension}`
-    const filepath = path.join(uploadsDir, filename)
-
-    // Save file
-    const bytes = await file.arrayBuffer()
-    const buffer = Buffer.from(bytes)
-    await writeFile(filepath, buffer)
+    const file = { name, type: String(mimeType || ''), size: Number(fileSizeBytes) || 0 }
 
     // Generate final display ID
     const finalDisplayId = `${abstract.abstractId}-F`
@@ -90,7 +69,7 @@ export async function POST(request: NextRequest) {
         originalName: file.name,
         mimeType: file.type,
         fileSizeBytes: file.size,
-        storagePath: filepath,
+        storagePath: blobUrl,
         uploadedAt: new Date()
       },
       submittedAt: new Date(),
