@@ -1116,8 +1116,8 @@ export default function AbstractsPage() {
                             <p className="font-bold text-yellow-300">{submissionDeadlineLabel}</p>
                           </div>
                           <div className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                            <p className="text-sm text-white/80">Acceptance Notification</p>
-                            <p className="font-bold text-white/90">To be announced</p>
+                            <p className="text-sm text-white/80">Abstract Presentations</p>
+                            <p className="font-bold text-white/90">24 &amp; 25 October 2026</p>
                           </div>
                         </div>
                       </div>
@@ -1206,48 +1206,47 @@ export default function AbstractsPage() {
                   </Card>
                 </motion.div>
 
-                {/* Important Notice */}
-                {/* FINAL submission rules — added on the 10 September 2026
-                    committee review. The flow the committee settled on is TWO
-                    stages, and the page must say so plainly or authors will
-                    format twice for nothing: submit a Word document now, and
-                    only once the scientific committee has accepted it do you
-                    resubmit on the official template. The template itself is not
-                    published yet, so it is promised rather than linked — do not
-                    add a download button until a real file exists. */}
-                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
-                  <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
-                    <CardContent className="p-6">
-                      <div className="flex items-start">
-                        <Upload className="w-6 h-6 mr-3 text-[#b3122a] mt-1 flex-shrink-0" />
-                        <div className="w-full">
-                          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-1">Final Submission Rules</h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                            These apply <strong>after</strong> your abstract is accepted — not to the submission you make today.
-                          </p>
-                          <ol className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0 list-none p-0 m-0">
-                            {[
-                              'Initial submission is a Microsoft Word document — submit that now.',
-                              'Every submission is reviewed by the scientific committee, which decides acceptance and the presentation format.',
-                              'Once accepted, the final paper or poster must be prepared on the official conference template.',
-                              'The template carries the IACTS Technocollege CME 2026 branding and will be made available here; accepted authors will also be emailed a link.',
-                              'Final submissions are made from your delegate account, in the template only.',
-                              'The scientific committee gives the final confirmation on every accepted submission.',
-                            ].map((rule, i) => (
-                              <li key={rule} className="flex gap-3 py-3 border-b border-slate-200 dark:border-slate-700">
-                                <span className="font-mono text-xs font-semibold text-[#b3122a] pt-0.5">{String(i + 1).padStart(2, '0')}</span>
-                                <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{rule}</span>
-                              </li>
-                            ))}
-                          </ol>
-                          <p className="mt-4 text-[13px] font-semibold text-[#b3122a]">
-                            Presentation template — to be published. Submit your abstract now; you do not need the template yet.
-                          </p>
+                {/* Presentation guidelines — the committee's instructions for
+                    accepted abstracts (19 October 2026), read from config so the
+                    dashboard shows the same text. Replaces the earlier "Final
+                    Submission Rules", which promised a template not yet
+                    published and an acceptance step that no longer applies. */}
+                {(conferenceConfig.abstracts.presentationGuidelines || []).length > 0 && (
+                  <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
+                    <Card className="bg-white dark:bg-gray-800 border-slate-200 dark:border-slate-700 shadow-lg">
+                      <CardContent className="p-6">
+                        <div className="flex items-start">
+                          <Upload className="w-6 h-6 mr-3 text-[#b3122a] mt-1 flex-shrink-0" />
+                          <div className="w-full">
+                            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-1">Presentation Guidelines</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                              Prepare your final presentation on the template above and upload it from the{' '}
+                              <Link href="/dashboard/abstracts" className="font-semibold text-[#b3122a] underline underline-offset-2">Abstracts section of your dashboard</Link>.
+                            </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              {(conferenceConfig.abstracts.presentationGuidelines || []).map((g) => (
+                                <div key={g.format} className="rounded-lg border border-[#b3122a]/15 bg-[#fbf7f1] dark:bg-gray-900/40 p-4">
+                                  <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                    <h4 className="font-bold text-[#b3122a] dark:text-red-300">{g.format}</h4>
+                                    <span className="rounded-full bg-[#b3122a] px-3 py-0.5 text-xs font-semibold text-white">{g.slot}</span>
+                                  </div>
+                                  <ol className="list-none p-0 m-0">
+                                    {g.rules.map((rule, i) => (
+                                      <li key={rule} className="flex gap-3 py-2 border-b last:border-b-0 border-slate-200 dark:border-slate-700">
+                                        <span className="font-mono text-xs font-semibold text-[#b3122a] pt-0.5">{String(i + 1).padStart(2, '0')}</span>
+                                        <span className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{rule}</span>
+                                      </li>
+                                    ))}
+                                  </ol>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )}
 
                 <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
                   <Card className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-800">

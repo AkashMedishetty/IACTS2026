@@ -59,6 +59,7 @@ interface Abstract {
   wordCount?: number
   averageScore?: number
   decisionAt?: string
+  approvedFor?: string
   initial: {
     file?: {
       originalName: string
@@ -1048,6 +1049,28 @@ export function AbstractsDashboard() {
                 </div>
               )}
             </div>
+
+            {/* The committee's presentation guidelines; the author's own format
+                first when the committee has recorded it. */}
+            {(() => {
+              const all = conferenceConfig.abstracts.presentationGuidelines || []
+              const kind = finalSubmissionAbstract?.approvedFor
+              const mine = kind === 'poster-presentation' || kind === 'poster' ? 'Poster' : kind ? 'Oral' : ''
+              const shown = mine ? all.filter((g) => g.format.startsWith(mine)) : all
+              if (!shown.length) return null
+              return (
+                <div className="bg-[#fbf7f1] border border-[#b3122a]/20 rounded-lg p-4 space-y-3">
+                  {shown.map((g) => (
+                    <div key={g.format}>
+                      <h4 className="font-semibold text-[#b3122a] mb-1">{g.format} · {g.slot}</h4>
+                      <ul className="text-sm text-[#160a0d] space-y-1">
+                        {g.rules.map((r) => <li key={r}>• {r}</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              )
+            })()}
 
             {/* Template Download - Track-specific or default */}
             {(() => {

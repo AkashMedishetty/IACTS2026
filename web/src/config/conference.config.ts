@@ -171,6 +171,8 @@ export interface ConferenceConfig {
     /** Final submission: open to every abstract that has not been rejected —
      *  no acceptance step (committee instruction, 19 October 2026). */
     finalSubmissionOpen?: boolean
+    /** How accepted abstracts are presented — the committee's instructions. */
+    presentationGuidelines?: { format: string; slot: string; rules: string[] }[]
     submissionRules?: string[]
     wordLimit?: number
     maxAbstractsPerUser: number
@@ -415,6 +417,27 @@ export const conferenceConfig: ConferenceConfig = {
       { label: "Poster presentation template", href: "/templates/IACTS_TechnoCollege_2026_Poster_Template.pptx", fileName: "IACTS_TechnoCollege_2026_Poster_Template.pptx" },
     ],
     finalSubmissionOpen: true,
+    /* Verbatim from the committee's instructions (abstract schedule sheet,
+       19 October 2026). */
+    presentationGuidelines: [
+      {
+        format: "Oral Paper Presentation",
+        slot: "7 minutes + 3 minutes Q&A",
+        rules: [
+          "Slides must be prepared using the template provided.",
+          "The presentation must conclude at 7 minutes, followed by 3 minutes for Q&A.",
+          "The presentation must adhere to a maximum of 9 slides.",
+        ],
+      },
+      {
+        format: "Poster Presentation",
+        slot: "4 minutes + 2 minutes Q&A",
+        rules: [
+          "Poster should be prepared using the template provided.",
+          "The presentation must conclude at 4 minutes, followed by 2 minutes for Q&A.",
+        ],
+      },
+    ],
     // Deadline not yet announced — window gate stays off until the committee confirms.
     submissionWindow: {
       enabled: true,
