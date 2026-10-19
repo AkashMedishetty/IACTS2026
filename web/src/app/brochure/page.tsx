@@ -62,7 +62,7 @@ const LINK = {
   site: SITE,
 };
 
-const MARK = "Future Is Now · Hyderabad 2026";
+const MARK = "The Future Is Now · Hyderabad 2026";
 
 /**
  * The same marks the website's Strata section uses, in the same order, so the two

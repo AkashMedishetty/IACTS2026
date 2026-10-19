@@ -42,7 +42,7 @@ function page(inner: string, opts: { cover?: boolean } = {}): string {
   if (opts.cover) return `<section class="page cover"><img class="coverimg" src="../assets/cover.jpg" alt=""></section>`
   pageNo += 1
   return `<section class="page bg">
-  <div class="rhead">Future Is Now · Hyderabad 2026</div>
+  <div class="rhead">The Future Is Now · Hyderabad 2026</div>
   <div class="pad">${inner}</div>
   <div class="foot"><span>IACTS TechnoCollege CME 2026</span><span class="pg">${String(pageNo).padStart(2, '0')}</span></div>
 </section>`

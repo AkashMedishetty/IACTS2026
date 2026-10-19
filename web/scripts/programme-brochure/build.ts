@@ -109,14 +109,20 @@ const cover = `<section class="page cover">
   <img class="cv-logo" src="${LOGO}" alt="IACTS TechnoCollege CME 2026">
   <div class="cv-mask" style="left:7.2mm;top:276.3mm;width:134mm;height:15.2mm"></div>
   <div class="cv-title" id="cvTitle"><span class="r">Scientific</span>&nbsp;<span>Programme</span></div>
+  <div class="cv-mask" style="left:8.9mm;top:148.9mm;width:101.7mm;height:20mm"></div>
+  <div class="cv-theme" id="cvTheme">The Future Is Now</div>
 </section>
 <script>
-  /* Fit the title to the width the original line occupied. */
-  (function () {
-    var el = document.getElementById('cvTitle'), size = 40;
-    el.style.fontSize = size + 'pt';
-    while (el.scrollWidth > el.clientWidth && size > 14) { size -= 0.5; el.style.fontSize = size + 'pt'; }
-  })();
+  /* Fit each replaced line to the width the artwork's original line occupied. */
+  function fit() {
+    [['cvTitle', 40], ['cvTheme', 66]].forEach(function (f) {
+      var el = document.getElementById(f[0]), size = f[1];
+      el.style.fontSize = size + 'pt';
+      while (el.scrollWidth > el.clientWidth && size > 14) { size -= 0.25; el.style.fontSize = size + 'pt'; }
+    });
+  }
+  fit();
+  document.fonts.ready.then(fit); /* measure again once Anton has loaded */
 </script>`
 
 const [d1, d2] = scheduleDays
@@ -244,8 +250,9 @@ html,body{font-family:'Barlow',sans-serif;color:var(--ink);-webkit-print-color-a
 .cv-art{position:absolute;inset:0;width:210mm;height:297mm;object-fit:cover;display:block}
 .cv-mask{position:absolute;background:#F8F3ED}
 .cv-logo{position:absolute;left:9.5mm;top:16.6mm;height:28mm}
-.cv-title{position:absolute;left:9.6mm;top:277.4mm;width:130mm;height:13mm;display:flex;align-items:center;white-space:nowrap;overflow:hidden;font-family:'Anton';font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:#17120F;line-height:1}
+.cv-title{position:absolute;left:9.6mm;top:277.4mm;width:122mm;height:13mm;display:flex;align-items:center;white-space:nowrap;overflow:hidden;font-family:'Anton';font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:#17120F;line-height:1}
 .cv-title .r{color:#9B0F1E}
+.cv-theme{position:absolute;left:10.1mm;top:149.5mm;width:99mm;height:19mm;display:flex;align-items:center;white-space:nowrap;overflow:hidden;font-family:'Anton';font-weight:400;letter-spacing:.03em;text-transform:uppercase;color:#98050E;line-height:1}
 
 /* at a glance */
 .g-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4.5mm;margin-top:6mm}
