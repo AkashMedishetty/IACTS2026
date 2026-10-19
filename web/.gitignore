@@ -45,3 +45,4 @@ next-env.d.ts
 
 # generated trade brochure page
 /scripts/trade-brochure/out/
+/scripts/programme-brochure/out/

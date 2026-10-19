@@ -107,6 +107,9 @@ function useRows(): Row[] {
             day.label,
             day.date,
             (item.chairpersons || []).join(" "),
+            item.moderator,
+            (item.panelists || []).join(" "),
+            (item.guests || []).join(" "),
           ]
             .filter(Boolean)
             .join(" ")
@@ -161,11 +164,38 @@ const KIND_LABEL: Record<ScheduleItem["kind"], string> = {
   break: "Break",
   ceremony: "Ceremony",
   special: "Session",
+  session: "",
 };
+
+function People({ label, names, query }: { label: string; names?: readonly string[]; query: string }) {
+  if (!names?.length) return null;
+  return (
+    <p className="m-0 mt-1.5 text-[0.88rem] leading-[1.6] text-muted-foreground">
+      <span className="font-mono text-[0.68rem] uppercase tracking-[.14em] text-[#6a545a]">{label}</span>{" "}
+      <Mark text={names.join(" · ")} query={query} />
+    </p>
+  );
+}
 
 function Item({ row, query, bare = false }: { row: Row; query: string; bare?: boolean }) {
   const { item } = row;
   const quiet = item.kind === "break";
+  /* A session opens with a band: its number and its chairpersons. */
+  if (item.kind === "session") {
+    return (
+      <li className="mt-4 border-l-4 border-[#b3122a] bg-[#f8e9ed] px-4 py-3">
+        <p className="m-0 font-mono text-[0.72rem] font-semibold uppercase tracking-[.18em] text-[#8c0b20]">
+          <Mark text={item.title} query={query} />
+        </p>
+        {item.chairpersons?.length ? (
+          <p className="m-0 mt-1 text-[0.9rem] leading-[1.55] text-[#160a0d]">
+            <span className="font-semibold">Chairpersons </span>
+            <Mark text={item.chairpersons.join(" · ")} query={query} />
+          </p>
+        ) : null}
+      </li>
+    );
+  }
   /* Inside the Breakthrough block the heading already says what these are, and
      they carry no times, so the time column and the chips are dropped. */
   if (bare) {
@@ -197,12 +227,10 @@ function Item({ row, query, bare = false }: { row: Row; query: string; bare?: bo
             <Mark text={item.speaker} query={query} />
           </p>
         ) : null}
-        {item.chairpersons?.length ? (
-          <p className="m-0 mt-1.5 text-[0.88rem] leading-[1.6] text-muted-foreground">
-            <span className="font-mono text-[0.68rem] uppercase tracking-[.14em] text-[#6a545a]">Chairpersons</span>{" "}
-            <Mark text={item.chairpersons.join(" · ")} query={query} />
-          </p>
-        ) : null}
+        {item.moderator ? <People label="Moderator" names={[item.moderator]} query={query} /> : null}
+        <People label="Panelists" names={item.panelists} query={query} />
+        <People label="On the dais" names={item.guests} query={query} />
+        <People label="Chairpersons" names={item.chairpersons} query={query} />
         {(item.track || KIND_LABEL[item.kind]) && !quiet ? (
           <p className="m-0 mt-2 flex flex-wrap gap-2">
             {item.track ? (
@@ -318,7 +346,9 @@ export default function ScheduleBrowser() {
             </button>
           ))}
           <span className="ml-auto font-mono text-[0.68rem] uppercase tracking-[.14em] text-[#6a545a]" aria-live="polite">
-            {filtered.length} {filtered.length === 1 ? "session" : "sessions"}
+            {/* Count talks and breaks, not the session headings that group them. */}
+            {filtered.filter((r) => r.item.kind !== "session").length}{" "}
+            {filtered.filter((r) => r.item.kind !== "session").length === 1 ? "item" : "items"}
           </span>
         </div>
 

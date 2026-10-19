@@ -170,12 +170,17 @@ function rows(items: readonly ScheduleItem[]): string {
   return items
     .map((it) => {
       let out = ''
+      if (it.kind === 'session') {
+        return `<div class="trk">${esc(it.title)}${it.chairpersons?.length ? ` <span class="chairs">Chairpersons · ${esc(it.chairpersons.join(' · '))}</span>` : ''}</div>`
+      }
       if (it.track && it.track !== lastTrack) out += `<div class="trk">${esc(it.track)}</div>`
       if (it.track) lastTrack = it.track
       const cls = QUIET.includes(it.kind) ? 'brk' : FEATURE.includes(it.kind) ? 'feat' : ''
       const sub = [
         it.speaker ? `<div class="fac">${esc(it.speaker)}</div>` : '',
-        it.chairpersons?.length ? `<div class="chair"><b>Chairpersons</b> ${esc(it.chairpersons.join(' · '))}</div>` : '',
+        it.moderator ? `<div class="chair"><b>Moderator</b> ${esc(it.moderator)}</div>` : '',
+        it.panelists?.length ? `<div class="chair"><b>Panelists</b> ${esc(it.panelists.join(' · '))}</div>` : '',
+        it.guests?.length ? `<div class="chair"><b>On the dais</b> ${esc(it.guests.join(' · '))}</div>` : '',
       ].join('')
       out += `<div class="trow ${cls}"><div class="tt">${esc(it.time || '')}</div><div class="tdot"><i></i></div><div class="tb"><div class="top">${esc(it.title)}</div>${sub}</div></div>`
       return out
@@ -259,6 +264,7 @@ const EXTRA = `
 .lunch{margin-top:3mm;font-family:'BarlowCondensed';font-weight:600;font-size:10pt;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);text-align:center}
 .lunch b{color:var(--red)}
 .status{font-size:8.4pt;color:var(--crimson);font-weight:600;margin:-.6mm 0 1.2mm}
+.trk .chairs{font-family:'Barlow';font-weight:500;letter-spacing:0;text-transform:none;color:var(--soft);font-size:7.6pt;margin-left:2mm}
 .trk{font-family:'BarlowCondensed';font-weight:700;font-size:8.4pt;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:2.4mm 0 .6mm 31mm}
 .rail{margin-top:.6mm}.railline{display:none}
 .trow{padding:.8mm 0}.tt{width:26mm;flex:0 0 26mm;font-size:8.6pt}
