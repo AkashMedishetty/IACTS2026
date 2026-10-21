@@ -400,18 +400,24 @@ export function AbstractsDashboard() {
     }
   }
 
-  /** Send a failed upload to the server log, so problems are visible there. */
+  /** Log a failed upload to Admin › Errors: the file goes straight from the
+   *  browser to storage, so otherwise the failure never reaches the server. */
   const reportFinalFailure = (stage: string, message: string) => {
     try {
-      fetch('/api/abstracts/final-submission/report', {
+      fetch('/api/errors/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          stage, message,
-          abstractId: finalSubmissionAbstract?.abstractId,
-          fileName: finalSubmissionFile?.name,
-          fileSizeBytes: finalSubmissionFile?.size,
-          userAgent: navigator.userAgent,
+          message: `Final presentation ${stage === 'record' ? 'save' : 'upload'} failed: ${message}`,
+          severity: 'error',
+          category: 'file_upload',
+          url: window.location.href,
+          additionalInfo: {
+            stage,
+            abstractId: finalSubmissionAbstract?.abstractId,
+            fileName: finalSubmissionFile?.name,
+            fileSizeMB: finalSubmissionFile ? Math.round(finalSubmissionFile.size / 1e5) / 10 : undefined,
+          },
         }),
         keepalive: true,
       }).catch(() => {})
