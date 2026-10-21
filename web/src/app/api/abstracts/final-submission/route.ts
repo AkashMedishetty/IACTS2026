@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     const name = String(originalName || 'final-presentation')
-    if (!/\.(pptx?|pdf|docx?)$/i.test(name)) {
+    if (!/\.(pptx?|ppsx?|pdf|docx?)$/i.test(name)) {
       return NextResponse.json({ success: false, message: 'Only PowerPoint, PDF and Word files are allowed' }, { status: 400 })
     }
     const file = { name, type: String(mimeType || ''), size: Number(fileSizeBytes) || 0 }

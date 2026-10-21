@@ -77,6 +77,10 @@ interface Abstract {
   }
 }
 
+/** Final presentation files: kept in step with /api/abstracts/final-submission/upload. */
+const FINAL_MAX_MB = 300
+const FINAL_FILE_OK = /\.(pptx?|ppsx?|pdf|docx?)$/i
+
 export function AbstractsDashboard() {
   const [abstracts, setAbstracts] = useState<Abstract[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,6 +91,8 @@ export function AbstractsDashboard() {
   const [finalSubmissionFile, setFinalSubmissionFile] = useState<File | null>(null)
   const [finalSubmissionNotes, setFinalSubmissionNotes] = useState('')
   const [submittingFinal, setSubmittingFinal] = useState(false)
+  const [finalProgress, setFinalProgress] = useState<number | null>(null)
+  const [finalDragOver, setFinalDragOver] = useState(false)
   
   // Initial submission states
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false)
@@ -197,7 +203,8 @@ export function AbstractsDashboard() {
   /* Final submission is open to every submitted abstract — no acceptance step
      (committee instruction, 19 October 2026). Only a rejected one is excluded. */
   const canSubmitFinal = (abstract: Abstract) => {
-    return Boolean(conferenceConfig.abstracts.finalSubmissionOpen) && abstract.status !== 'rejected' && !abstract.final?.submittedAt
+    // A submitted presentation can be replaced while final submission is open.
+    return Boolean(conferenceConfig.abstracts.finalSubmissionOpen) && abstract.status !== 'rejected'
   }
 
   const downloadFile = async (abstractId: string, fileType: 'initial' | 'final') => {
@@ -330,16 +337,33 @@ export function AbstractsDashboard() {
       return
     }
 
+    if (!FINAL_FILE_OK.test(finalSubmissionFile.name)) {
+      toast.error('Please upload a PowerPoint (.pptx, .ppt, .ppsx), PDF or Word file')
+      return
+    }
+    if (finalSubmissionFile.size > FINAL_MAX_MB * 1024 * 1024) {
+      toast.error(`The file is larger than ${FINAL_MAX_MB} MB. Please compress embedded videos/images and try again.`)
+      return
+    }
+
     setSubmittingFinal(true)
+    setFinalProgress(0)
+    let stage = 'upload'
     try {
       // Straight to Vercel Blob: presentations are larger than a function's
       // 4.5 MB request limit. The route below then records the upload.
-      toast.info('Uploading your presentation…')
-      const blob = await upload(finalSubmissionFile.name, finalSubmissionFile, {
+      // The stored name is reduced to safe characters: spaces, #, ?, % and
+      // non-Latin letters in a file name must not break the blob path.
+      const safeName = finalSubmissionFile.name.normalize('NFKD').replace(/[^\w.\-]+/g, '_').replace(/_+/g, '_')
+      const blob = await upload(`final-presentations/${finalSubmissionAbstract.abstractId}/${safeName}`, finalSubmissionFile, {
         access: 'public',
         handleUploadUrl: '/api/abstracts/final-submission/upload',
         clientPayload: JSON.stringify({ abstractId: finalSubmissionAbstract._id }),
+        // Chunked, retried upload for large decks on slow or flaky connections.
+        multipart: finalSubmissionFile.size > 8 * 1024 * 1024,
+        onUploadProgress: ({ percentage }) => setFinalProgress(Math.round(percentage)),
       })
+      stage = 'record'
 
       const response = await fetch('/api/abstracts/final-submission', {
         method: 'POST',
@@ -363,14 +387,35 @@ export function AbstractsDashboard() {
         setFinalSubmissionNotes('')
         fetchAbstracts() // Refresh the list
       } else {
+        reportFinalFailure('record', data.message || `HTTP ${response.status}`)
         toast.error(data.message || 'Failed to submit final presentation')
       }
     } catch (error: any) {
       console.error('Final submission error:', error)
-      toast.error(error?.message || 'Error submitting final presentation')
+      reportFinalFailure(stage, error?.message || String(error))
+      toast.error(`${error?.message || 'Error submitting final presentation'}. If this keeps happening, email your presentation to ${conferenceConfig.contact.abstractsEmail || conferenceConfig.contact.email}.`, { duration: 12000 })
     } finally {
       setSubmittingFinal(false)
+      setFinalProgress(null)
     }
+  }
+
+  /** Send a failed upload to the server log, so problems are visible there. */
+  const reportFinalFailure = (stage: string, message: string) => {
+    try {
+      fetch('/api/abstracts/final-submission/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          stage, message,
+          abstractId: finalSubmissionAbstract?.abstractId,
+          fileName: finalSubmissionFile?.name,
+          fileSizeBytes: finalSubmissionFile?.size,
+          userAgent: navigator.userAgent,
+        }),
+        keepalive: true,
+      }).catch(() => {})
+    } catch { /* reporting must never get in the way */ }
   }
 
   if (loading) {
@@ -609,7 +654,7 @@ export function AbstractsDashboard() {
                         </div>
                       )}
 
-                      {canSubmitFinal(abstract) && (
+                      {canSubmitFinal(abstract) && !abstract.final?.submittedAt && (
                         <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                           <div className="flex items-center gap-2 text-green-800 dark:text-green-200">
                             <CheckCircle className="w-4 h-4" />
@@ -630,7 +675,7 @@ export function AbstractsDashboard() {
                           onClick={() => setFinalSubmissionAbstract(abstract)}
                         >
                           <Upload className="w-4 h-4 mr-2" />
-                          Submit Final Version
+                          {abstract.final?.submittedAt ? 'Replace Final Presentation' : 'Submit Final Version'}
                         </Button>
                       )}
                       
@@ -980,10 +1025,20 @@ export function AbstractsDashboard() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Final Presentation File *
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <div
+                className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${finalDragOver ? 'border-green-500 bg-green-50' : 'border-gray-300'}`}
+                onDragOver={(e) => { e.preventDefault(); setFinalDragOver(true) }}
+                onDragLeave={() => setFinalDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  setFinalDragOver(false)
+                  const f = e.dataTransfer.files?.[0]
+                  if (f) setFinalSubmissionFile(f)
+                }}
+              >
                 <input
                   type="file"
-                  accept=".pdf,.ppt,.pptx,.doc,.docx"
+                  accept=".pdf,.ppt,.pptx,.pps,.ppsx,.doc,.docx"
                   onChange={(e) => setFinalSubmissionFile(e.target.files?.[0] || null)}
                   className="hidden"
                   id="final-file-upload"
@@ -994,7 +1049,7 @@ export function AbstractsDashboard() {
                     Click to upload or drag and drop
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    PDF, PowerPoint, or Word documents (Max 50MB)
+                    PowerPoint, PDF or Word (max {FINAL_MAX_MB} MB)
                   </p>
                 </label>
                 {finalSubmissionFile && (
@@ -1130,7 +1185,7 @@ export function AbstractsDashboard() {
                 {submittingFinal ? (
                   <>
                     <Loader className="w-4 h-4 mr-2 animate-spin" />
-                    Uploading...
+                    {finalProgress !== null && finalProgress < 100 ? `Uploading… ${finalProgress}%` : 'Saving…'}
                   </>
                 ) : (
                   <>

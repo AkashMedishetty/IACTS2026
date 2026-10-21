@@ -47,14 +47,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         if (!abstract || abstract.userId.toString() !== userId) throw new Error('Abstract not found')
         if (abstract.status === 'rejected') throw new Error('This abstract is not eligible for final submission')
 
-        if (!/\.(pptx?|pdf|docx?)$/i.test(pathname)) {
+        if (!/\.(pptx?|ppsx?|pdf|docx?)$/i.test(pathname)) {
           throw new Error('Upload a PowerPoint, PDF or Word file')
         }
         return {
           // No content-type list: browsers report .pptx inconsistently, which
           // makes the Blob API reject the PUT. The extension check above and
           // the file picker enforce the format instead.
-          maximumSizeInBytes: 100 * 1024 * 1024,
+          maximumSizeInBytes: 300 * 1024 * 1024, // decks with embedded video; kept in step with the dashboard
           addRandomSuffix: true,
           tokenPayload: JSON.stringify({ abstractId, userId }),
         }
