@@ -83,9 +83,20 @@ tr.gala td{background:#EAD8B8;font-weight:bold}
 tr.gala td:last-child{text-align:center;color:#B3122A;font-size:11.5pt;letter-spacing:.08em}
 .bt{font-size:11.5pt;width:78%;margin:6mm auto 0}
 .bt td{padding:3.2mm 2mm}
-.ws{font-size:11pt}
-.ws td{padding:1.9mm 2.6mm}
-.ws td.tm{font-size:11pt}
-.ws tr.ses .st{font-size:13pt;letter-spacing:.04em}
+/* Workshop: two halls side by side, as in the committee's sheet */
+.ws2{font-size:10.6pt;margin-top:4mm}
+.ws2 td,.ws2 th{padding:2.6mm 2mm}
+.ws2 td.gap{border:0;background:#fff;padding:0}
+.ws2 tr.hall td{background:#F8E9ED;color:#B3122A;font-weight:bold;font-size:12.5pt;text-align:center;letter-spacing:.06em}
+.ws2 tr.hall td.gap{background:#fff}
+.ws2 tr.colh td.gap{background:#fff}
+.ws2 td{background:#fff}
+.ws2 td.alt{background:#FFFCF7}
+.ws2 td.tm{white-space:nowrap;text-align:center;font-size:9.6pt}
+.ws2 th{white-space:nowrap}
+.ws2 td.tm.wrap{white-space:normal}
+.ws2 td.nm{font-size:9.8pt;line-height:1.3;white-space:nowrap}
+.ws2 td.lu{background:#EAD8B8;font-weight:bold}
+.ws2 td.lu.lbl{text-align:center;color:#5F0717;letter-spacing:.06em;font-size:11pt}
 .ft{margin-top:auto;text-align:center;font-size:7.6pt;color:#6A545A;border-top:.25mm solid #D9C29C;padding-top:1.6mm}
 `

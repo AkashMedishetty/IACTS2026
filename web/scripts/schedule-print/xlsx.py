@@ -27,7 +27,7 @@ LOGO = ROOT / "public/brand/iacts-technocollege-2026-logo.png"
 DOC = sys.argv[2] if len(sys.argv) > 2 else "schedule"
 DATA = json.loads((HERE / f"out/{DOC}.json").read_text())
 TITLE = DATA.get("title", "SCIENTIFIC SCHEDULE")
-HEADINGS = ["Timings", "S. No.", "Faculty", "Workshop Topic"] if DOC == "workshop" else ["Timings", "S. No.", "Name", "Session Topic"]
+HEADINGS = ["Timings", "S. No.", "Name", "Session Topic"]
 
 DEEP, CRIMSON, WINE, GOLD = "8B0000", "B3122A", "5F0717", "A9793A"
 INK, SOFT = "17120F", "6A545A"
@@ -230,13 +230,88 @@ def breakthrough(ws):
     ws.sheet_view.showGridLines = False
 
 
+def workshop(ws):
+    """The workshop day as the committee's sheet lays it out: Hall A and Hall B
+    side by side (S.No · Topic · Faculty · Timings each), rows lined up."""
+    sh = Sheet(ws)
+    widths = {"A": 7, "B": 30, "C": 30, "D": 20, "E": 2, "F": 7, "G": 30, "H": 30, "I": 20}
+    for col, w in widths.items():
+        ws.column_dimensions[col].width = w
+    header(sh, widths)
+    halls = ("A", "D"), ("F", "I")
+
+    def band(value, f, fnt, h=16):
+        for col in "ABCDEFGHI":
+            c = ws[f"{col}{sh.r}"]
+            c.border, c.fill = BOX, fill(f)
+        ws.merge_cells(f"A{sh.r}:I{sh.r}")
+        sh.cell("A", value, f, fnt); sh.height(1, h); sh.next()
+
+    band(DATA["title"], CRIMSON, font(15, True, "FFFFFF"), 20)
+    band(f'Venue : {DATA["venue"]}', F_INFO, font(11.5, True, WINE))
+    band(DATA["date"], F_INFO, font(11.5, True, WINE))
+
+    for (a, b), name in zip(halls, DATA["halls"]):                       # hall headings
+        cols = "ABCDEFGHI"[ "ABCDEFGHI".index(a): "ABCDEFGHI".index(b) + 1]
+        for col in cols:
+            ws[f"{col}{sh.r}"].border, ws[f"{col}{sh.r}"].fill = BOX, fill(F_SES)
+        ws.merge_cells(f"{a}{sh.r}:{b}{sh.r}")
+        sh.cell(a, name, F_SES, font(13, True, CRIMSON))
+    sh.height(1, 18); sh.next()
+    head_row = sh.r
+    for a, _ in halls:                                                   # column headings
+        start = "ABCDEFGHI".index(a)
+        for i, t in enumerate(["S.No.", "Topic", "Faculty", "Timings"]):
+            c = sh.cell("ABCDEFGHI"[start + i], t, DEEP, font(10, True, "FFFFFF")); c.border = BOX
+    sh.height(1, 10); sh.next()
+
+    for i, pair in enumerate(DATA["rows"]):
+        bg = F_ALT if i % 2 else "FFFFFF"
+        tall = 1
+        for (a, _), c in zip(halls, pair):
+            s0 = "ABCDEFGHI".index(a)
+            A, B, C, D = "ABCDEFGHI"[s0:s0 + 4]
+            for col in (A, B, C, D):
+                ws[f"{col}{sh.r}"].border = BOX
+            if c is None:
+                for col in (A, B, C, D):
+                    ws[f"{col}{sh.r}"].fill = fill(bg)
+            elif c.get("lunch"):
+                for col in (A, B, C, D):
+                    ws[f"{col}{sh.r}"].fill = fill(F_BRK)
+                ws.merge_cells(f"{B}{sh.r}:{C}{sh.r}")
+                sh.cell(B, "Lunch", F_BRK, font(11, True, WINE))
+                sh.cell(D, c["time"], F_BRK, font(10, True))
+            else:
+                sh.cell(A, c["n"], bg, font(10))
+                sh.cell(B, c["topic"], bg, font(10))
+                sh.cell(C, "\n".join(c["faculty"]), bg, font(10, True), LEFT)
+                sh.cell(D, c["time"], bg, font(10))
+                tall = max(tall, len(c["faculty"]), lines(c["topic"], widths[B]), c["time"].count("\n") + 1)
+        ws.row_dimensions[sh.r].height = tall * 19 + 30; sh.next()   # roomy: one page, filled
+
+    ps = ws.page_setup
+    ps.orientation, ps.paperSize = "landscape", ws.PAPERSIZE_A4
+    ws.sheet_properties.pageSetUpPr.fitToPage = True
+    ps.fitToWidth, ps.fitToHeight = 1, 1
+    ws.page_margins.left = ws.page_margins.right = 0.4
+    ws.page_margins.top = ws.page_margins.bottom = 0.5
+    ws.print_options.horizontalCentered = True
+    ws.oddFooter.center.text = "IACTS TechnoCollege CME 2026  |  iactstechnocollegecme2026.com"
+    ws.oddFooter.center.size, ws.oddFooter.center.font = 8, "Arial"
+    ws.sheet_view.showGridLines = False
+
+
 if __name__ == "__main__":
     out = Path(sys.argv[1] if len(sys.argv) > 1 else f"{DOC}.xlsx").expanduser()
     wb = Workbook()
     ws = wb.active
-    ws.title = "Workshop" if DOC == "workshop" else "Scientific Schedule"
-    schedule(ws)
-    if DATA["breakthrough"]:
+    if DOC == "workshop":
+        ws.title = "Workshop"
+        workshop(ws)
+    else:
+        ws.title = "Scientific Schedule"
+        schedule(ws)
         breakthrough(wb.create_sheet("Breakthrough Sessions"))
     wb.properties.title = f"{ws.title} — IACTS TechnoCollege CME 2026"
     wb.properties.creator = "IACTS TechnoCollege CME 2026"
