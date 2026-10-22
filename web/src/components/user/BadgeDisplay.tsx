@@ -63,10 +63,28 @@ export function BadgeDisplay() {
   const [badgeData, setBadgeData] = useState<BadgeData | null>(null)
   const [qrCodeUrls, setQrCodeUrls] = useState<{ [key: string]: string }>({})
   const badgeRef = useRef<HTMLDivElement>(null)
+  /* The badge is laid out in the template's own pixels (every name, QR and
+     text box is positioned absolutely), so on a narrow screen it must be
+     scaled as a whole — squeezing only its width made the contents spill out
+     and break on phones. `fit` is the room available; `capturing` drops the
+     scale while the PNG is drawn so the download stays full size. */
+  const fitRef = useRef<HTMLDivElement>(null)
+  const [fit, setFit] = useState(0)
+  const [capturing, setCapturing] = useState(false)
 
   useEffect(() => {
     loadBadgeData()
   }, [])
+
+  useEffect(() => {
+    const el = fitRef.current
+    if (!el) return
+    const measure = () => setFit(el.clientWidth)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [badgeData])
 
   useEffect(() => {
     if (badgeData) {
@@ -161,7 +179,10 @@ export function BadgeDisplay() {
 
     try {
       setDownloading(true)
-      
+      // Draw at full template size, not the on-screen (possibly scaled) size.
+      setCapturing(true)
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+
       // Use html2canvas to convert the badge to an image
       const html2canvas = (await import('html2canvas')).default
       
@@ -198,6 +219,7 @@ export function BadgeDisplay() {
         variant: "destructive"
       })
     } finally {
+      setCapturing(false)
       setDownloading(false)
     }
   }
@@ -267,12 +289,15 @@ export function BadgeDisplay() {
   }
 
   const { template, user } = badgeData
+  const bw = template.dimensions.width
+  const bh = template.dimensions.height
+  const scale = capturing || !fit ? 1 : Math.min(1, fit / bw)
 
   return (
     <Card className="bg-white dark:bg-[#1e1e1e] border-slate-200 dark:border-slate-700 shadow-lg">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex items-center justify-between min-w-0">
+          <div className="min-w-0">
             <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
               <ImageIcon className="h-5 w-5" style={{ color: conferenceConfig.theme.primary }} />
               Your Conference Badge
@@ -286,14 +311,18 @@ export function BadgeDisplay() {
       <CardContent>
         <div className="space-y-6">
           {/* Badge Preview */}
-          <div className="flex justify-center p-8 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+          <div className="p-3 sm:p-8 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+           <div ref={fitRef} className="w-full flex justify-center">
+            {/* Takes the scaled size in the layout; the badge inside keeps its own. */}
+            <div style={{ width: bw * scale, height: bh * scale, flex: '0 0 auto' }}>
             <div
               ref={badgeRef}
               className="relative rounded-lg shadow-2xl overflow-hidden"
               style={{
-                width: `${template.dimensions.width}px`,
-                height: `${template.dimensions.height}px`,
-                maxWidth: '100%',
+                width: `${bw}px`,
+                height: `${bh}px`,
+                transform: scale === 1 ? undefined : `scale(${scale})`,
+                transformOrigin: 'top left',
                 backgroundImage: `url(${template.backgroundImage.url})`,
                 backgroundSize: 'contain',
                 backgroundPosition: 'center',
@@ -357,12 +386,14 @@ export function BadgeDisplay() {
                 return null
               })}
             </div>
+            </div>
+           </div>
           </div>
 
           {/* User Information */}
           <div className="p-4 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <h3 className="font-semibold text-slate-900 dark:text-white mb-3">Badge Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm break-words">
               <div>
                 <span className="text-slate-600 dark:text-slate-400">Registration ID:</span>
                 <p className="font-medium text-slate-900 dark:text-white">{user.registrationId}</p>
