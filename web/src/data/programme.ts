@@ -134,8 +134,8 @@ export const day1: { label: string; date: string; window: string; venue: string;
       title: "Pediatric & The Digital Surgeon",
       window: "4:00 – 5:30 PM",
       slots: [
-        { time: "4:00", title: "Pediatric Valve Repairs: Principles and Pitfalls", who: "Dr. Rajasekhar" },
-        { time: "4:15", title: "Changing Face of Redo Surgery in the Pediatric Population", who: "Dr. Rajasekhar" },
+        { time: "4:00", title: "Pediatric Valve Repairs: Principles and Pitfalls", who: "Dr. P. Rajashekar" },
+        { time: "4:15", title: "Changing Face of Redo Surgery in the Pediatric Population", who: "Dr. P. Rajashekar" },
         { time: "4:30", title: "AI in Cardiac Surgery: From ChatGPT to the Operating Room", who: "Dr. Amaresh Rao" },
         { time: "4:45", title: "AI for Postoperative Follow-up Care: AID–PaMS", who: "Mr. Khetan Bhokray" },
         { time: "5:00", title: "Digital Twin, VR & Surgical Simulation: Where Are We Going?", who: "University of Hyderabad" },

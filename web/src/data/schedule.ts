@@ -18,7 +18,7 @@
  *  - Speaker names are spelled as the published faculty list spells them, where
  *    they are plainly the same person (Gokahle → Gokhale, Muthirevula →
  *    Mutharevula, Nithin → Nitin Kumar Rajput, Smirti → Smriti Ranjan Mohanty,
- *    Dopade → Dhopade, Rajashekar → Rajashekhar, Kutti → Kutty, and the missing
+ *    Dopade → Dhopade, Kutti → Kutty, and the missing
  *    space in "Dr.Vitaly").
  *  - One supplied time ran backwards ("3.30 - 3.15pm", High Tea on day two) and
  *    clashed with the panel that followed. Corrected on the committee's
@@ -121,7 +121,7 @@ export const breakthroughHall = "Hall B";
  * Its time cells were exported overlapping ("8.30 - 8.50am 8.50 -"); each row
  * runs from its own start to the next row's, which is how they are written
  * here. Speakers use the faculty list's spelling where they are plainly the
- * same person (Rajashekhar, Gokhale, Mutharevula, Dhopade, Balasubramoniam K R,
+ * same person (Rajashekar — his own spelling, 22 Oct 2026 —, Gokhale, Mutharevula, Dhopade, Balasubramoniam K R,
  * Chandrashekhar, Amaresh Rao Malempati); "Pediartic", "Veinn" and
  * "orMereHype" are corrected. The PDF writes both "Smruti" and the faculty
  * list "Smriti" Ranjan Mohanty — the faculty-list spelling is used.
@@ -159,7 +159,7 @@ const day1: ScheduleDay = {
     { n: 12, time: "1:35 – 1:55 pm", speaker: "Dr. Manoj Durairaj", title: "Beginner's Guide to Starting a Thoracic Organ Transplant Program", kind: "talk" },
     { n: 13, time: "1:55 – 2:15 pm", speaker: "Dr. Sandeep Attawar", title: "Mechanical Circulatory Support & Thoracic Transplant: Where do Young Surgeons fit in?", kind: "talk" },
     { n: 14, time: "2:15 – 2:35 pm", speaker: "Dr. Maruti Haranal", title: "Complex Redo's and The Changing Face of Pediatric Cardiac Surgery", kind: "talk" },
-    { n: 15, time: "2:35 – 2:55 pm", speaker: "Dr. P. Rajashekhar", title: "Pediatric Aortic and Mitral Valve Repairs", kind: "talk" },
+    { n: 15, time: "2:35 – 2:55 pm", speaker: "Dr. P. Rajashekar", title: "Pediatric Aortic and Mitral Valve Repairs", kind: "talk" },
     { n: 16, time: "2:55 – 3:15 pm", speaker: "Dr. Alla Gopala Krishna Gokhale", title: "Heart Transplant in Borderline Recipients", kind: "talk" },
     { n: 17, time: "3:15 – 3:35 pm", speaker: "Dr. Dhaval Naik", title: "Starting an LVAD Program", kind: "talk" },
     { time: "3:35 – 3:50 pm", title: "High Tea Break", kind: "break" },
@@ -209,7 +209,7 @@ const day2: ScheduleDay = {
       title: "Panel Discussion — Pediatric Cardiac Program and the Pediatric Surgeon: The Art, Science & Economics",
       kind: "panel",
       moderator: "Dr. Debasis Das",
-      panelists: ["Dr. Smriti Ranjan Mohanty", "Dr. Ganapathy Subramaniam", "Dr. Sunil Kumar Swain", "Dr. Sandeep Khanzode", "Dr. P. Rajashekhar"],
+      panelists: ["Dr. Smriti Ranjan Mohanty", "Dr. Ganapathy Subramaniam", "Dr. Sunil Kumar Swain", "Dr. Sandeep Khanzode", "Dr. P. Rajashekar"],
     },
     { time: "1:00 – 1:45 pm", title: "Lunch", kind: "break" },
     S("Session 9", ["Dr. Satya Bhaskar Raju", "Dr. Avinash Dal", "Dr. Madasu Sudhakar Rao", "Dr. Siddarth Sathia", "Dr. Kalluri Sriram"]),

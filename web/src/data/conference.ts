@@ -314,7 +314,7 @@ export const faculty = {
     "Dr. Naresh",
     "Dr. Niranjan Hiremath",
     "Dr. Nitin Kumar Rajput",
-    "Dr. P. Rajashekhar",
+    "Dr. P. Rajashekar",
     "Dr. Prasanna Simha",
     "Dr. Praveen Varma",
     "Dr. Ramprassath",
