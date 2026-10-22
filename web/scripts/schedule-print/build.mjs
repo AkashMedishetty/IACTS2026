@@ -13,8 +13,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const LOGO = '../../../public/brand/iacts-technocollege-2026-logo.png'
-const FONTS = '../../trade-brochure/assets/base.css'
+import { esc, row, top, foot, document } from './shared.mjs'
 
 /* Tidied from the committee's PDF:
    Pediartic → Pediatric (×2) · Veinn → Vein · "Venue:DR.MCRHRDINSTITUTE" spaced ·
@@ -128,37 +127,8 @@ const breakthrough = [
    session headings and topics — recoloured to the event palette. Built for
    printing: white paper, everything inside 10 mm margins (nothing bleeds to
    the edge, where printers clip), light fills only. */
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const total = pages.length + 1
 
-function row(r) {
-  switch (r.k) {
-    case 'session':
-      return `<tr class="ses"><td colspan="4"><div class="st">${esc(r.title)}</div><div class="ch">Chairpersons - ${esc(r.chairs)}</div></td></tr>`
-    case 'talk':
-      return `<tr class="talk"><td class="tm">${esc(r.time)}</td><td class="no">${r.n}</td><td class="nm">${esc(r.name)}</td>
-        <td class="tp">${r.badge ? `<b>${esc(r.badge)}:</b> ` : ''}${esc(r.topic)}</td></tr>`
-    case 'break':
-      return `<tr class="brk"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>`
-    case 'ceremony':
-      return `<tr class="cer"><td class="tm b">${esc(r.time)}</td><td></td><td></td>
-        <td class="tp"><div class="lbl">${esc(r.title)}</div><div class="gs">${r.guests.map((g) => `<div class="g">${esc(g)}</div>`).join('')}</div></td></tr>`
-    case 'panel':
-      return `<tr class="pan"><td class="tm b">${esc(r.time)}</td><td class="no">${r.n ?? ''}</td>
-        <td class="nm">${r.moderator ? `Moderator - ${esc(r.moderator)}` : 'PANEL DISCUSSION'}</td>
-        <td class="tp"><div class="lbl">${r.moderator ? 'PANEL DISCUSSION - ' : ''}${esc(r.topic)}</div><div>Panelists - ${esc(r.panelists)}</div></td></tr>`
-    case 'special':
-      return `<tr class="brk"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>
-        <tr class="talk"><td class="tm"></td><td class="no">${r.n}</td><td class="nm">${esc(r.name)}</td><td class="tp">${esc(r.topic)}</td></tr>`
-    case 'gala':
-      return `<tr class="gala"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>`
-  }
-}
-
-const top = `
-  <div class="hd"><img src="${LOGO}" alt="IACTS TechnoCollege CME 2026">
-    <div class="hd-r">THE FUTURE <span>IS NOW</span><small>23 – 25 October 2026 · Hyderabad</small></div></div>`
-const foot = (n) => `<div class="ft">IACTS TechnoCollege CME 2026 &nbsp;|&nbsp; iactstechnocollegecme2026.com &nbsp;|&nbsp; Page ${n} of ${total}</div>`
 const cols = `<colgroup><col style="width:15%"><col style="width:6%"><col style="width:25%"><col></colgroup>`
 const titleRows = `
   <tr class="colh"><th>Timings</th><th>S. No.</th><th>Name</th><th>Session Topic</th></tr>
@@ -170,7 +140,7 @@ const dayRows = (d, cont) => cont ? '' : `
 const body = pages.map((p, i) => `
 <section class="page sp"><div class="pad">${top}
   <table>${cols}<tbody>${titleRows}${dayRows(p.day, p.cont)}${p.rows.map(row).join('')}</tbody></table>
-  ${foot(i + 1)}</div>
+  ${foot(i + 1, total)}</div>
 </section>`).join('') + `
 <section class="page sp"><div class="pad">${top}
   <table class="bt"><colgroup><col style="width:12%"><col></colgroup><tbody>
@@ -179,53 +149,10 @@ const body = pages.map((p, i) => `
     ${breakthrough.map((t, i) => `<tr class="talk"><td class="no">${i + 1}</td><td class="tp b">${esc(t)}</td></tr>`).join('')}
     <tr class="info"><td colspan="2">Breakthrough Sessions Run in Parallel with the Scientific Program</td></tr>
   </tbody></table>
-  ${foot(total)}</div>
+  ${foot(total, total)}</div>
 </section>`
 
-const css = `
-@page{size:297mm 210mm;margin:0}
-.page.sp{width:297mm;height:210mm;background:#fff;position:relative;overflow:hidden}
-.sp .pad{position:absolute;top:10mm;left:10mm;right:10mm;bottom:10mm;display:flex;flex-direction:column}
-.sp,.sp table{font-family:Arial,Helvetica,sans-serif;color:#17120F}
-.hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:2.5mm;border-bottom:.8mm solid #B3122A;margin-bottom:.6mm}
-.hd img{height:16mm;display:block}
-.hd-r{text-align:right;font-family:'Anton';font-size:19pt;letter-spacing:.06em;color:#B3122A;line-height:1}
-.hd-r span{color:#A9793A}
-.hd-r small{display:block;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:.12em;color:#6A545A;text-transform:uppercase;margin-top:1.4mm;font-weight:bold}
-.hd+table{border-top:.4mm solid #A9793A;margin-top:.6mm}
-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.2pt;margin-top:3mm}
-td,th{border:.25mm solid #D9C29C;padding:2.05mm 2.2mm;vertical-align:middle}
-tr.colh th{background:#8B0000;color:#fff;font-weight:bold;font-size:10pt;text-align:center}
-tr.title td{background:#B3122A;color:#fff;font-weight:bold;font-size:14pt;text-align:center;padding:2mm}
-tr.info td{background:#F6EBDA;color:#5F0717;font-weight:bold;font-size:11.5pt;text-align:center}
-tr.ses td{background:#F8E9ED;text-align:center;padding:2mm 2mm}
-tr.ses .st{color:#B3122A;font-weight:bold;font-size:12pt}
-tr.ses .ch{color:#17120F;font-size:10pt;margin-top:.6mm}
-tr.talk:nth-child(odd) td{background:#FFFCF7}
-td.tm{font-size:9.8pt;white-space:nowrap}
-td.b,.b{font-weight:bold}
-td.no{text-align:center}
-td.nm{font-weight:bold}
-td.tp{text-align:center}
-tr.brk td{background:#EAD8B8;font-weight:bold}
-tr.brk td:last-child{text-align:center;color:#5F0717;font-size:11pt;letter-spacing:.06em}
-tr.cer td{background:#F8E9ED}
-tr.cer .lbl{color:#B3122A;font-weight:bold;margin-bottom:.6mm}
-tr.cer .gs{display:grid;grid-template-columns:repeat(3,1fr);gap:.4mm 3mm}
-tr.cer .g{font-weight:bold;font-size:9.8pt;line-height:1.3}
-tr.pan td{background:#F8E9ED}
-tr.pan td.nm{font-weight:bold}
-tr.pan td.tp{font-size:9.6pt}
-tr.pan .lbl{font-weight:bold;color:#B3122A;margin-bottom:.4mm}
-tr.gala td{background:#EAD8B8;font-weight:bold}
-tr.gala td:last-child{text-align:center;color:#B3122A;font-size:11.5pt;letter-spacing:.08em}
-.bt{font-size:11.5pt;width:78%;margin:6mm auto 0}
-.bt td{padding:3.2mm 2mm}
-.ft{margin-top:auto;text-align:center;font-size:7.6pt;color:#6A545A;border-top:.25mm solid #D9C29C;padding-top:1.6mm}
-`
-
-const html = `<!doctype html><html><head><meta charset="utf-8"><title>Scientific Schedule — IACTS TechnoCollege CME 2026</title>
-<link rel="stylesheet" href="${FONTS}"><style>${css}</style></head><body>${body}</body></html>`
+const html = document('Scientific Schedule — IACTS TechnoCollege CME 2026', body)
 mkdirSync(join(HERE, 'out'), { recursive: true })
 writeFileSync(join(HERE, 'out/index.html'), html)
 // The same rows feed the Excel version (xlsx.py), so the two never drift apart.

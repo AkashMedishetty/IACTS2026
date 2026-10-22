@@ -3,7 +3,7 @@ The printable scientific schedule as an Excel workbook — same table, colours
 and wording as the PDF (build.mjs), read from the rows build.mjs writes.
 
     node scripts/schedule-print/build.mjs
-    python scripts/schedule-print/xlsx.py "<output.xlsx>"     (needs openpyxl, Pillow)
+    python scripts/schedule-print/xlsx.py "<output.xlsx>" [schedule|workshop]     (needs openpyxl, Pillow)
 
 Sheet 1 is the scientific schedule (both days), sheet 2 the Breakthrough
 Sessions. Both are set up to print: A4 landscape, one page wide, the column
@@ -23,7 +23,11 @@ from openpyxl.worksheet.pagebreak import Break
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]  # web/
 LOGO = ROOT / "public/brand/iacts-technocollege-2026-logo.png"
-DATA = json.loads((HERE / "out/schedule.json").read_text())
+# Which document: the scientific schedule (default) or the workshop day.
+DOC = sys.argv[2] if len(sys.argv) > 2 else "schedule"
+DATA = json.loads((HERE / f"out/{DOC}.json").read_text())
+TITLE = DATA.get("title", "SCIENTIFIC SCHEDULE")
+HEADINGS = ["Timings", "S. No.", "Faculty", "Workshop Topic"] if DOC == "workshop" else ["Timings", "S. No.", "Name", "Session Topic"]
 
 DEEP, CRIMSON, WINE, GOLD = "8B0000", "B3122A", "5F0717", "A9793A"
 INK, SOFT = "17120F", "6A545A"
@@ -111,10 +115,10 @@ def schedule(ws):
 
     # Column headings + title (the headings repeat on every printed page)
     head_row = sh.r
-    for col, t in zip("ABCD", ["Timings", "S. No.", "Name", "Session Topic"]):
+    for col, t in zip("ABCD", HEADINGS):
         sh.cell(col, t, DEEP, font(10, True, "FFFFFF")).border = BOX
     sh.height(1, 10); sh.next()
-    sh.span("A", "D", "SCIENTIFIC SCHEDULE", CRIMSON, font(14, True, "FFFFFF")); sh.height(1, 14); sh.next()
+    sh.span("A", "D", TITLE, CRIMSON, font(14, True, "FFFFFF")); sh.height(1, 14); sh.next()
 
     current_day, alt = None, False
     for i, page in enumerate(DATA["pages"]):
@@ -123,15 +127,18 @@ def schedule(ws):
             ws.row_breaks.append(Break(id=sh.r - 1))
         if day["title"] != current_day:
             if current_day is not None:
-                sh.span("A", "D", "SCIENTIFIC SCHEDULE", CRIMSON, font(14, True, "FFFFFF")); sh.height(1, 14); sh.next()
+                sh.span("A", "D", TITLE, CRIMSON, font(14, True, "FFFFFF")); sh.height(1, 14); sh.next()
             current_day = day["title"]
             sh.span("A", "D", f'{day["title"]} - {day["date"]}', F_INFO, font(11.5, True, WINE)); sh.height(1, 10); sh.next()
             sh.span("A", "D", f'Venue : {day["venue"]}', F_INFO, font(11.5, True, WINE)); sh.height(1, 10); sh.next()
         for r in page["rows"]:
             k = r["k"]
             if k == "session":
-                sh.span("A", "D", rich((r["title"] + "\n", 12, True, CRIMSON), ("Chairpersons - " + r["chairs"], 10, False, INK)), F_SES)
-                sh.height(1 + lines("Chairpersons - " + r["chairs"], sum(WIDTHS.values())), 10)
+                if r.get("chairs"):
+                    sh.span("A", "D", rich((r["title"] + "\n", 12, True, CRIMSON), ("Chairpersons - " + r["chairs"], 10, False, INK)), F_SES)
+                    sh.height(1 + lines("Chairpersons - " + r["chairs"], sum(WIDTHS.values())), 10)
+                else:  # a hall heading on the workshop day
+                    sh.span("A", "D", r["title"], F_SES, font(12.5, True, CRIMSON)); sh.height(1, 12)
                 alt = False
             elif k == "talk":
                 bg = F_ALT if alt else "FFFFFF"
@@ -139,10 +146,11 @@ def schedule(ws):
                 sh.boxes(bg)
                 sh.cell("A", r["time"], bg, font(10), LEFT)
                 sh.cell("B", r["n"], bg, font(10))
-                sh.cell("C", r["name"], bg, font(10, True), LEFT)
+                names = "\n".join(r["name"]) if isinstance(r["name"], list) else r["name"]
+                sh.cell("C", names, bg, font(10, True), LEFT)
                 topic = rich((r["badge"] + ": ", 10, True, INK), (r["topic"], 10, False, INK)) if r.get("badge") else r["topic"]
                 sh.cell("D", topic, bg, font(10))
-                sh.height(max(lines(r["topic"], WIDTHS["D"]), lines(r["name"], WIDTHS["C"])))
+                sh.height(max(lines(r["topic"], WIDTHS["D"]), lines(names, WIDTHS["C"])))
             elif k in ("break", "gala"):
                 sh.boxes(F_BRK)
                 sh.cell("A", r["time"], F_BRK, font(10, True), LEFT)
@@ -223,13 +231,14 @@ def breakthrough(ws):
 
 
 if __name__ == "__main__":
-    out = Path(sys.argv[1] if len(sys.argv) > 1 else "scientific-schedule.xlsx").expanduser()
+    out = Path(sys.argv[1] if len(sys.argv) > 1 else f"{DOC}.xlsx").expanduser()
     wb = Workbook()
     ws = wb.active
-    ws.title = "Scientific Schedule"
+    ws.title = "Workshop" if DOC == "workshop" else "Scientific Schedule"
     schedule(ws)
-    breakthrough(wb.create_sheet("Breakthrough Sessions"))
-    wb.properties.title = "Scientific Schedule — IACTS TechnoCollege CME 2026"
+    if DATA["breakthrough"]:
+        breakthrough(wb.create_sheet("Breakthrough Sessions"))
+    wb.properties.title = f"{ws.title} — IACTS TechnoCollege CME 2026"
     wb.properties.creator = "IACTS TechnoCollege CME 2026"
     wb.save(out)
     print("wrote", out)

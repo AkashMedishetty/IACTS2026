@@ -13,14 +13,14 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT = process.argv[2];
-if (!OUT) throw new Error("Usage: node render.mjs <output.pdf>");
+if (!OUT) throw new Error("Usage: node render.mjs <output.pdf> [page.html, default out/index.html]");
 const EXE = process.env.BROCHURE_CHROME ?? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
 const browser = await chromium.launch({ executablePath: EXE, args: ["--allow-file-access-from-files"] });
 const page = await browser.newPage({ viewport: { width: 1240, height: 1754 } });
 const failed = [];
 page.on("requestfailed", (r) => failed.push(r.url()));
-await page.goto(pathToFileURL(resolve(HERE, "out/index.html")).href, { waitUntil: "load" });
+await page.goto(pathToFileURL(resolve(HERE, process.argv[3] ?? "out/index.html")).href, { waitUntil: "load" });
 await page.evaluate(() => document.fonts.ready);
 await page.waitForTimeout(800);
 
