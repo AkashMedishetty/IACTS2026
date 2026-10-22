@@ -228,7 +228,7 @@ const day2: ScheduleDay = {
       panelists: ["Dr. Alla Gopala Krishna Gokhale", "Dr. P N Rao", "Dr. Nitin Kumar Rajput", "Dr. Nagesh Ayalasomayajula"],
     },
     { n: 20, time: "4:10 – 4:30 pm", speaker: "Dr. Randolph Wong", title: "The Commando Procedure — Video Presentation", kind: "talk" },
-    { n: 21, time: "4:30 – 4:50 pm", speaker: "TSMC", title: "Medical Ethics / Good Clinical Practice / Lab Practice / Legal Issues", kind: "special" },
+    { n: 21, time: "4:30 – 4:50 pm", speaker: "TGMC", title: "Medical Ethics / Good Clinical Practice / Lab Practice / Legal Issues", kind: "special" },
     { time: "4:50 – 5:00 pm", title: "Valedictory", kind: "ceremony" },
   ],
 };

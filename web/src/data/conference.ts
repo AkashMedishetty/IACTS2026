@@ -400,8 +400,8 @@ const conferenceDayCount =
   ) + 1;
 
 export const creditPoints = {
-  authority: "Telangana State Medical Council",
-  abbreviation: "TSMC",
+  authority: "Telangana Medical Council",
+  abbreviation: "TGMC",
   status: "applied" as const,
   perDay: 2,
   days: conferenceDayCount,
