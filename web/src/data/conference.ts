@@ -26,7 +26,7 @@ export const days = [
     id: "workshop",
     date: "October 23, 2026",
     kicker: "Pre-Conference Workshop",
-    venue: "NIMS (Nizam's Institute of Medical Sciences), OP Block Learning Centre, Punjagutta, Hyderabad",
+    venue: "NIMS (Nizam's Institute of Medical Sciences), OP Block, 1st Floor, Learning Centre, Punjagutta, Hyderabad",
     stage: "Approach",
     blurb:
       "Hands-on sessions for postgraduate trainees, each with limited capacity.",
