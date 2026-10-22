@@ -228,4 +228,6 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><title>Scientific
 <link rel="stylesheet" href="${FONTS}"><style>${css}</style></head><body>${body}</body></html>`
 mkdirSync(join(HERE, 'out'), { recursive: true })
 writeFileSync(join(HERE, 'out/index.html'), html)
+// The same rows feed the Excel version (xlsx.py), so the two never drift apart.
+writeFileSync(join(HERE, 'out/schedule.json'), JSON.stringify({ pages, breakthrough }, null, 1))
 console.log(`wrote ${join(HERE, 'out/index.html')} — ${total} pages`)
