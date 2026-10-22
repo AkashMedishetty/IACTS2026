@@ -124,118 +124,104 @@ const breakthrough = [
 ]
 
 // ── html ─────────────────────────────────────────────────────────────────────
+/* Laid out like the committee's own table — bordered cells, Arial, centred
+   session headings and topics — recoloured to the event palette. Built for
+   printing: white paper, everything inside 10 mm margins (nothing bleeds to
+   the edge, where printers clip), light fills only. */
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const total = pages.length + 1
 
 function row(r) {
   switch (r.k) {
     case 'session':
-      return `<tr class="ses"><td colspan="4"><span class="st">${esc(r.title)}</span><span class="ch"><b>Chairpersons</b> ${esc(r.chairs)}</span></td></tr>`
+      return `<tr class="ses"><td colspan="4"><div class="st">${esc(r.title)}</div><div class="ch">Chairpersons - ${esc(r.chairs)}</div></td></tr>`
     case 'talk':
       return `<tr class="talk"><td class="tm">${esc(r.time)}</td><td class="no">${r.n}</td><td class="nm">${esc(r.name)}</td>
-        <td class="tp">${r.badge ? `<span class="badge">${esc(r.badge)}</span>` : ''}${esc(r.topic)}</td></tr>`
+        <td class="tp">${r.badge ? `<b>${esc(r.badge)}:</b> ` : ''}${esc(r.topic)}</td></tr>`
     case 'break':
-      return `<tr class="brk"><td class="tm">${esc(r.time)}</td><td colspan="3">${esc(r.label)}</td></tr>`
+      return `<tr class="brk"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>`
     case 'ceremony':
-      return `<tr class="cer"><td class="tm">${esc(r.time)}</td><td></td><td colspan="2">
-        <div class="lbl">${esc(r.title)}</div><div class="guests">${r.guests.map((g) => `<span>${esc(g)}</span>`).join('')}</div></td></tr>`
+      return `<tr class="cer"><td class="tm b">${esc(r.time)}</td><td></td><td></td>
+        <td class="tp"><div class="lbl">${esc(r.title)}</div><div class="gs">${r.guests.map((g) => `<div class="g">${esc(g)}</div>`).join('')}</div></td></tr>`
     case 'panel':
-      return `<tr class="pan"><td class="tm">${esc(r.time)}</td><td class="no">${r.n ?? ''}</td><td class="nm">
-        <div class="lbl">Panel Discussion</div>${r.moderator ? `<div class="mod"><i>Moderator</i>${esc(r.moderator)}</div>` : ''}</td>
-        <td class="tp"><div class="ptitle">${esc(r.topic)}</div><div class="pl"><i>Panelists</i> ${esc(r.panelists)}</div></td></tr>`
+      return `<tr class="pan"><td class="tm b">${esc(r.time)}</td><td class="no">${r.n ?? ''}</td>
+        <td class="nm">${r.moderator ? `Moderator - ${esc(r.moderator)}` : 'PANEL DISCUSSION'}</td>
+        <td class="tp"><div class="lbl">${r.moderator ? 'PANEL DISCUSSION - ' : ''}${esc(r.topic)}</div><div>Panelists - ${esc(r.panelists)}</div></td></tr>`
     case 'special':
-      return `<tr class="spc"><td class="tm">${esc(r.time)}</td><td colspan="3" class="lbl">${esc(r.label)}</td></tr>
+      return `<tr class="brk"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>
         <tr class="talk"><td class="tm"></td><td class="no">${r.n}</td><td class="nm">${esc(r.name)}</td><td class="tp">${esc(r.topic)}</td></tr>`
     case 'gala':
-      return `<tr class="gala"><td class="tm">${esc(r.time)}</td><td colspan="3">${esc(r.label)}</td></tr>`
+      return `<tr class="gala"><td class="tm b">${esc(r.time)}</td><td></td><td colspan="2">${esc(r.label)}</td></tr>`
   }
 }
 
-const head = (n) => `
-  <header class="hd">
-    <img src="${LOGO}" alt="IACTS TechnoCollege CME 2026">
-    <div class="hd-r"><div class="hd-t">Scientific <span>Schedule</span></div>
-      <div class="hd-s">IACTS TechnoCollege CME 2026 &nbsp;·&nbsp; The Future Is Now</div></div>
-  </header>
-  <footer class="ft"><span><b>IACTS TechnoCollege CME 2026</b> &nbsp;·&nbsp; 23 – 25 October 2026 &nbsp;·&nbsp; Hyderabad</span>
-    <span>iactstechnocollegecme2026.com</span><span class="pg">Page ${n} of ${total}</span></footer>`
-
-const dayBar = (d, cont) => `
-  <div class="day"><div class="dl"><span class="dt">${d.title}</span><span class="dd">${d.date}${cont ? ' <em>(continued)</em>' : ''}</span></div>
-    <div class="dv">${esc(d.venue)}</div></div>`
-
-const thead = `<thead><tr><th class="tm">Timings</th><th class="no">S. No.</th><th class="nm">Name</th><th class="tp">Session Topic</th></tr></thead>`
+const top = `
+  <div class="hd"><img src="${LOGO}" alt="IACTS TechnoCollege CME 2026">
+    <div class="hd-r">THE FUTURE <span>IS NOW</span><small>23 – 25 October 2026 · Hyderabad</small></div></div>`
+const foot = (n) => `<div class="ft">IACTS TechnoCollege CME 2026 &nbsp;|&nbsp; iactstechnocollegecme2026.com &nbsp;|&nbsp; Page ${n} of ${total}</div>`
+const cols = `<colgroup><col style="width:15%"><col style="width:6%"><col style="width:25%"><col></colgroup>`
+const titleRows = `
+  <tr class="colh"><th>Timings</th><th>S. No.</th><th>Name</th><th>Session Topic</th></tr>
+  <tr class="title"><td colspan="4">SCIENTIFIC SCHEDULE</td></tr>`
+const dayRows = (d, cont) => cont ? '' : `
+  <tr class="info"><td colspan="4">${d.title} - ${d.date}</td></tr>
+  <tr class="info"><td colspan="4">Venue : ${esc(d.venue)}</td></tr>`
 
 const body = pages.map((p, i) => `
-<section class="page sp">${head(i + 1)}
-  <div class="pad">${dayBar(p.day, p.cont)}
-    <table>${thead}<tbody>${p.rows.map(row).join('')}</tbody></table>
-  </div>
+<section class="page sp"><div class="pad">${top}
+  <table>${cols}<tbody>${titleRows}${dayRows(p.day, p.cont)}${p.rows.map(row).join('')}</tbody></table>
+  ${foot(i + 1)}</div>
 </section>`).join('') + `
-<section class="page sp">${head(total)}
-  <div class="pad">
-    <div class="day"><div class="dl"><span class="dt">Breakthrough Sessions</span><span class="dd">Hall B</span></div>
-      <div class="dv">Runs in parallel with the scientific programme</div></div>
-    <table class="bt"><thead><tr><th class="no">S. No.</th><th class="tp">Topic Name</th></tr></thead><tbody>
-      ${breakthrough.map((t, i) => `<tr class="talk"><td class="no">${i + 1}</td><td class="nm">${esc(t)}</td></tr>`).join('')}
-    </tbody></table>
-  </div>
+<section class="page sp"><div class="pad">${top}
+  <table class="bt"><colgroup><col style="width:12%"><col></colgroup><tbody>
+    <tr class="title"><td colspan="2">Breakthrough Sessions - Hall B</td></tr>
+    <tr class="colh"><th>S. No.</th><th>Topic Name</th></tr>
+    ${breakthrough.map((t, i) => `<tr class="talk"><td class="no">${i + 1}</td><td class="tp b">${esc(t)}</td></tr>`).join('')}
+    <tr class="info"><td colspan="2">Breakthrough Sessions Run in Parallel with the Scientific Program</td></tr>
+  </tbody></table>
+  ${foot(total)}</div>
 </section>`
 
 const css = `
 @page{size:297mm 210mm;margin:0}
-.page.sp{width:297mm;height:210mm;background:#FBF7F1;position:relative;overflow:hidden}
-.sp .pad{position:absolute;top:22mm;left:11mm;right:11mm;bottom:12.5mm}
-.hd{position:absolute;left:0;right:0;top:0;height:18mm;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 11mm}
-.hd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.1mm;background:linear-gradient(90deg,#5F0717,#B3122A 55%,#A9793A)}
-.hd img{height:13.5mm;display:block}
-.hd-r{text-align:right}
-.hd-t{font-family:'Anton';font-size:20pt;letter-spacing:.07em;text-transform:uppercase;color:#17120F;line-height:1}
-.hd-t span{color:#B3122A}
-.hd-s{font-family:'BarlowCondensed';font-weight:600;font-size:8.5pt;letter-spacing:.2em;text-transform:uppercase;color:#A9793A;margin-top:1.2mm}
-.ft{position:absolute;left:0;right:0;bottom:0;height:9mm;background:#17120F;display:flex;align-items:center;justify-content:space-between;padding:0 11mm;
-  font-family:'BarlowCondensed';font-weight:600;font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:#E3D3B5}
-.ft b{color:#fff;font-weight:700}
-.ft .pg{color:#E8B86A}
-.day{display:flex;align-items:center;justify-content:space-between;background:#17120F;color:#fff;padding:2.2mm 4mm;border-left:2mm solid #A9793A}
-.dl{display:flex;align-items:baseline;gap:3mm}
-.dt{font-family:'Anton';font-size:15pt;letter-spacing:.06em;text-transform:uppercase;color:#E8B86A}
-.dd{font-family:'Barlow';font-weight:600;font-size:11pt}
-.dd em{font-style:normal;font-weight:500;color:#cfc3b3;font-size:9.5pt}
-.dv{font-family:'BarlowCondensed';font-weight:600;font-size:9.5pt;letter-spacing:.08em;text-transform:uppercase;color:#E3D3B5}
-table{width:100%;border-collapse:collapse;font-family:'Barlow';font-size:10.6pt;color:#17120F;table-layout:fixed}
-thead th{background:#E3D3B5;color:#17120F;font-family:'BarlowCondensed';font-weight:700;font-size:9.4pt;letter-spacing:.16em;text-transform:uppercase;padding:1.6mm 2.5mm;text-align:left;border-bottom:.5mm solid #A9793A}
-th.tm,td.tm{width:37mm}
-th.no,td.no{width:17mm;text-align:center;white-space:nowrap}
-th.nm{width:74mm}
-.bt th.no,.bt td.no{width:20mm}
-td{padding:2.35mm 2.5mm;vertical-align:middle;border-bottom:.25mm solid #EADFCF}
-tr.talk:nth-child(even) td{background:#fff}
-td.tm{font-family:'BarlowCondensed';font-weight:700;font-size:11pt;color:#8B0000;white-space:nowrap}
-td.no{font-family:'BarlowCondensed';font-weight:700;color:#A9793A;font-size:11.5pt}
-td.nm{font-weight:700}
-.badge{display:inline-block;font-family:'BarlowCondensed';font-weight:700;font-size:8.4pt;letter-spacing:.14em;text-transform:uppercase;background:#A9793A;color:#fff;border-radius:1mm;padding:.3mm 1.6mm;margin-right:2mm;vertical-align:1px}
-tr.ses td{background:linear-gradient(90deg,#B3122A,#8B0000);color:#fff;padding:2.2mm 4mm;border:0}
-tr.ses .st{font-family:'Anton';font-size:14pt;letter-spacing:.08em;text-transform:uppercase;margin-right:4mm}
-tr.ses .ch{font-size:10.2pt}
-tr.ses .ch b{font-family:'BarlowCondensed';font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#F3DDB0;font-size:8.2pt;margin-right:1.5mm}
-tr.brk td{background:#F3E7D3;border-top:.25mm solid #D9C29C;border-bottom:.25mm solid #D9C29C}
-tr.brk td:last-child{font-family:'BarlowCondensed';font-weight:700;font-size:11.5pt;letter-spacing:.3em;text-transform:uppercase;color:#875318;text-align:center}
-tr.cer td,tr.pan td{background:#F8E9ED}
-.lbl{font-family:'BarlowCondensed';font-weight:700;font-size:10.5pt;letter-spacing:.2em;text-transform:uppercase;color:#B3122A}
-.guests{display:grid;grid-template-columns:repeat(3,1fr);gap:.6mm 4mm;margin-top:1.2mm;font-weight:600;font-size:10.2pt}
-.mod{font-weight:700;margin-top:.6mm}
-.mod i,.pl i{font-style:normal;font-family:'BarlowCondensed';font-weight:700;font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:#A9793A;margin-right:1.5mm}
-.mod i{display:block}
-.ptitle{font-weight:700}
-.pl{margin-top:.8mm;font-size:10pt}
-tr.spc td{background:#F8E9ED}
-tr.spc td.lbl{font-size:10pt}
-tr.gala td{background:#17120F;color:#E8B86A;border:0}
-tr.gala td.tm{color:#E8B86A}
-tr.gala td:last-child{font-family:'Anton';font-size:14pt;letter-spacing:.2em;text-transform:uppercase;text-align:center}
-.bt{margin-top:0;font-size:12pt}
-.bt td{padding:3.6mm 3mm}
+.page.sp{width:297mm;height:210mm;background:#fff;position:relative;overflow:hidden}
+.sp .pad{position:absolute;top:10mm;left:10mm;right:10mm;bottom:10mm;display:flex;flex-direction:column}
+.sp,.sp table{font-family:Arial,Helvetica,sans-serif;color:#17120F}
+.hd{display:flex;align-items:center;justify-content:space-between;padding-bottom:2.5mm;border-bottom:.8mm solid #B3122A;margin-bottom:.6mm}
+.hd img{height:16mm;display:block}
+.hd-r{text-align:right;font-family:'Anton';font-size:19pt;letter-spacing:.06em;color:#B3122A;line-height:1}
+.hd-r span{color:#A9793A}
+.hd-r small{display:block;font-family:Arial,sans-serif;font-size:8pt;letter-spacing:.12em;color:#6A545A;text-transform:uppercase;margin-top:1.4mm;font-weight:bold}
+.hd+table{border-top:.4mm solid #A9793A;margin-top:.6mm}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:10.2pt;margin-top:3mm}
+td,th{border:.25mm solid #D9C29C;padding:2.05mm 2.2mm;vertical-align:middle}
+tr.colh th{background:#8B0000;color:#fff;font-weight:bold;font-size:10pt;text-align:center}
+tr.title td{background:#B3122A;color:#fff;font-weight:bold;font-size:14pt;text-align:center;padding:2mm}
+tr.info td{background:#F6EBDA;color:#5F0717;font-weight:bold;font-size:11.5pt;text-align:center}
+tr.ses td{background:#F8E9ED;text-align:center;padding:2mm 2mm}
+tr.ses .st{color:#B3122A;font-weight:bold;font-size:12pt}
+tr.ses .ch{color:#17120F;font-size:10pt;margin-top:.6mm}
+tr.talk:nth-child(odd) td{background:#FFFCF7}
+td.tm{font-size:9.8pt;white-space:nowrap}
+td.b,.b{font-weight:bold}
+td.no{text-align:center}
+td.nm{font-weight:bold}
+td.tp{text-align:center}
+tr.brk td{background:#EAD8B8;font-weight:bold}
+tr.brk td:last-child{text-align:center;color:#5F0717;font-size:11pt;letter-spacing:.06em}
+tr.cer td{background:#F8E9ED}
+tr.cer .lbl{color:#B3122A;font-weight:bold;margin-bottom:.6mm}
+tr.cer .gs{display:grid;grid-template-columns:repeat(3,1fr);gap:.4mm 3mm}
+tr.cer .g{font-weight:bold;font-size:9.8pt;line-height:1.3}
+tr.pan td{background:#F8E9ED}
+tr.pan td.nm{font-weight:bold}
+tr.pan td.tp{font-size:9.6pt}
+tr.pan .lbl{font-weight:bold;color:#B3122A;margin-bottom:.4mm}
+tr.gala td{background:#EAD8B8;font-weight:bold}
+tr.gala td:last-child{text-align:center;color:#B3122A;font-size:11.5pt;letter-spacing:.08em}
+.bt{font-size:11.5pt;width:78%;margin:6mm auto 0}
+.bt td{padding:3.2mm 2mm}
+.ft{margin-top:auto;text-align:center;font-size:7.6pt;color:#6A545A;border-top:.25mm solid #D9C29C;padding-top:1.6mm}
 `
 
 const html = `<!doctype html><html><head><meta charset="utf-8"><title>Scientific Schedule — IACTS TechnoCollege CME 2026</title>
