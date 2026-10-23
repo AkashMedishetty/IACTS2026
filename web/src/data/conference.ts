@@ -445,7 +445,7 @@ export const about = {
    * that layout was explicitly removed from the About section on the same call.
    */
   programmeNote: [
-    "The programme begins on Day Zero with the Pre-conference Hands-on Workshops at Nizam's Institute of Medical Sciences, Hyderabad, providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, valve replacement techniques, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
+    "The programme begins on Day Zero with the Pre-conference Hands-on Workshops at Nizam's Institute of Medical Sciences, Hyderabad, providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, surgical stapling, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
     "The following two days at Dr. Marri Channa Reddy Human Resource Development Institute will take participants beyond conventional CME learning. The scientific programme is structured around four major domains shaping the future of our specialty: Minimally Invasive and Robotic Cardiac Surgery; Aortic Surgery; Heart-Lung Transplantation; Complex Congenital and Thoracic Surgery, including VATS and Robotic Thoracic Surgery.",
     "A distinctive feature of Technocollege will be the Breakthrough Sessions, where industry partners and technology innovators will showcase emerging technologies and demonstrate their real-world applications. These sessions are intended to provide participants with an opportunity to see, understand and critically evaluate technologies that may define their practice in the years ahead.",
   ],
@@ -459,11 +459,14 @@ export const pending = {
   delegateCategories: "published",
   abstractDeadline: "2026-10-15",
   abstractRules: "published",
-  cmeCreditHours: null,
-  accreditingCouncil: null,
-  sponsorshipTiers: null,
+  /* Settled before the event: TGMC, 2 points a day, 6 in all; the full
+     programme is on /programme; exhibition is arranged directly with the
+     secretariat. Non-null removes each from the FAQ's open list. */
+  cmeCreditHours: "2 per day, 6 total",
+  accreditingCouncil: "TGMC",
+  sponsorshipTiers: "on request",
   accommodation: "early-bird-complimentary",
-  sessionTimetable: null,
+  sessionTimetable: "published",
   phones: "published",
 } as const;
 

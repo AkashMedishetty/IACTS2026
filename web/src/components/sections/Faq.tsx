@@ -1,5 +1,9 @@
 import { conference, days, pending, secretariat, venues } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
+import { getCategoryPricing } from "@/config/pricing.config";
+import { getCurrentTierKey } from "@/lib/registration";
+
+const inr = (n?: number) => (n ? `₹${n.toLocaleString("en-IN")}` : "—");
 
 /**
  * FAQ.
@@ -37,6 +41,10 @@ const LABELS: Record<string, string> = {
 };
 
 export default function Faq() {
+  // Answers follow the tier active today, never a tier typed into the text.
+  const tierKey = getCurrentTierKey();
+  const tier: any = (conferenceConfig.payment.tiers as any)[tierKey] || {};
+  const price = (cat: string) => getCategoryPricing(cat, tierKey)?.amount;
   const answered: [string, React.ReactNode][] = [
     [
       "When and where is it?",
@@ -55,19 +63,23 @@ export default function Faq() {
     ],
     [
       "Can I present my own work?",
-      "Yes. Two of the seven scientific formats take submitted work — Paper & Video Presentations, and the Young Surgeons Forum. The submission rules are not published yet.",
+      "Abstract submission closed on 15 October 2026. Accepted abstracts are presented in Hall B — oral papers on 24 October and posters on 25 October.",
     ],
     [
       "Are there awards?",
-      "Yes — Best Paper and E-Poster Awards, and the Young Surgeons Forum. Entry criteria and judging panels are not announced yet.",
+      "Yes — Best Paper and E-Poster Awards, and the Young Surgeons Forum.",
     ],
     [
       "Is registration open?",
-      `Yes. Early Bird rates run until ${faqDate(conferenceConfig.payment.tiers.earlyBird?.endDate)}, Standard until ${faqDate(conferenceConfig.payment.tiers.regular?.endDate)}, and Spot registration is available at the venue. Early Bird registrations include complimentary twin-sharing accommodation.`,
+      `Yes — ${tier.label} rates apply until ${faqDate(tier.endDate)}, and you can also register at the venue.`,
     ],
     [
       "What does registration cost?",
-      "Residents/Trainees ₹3,000, IACTS Members ₹5,000 and Non-Members ₹7,000 at the Early Bird rate. Standard and Spot rates are higher — the full matrix is in the registration section.",
+      `At the current ${tier.label} rate: Residents/Trainees ${inr(price("resident"))}, IACTS Members ${inr(price("iacts-member"))} and Non-Members ${inr(price("non-member"))}. The full fee table is on the registration page.`,
+    ],
+    [
+      "Are CME credit points awarded?",
+      "TGMC (Telangana Medical Council) credit points have been applied for — 2 points per day across all 3 days, the workshop included, for a total of 6. Daily attendance at the Registration Counter is mandatory, and credit point certificates are issued by TGMC after the conference.",
     ],
     [
       "How do I pay?",
@@ -123,7 +135,7 @@ export default function Faq() {
           ))}
         </div>
 
-        <aside>
+        {open.length > 0 && <aside>
           <p className="u-eyebrow text-gold-lift" data-r>
             Awaiting the organising committee
           </p>
@@ -143,7 +155,7 @@ export default function Faq() {
               </li>
             ))}
           </ul>
-        </aside>
+        </aside>}
       </div>
     </section>
   );

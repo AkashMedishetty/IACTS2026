@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { conferenceConfig } from '@/config/conference.config'
 import connectDB from '@/lib/mongodb'
 import Abstract from '@/lib/models/Abstract'
 import User from '@/lib/models/User'
@@ -32,6 +33,11 @@ const onlyDigits = (s: string) => (s || '').replace(/\D/g, '')
 
 export async function POST(request: NextRequest) {
   try {
+    // Closed after the deadline in conference.config (end of 15 October 2026, IST).
+    const closesAt = conferenceConfig.abstracts.submissionWindow?.end
+    if (conferenceConfig.abstracts.submissionWindow?.enabled && closesAt && Date.now() > new Date(closesAt).getTime()) {
+      return NextResponse.json({ success: false, message: 'Abstract submission closed on 15 October 2026.' }, { status: 403 })
+    }
     await connectDB()
     const body = await request.json()
 

@@ -10,6 +10,11 @@ import { logAbstractAction, logAction } from '@/lib/audit/service'
 import { conferenceConfig } from '@/config/conference.config'
 
 export async function POST(request: NextRequest) {
+  // Closed after the deadline in conference.config (end of 15 October 2026, IST).
+  const closesAt = conferenceConfig.abstracts.submissionWindow?.end
+  if (conferenceConfig.abstracts.submissionWindow?.enabled && closesAt && Date.now() > new Date(closesAt).getTime()) {
+    return NextResponse.json({ success: false, message: 'Abstract submission closed on 15 October 2026.' }, { status: 403 })
+  }
   // UNIQUE IDENTIFIER - If you see this in logs, the correct route is being hit
   console.log('=== SUBMIT-UNREGISTERED-V4 ROUTE HIT ===')
   console.log('Timestamp:', new Date().toISOString())

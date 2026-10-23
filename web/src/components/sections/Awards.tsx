@@ -58,20 +58,9 @@ export default function Awards() {
           ))}
         </div>
 
-        <div className="mt-[clamp(2rem,5vh,3.5rem)] grid gap-x-[clamp(1.5rem,3vw,3.5rem)] border-t border-[var(--hair)] pt-6 sm:grid-cols-3">
-          {[
-            ["Entry criteria", "To be published"],
-            ["Judging panel", "To be announced"],
-            ["Prize categories", "To be announced"],
-          ].map(([t, d]) => (
-            <div key={t} data-r className="py-2">
-              <p className="u-eyebrow">{t}</p>
-              <p className="mt-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-crimson-lift">
-                {d}
-              </p>
-            </div>
-          ))}
-        </div>
+        {/* The "To be published / To be announced" row for entry criteria, judging
+            panel and prize categories was removed on 23 October 2026: the
+            conference is under way and none of it was published. */}
       </div>
     </section>
   );

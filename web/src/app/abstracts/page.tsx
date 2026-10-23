@@ -943,7 +943,10 @@ export default function AbstractsPage() {
     } catch { toast.error('An error occurred') } finally { setReminderLoading(false) }
   }
 
-  const submissionsDisabled = !configLoading && abstractsConfig && !abstractsConfig.submissionWindow?.enabled
+  // Closed when the stored window is off OR the published deadline has passed —
+  // checking only the switch left "Now Open" and a submit button up after 15 Oct.
+  const deadlinePassed = Boolean(conferenceConfig.abstracts.submissionWindow?.end) && Date.now() > new Date(conferenceConfig.abstracts.submissionWindow!.end).getTime()
+  const submissionsDisabled = deadlinePassed || (!configLoading && abstractsConfig && !abstractsConfig.submissionWindow?.enabled)
 
   // Success screen
   if (isSubmitted) {
@@ -1012,7 +1015,7 @@ export default function AbstractsPage() {
               
               <div className="mb-6">
                 <motion.div className={`inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-sm rounded-full mb-4 ${submissionsDisabled ? 'bg-orange-500/30' : ''}`} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5, duration: 0.5 }}>
-                  {submissionsDisabled ? <><Clock className="w-5 h-5 mr-2" /><span className="font-semibold">Coming Soon</span></> : <><CheckCircle className="w-5 h-5 mr-2" /><span className="font-semibold">Now Open</span></>}
+                  {submissionsDisabled ? <><Clock className="w-5 h-5 mr-2" /><span className="font-semibold">{deadlinePassed ? 'Submission Closed' : 'Coming Soon'}</span></> : <><CheckCircle className="w-5 h-5 mr-2" /><span className="font-semibold">Now Open</span></>}
                 </motion.div>
                 
                 <p className="text-lg md:text-xl max-w-3xl mx-auto">
@@ -1066,7 +1069,7 @@ export default function AbstractsPage() {
               <UnregisteredForm registrationTypes={registrationTypes} onClose={handleCloseForm} onSuccess={handleFormSuccess} abstractsConfig={abstractsConfig} />
             )}
             
-            {activeFlow === 'none' && submissionsDisabled && (
+            {activeFlow === 'none' && submissionsDisabled && !deadlinePassed && (
               <div className="max-w-xl mx-auto mb-14">
                 <Card className="bg-white/10 backdrop-blur-md border-white/20">
                   <CardContent className="pt-6 pb-6">
@@ -1274,7 +1277,7 @@ export default function AbstractsPage() {
                   <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
                     <p className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 font-semibold">
                       <Clock className="w-5 h-5" />
-                      Online submission is not open yet — use the notify form above and we will email you when it opens.
+                      {deadlinePassed ? 'Abstract submission closed on 15 October 2026. Accepted presenters: upload your final presentation from the Abstracts section of your dashboard.' : 'Online submission is not open yet — use the notify form above and we will email you when it opens.'}
                     </p>
                   </motion.div>
                 ) : (
