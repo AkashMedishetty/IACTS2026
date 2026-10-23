@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth/next'
+import { authOptions } from '@/lib/auth'
 import connectDB from '../../../../lib/mongodb'
 import NotificationEmail from '@/lib/models/NotificationEmail'
 import { notificationSubscriptionSchema } from '@/lib/validation/schemas'
@@ -96,6 +98,11 @@ export async function POST(request: NextRequest) {
 // GET endpoint to retrieve subscriptions (for admin)
 export async function GET(request: NextRequest) {
   try {
+    // Admin panel only: this lists people's names and contact details.
+    const session = await getServerSession(authOptions)
+    if (!['admin', 'manager'].includes((session?.user as any)?.role)) {
+      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
+    }
     await connectDB()
     
     const { searchParams } = new URL(request.url)
