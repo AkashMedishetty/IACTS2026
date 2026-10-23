@@ -19,8 +19,12 @@ function fmtDate(iso?: string) {
 
 export default function RegisterCta() {
   const activeKey = getCurrentTierKey();
+  /* Public fee table: only categories a delegate can actually buy. Admin-only
+     categories (Faculty, Special Invitee, Organising Committee, Delegate) have
+     no public price and must never appear here — they did, at ₹0, from
+     12 October 2026 until this filter checked `adminOnly`. */
   const categories = conferenceConfig.registration.categories.filter(
-    (c) => !["complimentary", "sponsored"].includes(c.key),
+    (c: any) => !c.adminOnly && !["complimentary", "sponsored"].includes(c.key),
   );
 
   return (

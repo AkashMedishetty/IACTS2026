@@ -268,7 +268,7 @@ export default function SubmitUnregisteredAbstractPage() {
               price: type.price
             })))
           } else {
-            setRegistrationTypes(conferenceConfig.registration.categories.map(cat => ({
+            setRegistrationTypes(conferenceConfig.registration.categories.filter((cat: any) => !cat.adminOnly).map(cat => ({
               value: cat.key,
               label: cat.label,
               price: 0

@@ -869,7 +869,7 @@ export default function AbstractsPage() {
           if (typesResult.success && typesResult.data?.length > 0) {
             setRegistrationTypes(typesResult.data.map((type: any) => ({ value: type.key, label: type.label, price: type.price })))
           } else {
-            setRegistrationTypes(conferenceConfig.registration.categories.map(cat => ({ value: cat.key, label: cat.label, price: 0 })))
+            setRegistrationTypes(conferenceConfig.registration.categories.filter((cat: any) => !cat.adminOnly).map(cat => ({ value: cat.key, label: cat.label, price: 0 })))
           }
         }
       } catch { /* ignore */ } finally { setConfigLoading(false) }
