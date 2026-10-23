@@ -41,7 +41,7 @@ export default function Sponsors() {
             Industry <span className="u-serif">participation</span>
           </h2>
           <p className="mt-5 max-w-xl text-[0.95rem] leading-relaxed text-muted-foreground" data-r>
-            Six technology domains are delivered as programme content, and five skills stations run on live equipment with delegate participation.
+            Six technology domains are delivered as programme content, and {stations.length} skills stations run on live equipment with delegate participation.
           </p>
         </header>
 
@@ -83,29 +83,13 @@ export default function Sponsors() {
           </div>
 
           <div>
-            <p className="u-eyebrow text-gold-lift" data-r>Commercial terms</p>
-            <ul className="mt-4 list-none border-t border-[var(--hair)] p-0">
-              {[
-                ["Partnership tiers", "Not yet published"],
-                ["Exhibition floor plan", "Not yet released"],
-                ["Stall dimensions & rates", "Not yet published"],
-                ["Delegate profile & numbers", "Not yet confirmed"],
-                ["Satellite-symposium slots", "To be announced"],
-              ].map(([t, d]) => (
-                <li key={t} data-r className="flex items-baseline justify-between gap-4 border-b border-[var(--hair)] py-3">
-                  <span className="text-[0.9rem]">{t}</span>
-                  <span className="shrink-0 font-mono text-[0.6rem] uppercase tracking-[0.14em] text-crimson-lift">
-                    {d}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-6 border border-[var(--hair-gold)] p-[clamp(1.25rem,2.5vw,2rem)]" data-r>
-              <p className="u-eyebrow">Register interest</p>
+            {/* The "Commercial terms — not yet published / to be announced" list was
+                removed on 23 October 2026; the conference is under way. */}
+            <div className="border border-[var(--hair-gold)] p-[clamp(1.25rem,2.5vw,2rem)]" data-r>
+              <p className="u-eyebrow">Industry enquiries</p>
               <p className="mt-2 text-[0.88rem] leading-relaxed text-muted-foreground">
-                The prospectus is being prepared. Until it is published, the
-                organising secretariat is the only route.
+                For exhibition and partnership enquiries, write to the
+                organising secretariat.
               </p>
               <a
                 href={`mailto:${secretariat.email}?subject=IACTS%20Technocollege%20CME%202026%20-%20exhibition%20enquiry`}
