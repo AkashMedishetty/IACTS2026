@@ -12,6 +12,13 @@ const nextConfig: NextConfig = {
          already out in the wild. */
       { source: '/speakers', destination: '/faculty', permanent: true },
       { source: '/login', destination: '/auth/login', permanent: true },
+      /* Design experiments and render rigs: kept in the repo for local work,
+         never served on the live site (one showed stale "To be announced"
+         content). Vercel sets VERCEL_ENV=production on the live deployment. */
+      ...(process.env.VERCEL_ENV === 'production'
+        ? ['/concept1', '/concept-index', '/concept-register', '/hero-lab', '/motion-lab', '/anatomy-lab', '/render-plate']
+            .flatMap((p) => [{ source: p, destination: '/', permanent: false }, { source: `${p}/:path*`, destination: '/', permanent: false }])
+        : []),
     ]
   },
 

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { facultyRegistrationKey } from '@/lib/facultyRegistration'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import connectDB from '@/lib/mongodb'
@@ -48,7 +49,12 @@ export async function GET(request: NextRequest) {
       .sort({ 'registration.registrationDate': -1 })
       .lean()
 
-    return NextResponse.json({ success: true, data: faculty, total: faculty.length })
+    // The shareable faculty link carries the faculty code, so it is handed to
+    // admins here rather than built into the public page code.
+    const key = facultyRegistrationKey()
+    const base = (process.env.NEXT_PUBLIC_APP_URL && !/localhost/.test(process.env.NEXT_PUBLIC_APP_URL) ? process.env.NEXT_PUBLIC_APP_URL : 'https://iactstechnocollegecme2026.com').replace(/\/$/, '')
+    const registrationLink = key ? `${base}/faculty-register/${encodeURIComponent(key)}` : null
+    return NextResponse.json({ success: true, data: faculty, total: faculty.length, registrationLink })
   } catch (error) {
     console.error('Faculty list error:', error)
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })

@@ -19,7 +19,7 @@ export default function Page() {
       <ul>
         <li>Registration is personal to the named delegate and may not be transferred without written approval from the secretariat.</li>
         <li>A registration is <strong>confirmed only when payment has been received and verified</strong> by the secretariat. Until then it is held as pending.</li>
-        <li>Concessional categories (Resident/Trainee, {conferenceConfig.registration.categories.find((c) => c.requiresMembership)?.label}) require valid proof of eligibility. The secretariat may request documentation and may re-rate a registration if eligibility cannot be evidenced.</li>
+        <li>Concessional categories (Resident/Trainee, IACTS Member) require valid proof of eligibility. The secretariat may request documentation and may re-rate a registration if eligibility cannot be evidenced.</li>
         <li>Delegates must supply accurate details. Incorrect information may delay confirmation, badge issue or certification.</li>
       </ul>
 

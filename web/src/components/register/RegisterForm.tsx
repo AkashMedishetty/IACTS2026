@@ -516,8 +516,8 @@ export default function RegisterForm({
                   I want to attend the pre-conference workshop (23 October)
                 </span>
                 <span className="mt-1 block text-[13px] leading-[1.6] text-[#614d53]">
-                  Seats are limited. The programme is being finalised — we will write to you with the tracks and any
-                  applicable charge once it is confirmed. You can change this later from your account.
+                  23 October at NIMS — OP Block, 1st Floor, Learning Centre. Reporting 8:00 AM. Seats are limited
+                  and subject to availability; see the full workshop schedule on the programme page.
                 </span>
               </span>
             </label>

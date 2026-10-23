@@ -53,7 +53,9 @@ export function FacultyManager() {
   const [emailSubject, setEmailSubject] = useState('')
   const [emailMessage, setEmailMessage] = useState('')
 
-  const registrationLink = typeof window !== 'undefined' ? `${window.location.origin}/faculty/register` : `${conferenceConfig.contact.website}/faculty/register`
+  // The faculty link (with its code) comes from the admin API. The old
+  // /faculty/register page it used to point to has been removed.
+  const [registrationLink, setRegistrationLink] = useState<string | null>(null)
 
   const loadFaculty = useCallback(async () => {
     try {
@@ -61,7 +63,7 @@ export function FacultyManager() {
       const url = search ? `/api/admin/faculty?search=${encodeURIComponent(search)}` : '/api/admin/faculty'
       const res = await fetch(url)
       const data = await res.json()
-      if (data.success) setFaculty(data.data)
+      if (data.success) { setFaculty(data.data); setRegistrationLink(data.registrationLink || null) }
     } catch { toast({ title: 'Error', description: 'Failed to load faculty', variant: 'destructive' }) }
     finally { setLoading(false) }
   }, [search, toast])
@@ -197,6 +199,7 @@ export function FacultyManager() {
   }
 
   const copyLink = () => {
+    if (!registrationLink) return
     navigator.clipboard.writeText(registrationLink)
     toast({ title: 'Copied!', description: 'Faculty registration link copied to clipboard' })
   }
@@ -279,7 +282,7 @@ export function FacultyManager() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="font-semibold text-blue-800 dark:text-blue-200">Faculty Registration Link</p>
-              <p className="text-sm text-blue-600 dark:text-blue-300 font-mono break-all">{registrationLink}</p>
+              <p className="text-sm text-blue-600 dark:text-blue-300 font-mono break-all">{registrationLink || 'Not available — set FACULTY_REGISTRATION_KEY in Vercel to enable the faculty link.'}</p>
             </div>
             <Button variant="outline" size="sm" onClick={copyLink}><Copy className="h-4 w-4" /></Button>
           </div>
