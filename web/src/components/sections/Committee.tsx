@@ -177,9 +177,9 @@ export default function Committee() {
         </ul>
       </div>
 
-      <p className="mt-10 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">
-        Faculty list to be announced
-      </p>
+      <a href="/faculty" className="mt-10 inline-block font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint underline-offset-4 hover:text-crimson-lift hover:underline">
+        View the full faculty →
+      </a>
     </section>
   );
 }

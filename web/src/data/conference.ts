@@ -30,19 +30,19 @@ export const days = [
     stage: "Approach",
     blurb:
       "Hands-on sessions for postgraduate trainees, each with limited capacity.",
-    /* The committee's final sheet, 30 September 2026, runs the workshop in two
-       parallel halls. Full detail is on /programme; this is the summary the home
-       page and brochure show. The Breakthrough Sessions moved to 24 October on
-       2 October 2026 and are no longer part of this day. */
+    /* The committee's final workshop sheet, 22 October 2026 (same as
+       workshopHalls in data/schedule.ts, which carries the times and faculty).
+       This is the summary the home page, FAQ and brochure show. Valve
+       Replacement and the ESV/radial harvest simulation were dropped; Stapler
+       Devices was added. */
     items: [
       { title: "Applied Anatomy of Heart", tag: "Hall A", lead: "Dr. Anil Tendolkar" },
       { title: "Coronary Anastomosis", tag: "Hall A" },
-      { title: "Valve Replacement", tag: "Hall A" },
+      { title: "Stapler Devices — Hands On", tag: "Hall A" },
       { title: "Proximal Coronary Anastomosis Contest", tag: "Hall A" },
       { title: "Sizing and Planning for FET — Aortic Aneurysm and Dissection", tag: "Hall B" },
       { title: "Deployment of FET", tag: "Hall B" },
       { title: "MICS CABG Planning & Demo Workshop Simulator", tag: "Hall B" },
-      { title: "Endoscopic Saphenous Vein and Radial Artery Harvest Simulation", tag: "Hall B" },
     ],
   },
   {
@@ -513,10 +513,11 @@ export const programmeOverview = {
     label: "Day Zero",
     heading: "Pre-conference Hands-on Workshops",
     venue: "Nizam's Institute of Medical Sciences, Hyderabad",
-    body: "Providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, valve replacement techniques, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
+    // "valve replacement techniques" dropped with the Valve Replacement station (final sheet, 22 Oct 2026).
+    body: "Providing postgraduate trainees with an opportunity to develop and refine essential surgical skills. Through focused practical sessions on vascular and coronary anastomosis, surgical stapling, CABG and Aortic surgical planning, participants will learn not merely what to do, but how to think through a surgical procedure.",
     skills: [
       "Vascular and coronary anastomosis",
-      "Valve replacement techniques",
+      "Surgical stapling devices",
       "CABG surgical planning",
       "Aortic surgical planning",
     ],

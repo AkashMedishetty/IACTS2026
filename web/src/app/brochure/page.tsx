@@ -440,10 +440,9 @@ export default function BrochurePage() {
           className="bro-panel"
           style={{ marginTop: "8mm", textAlign: "center", borderTop: "1.5pt solid var(--crimson)" }}
         >
-          <p className="bro-h3" style={{ fontSize: "10.5pt" }}>Workshop schedule yet to be finalised</p>
+          <p className="bro-h3" style={{ fontSize: "10.5pt" }}>23 October · NIMS, OP Block, 1st Floor, Learning Centre</p>
           <p className="bro-note" style={{ marginTop: "2mm" }}>
-            Select your workshop preference in the registration form; the secretariat will write to confirm your place.
-            Per-track seat counts to be announced.
+            Reporting 8:00 AM. Full timings and faculty for both halls are on the programme page.
           </p>
         </div>
       </Page>

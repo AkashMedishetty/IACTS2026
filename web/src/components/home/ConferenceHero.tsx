@@ -4,6 +4,16 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { conference, days, secretariat } from "@/data/conference";
+import { conferenceConfig } from "@/config/conference.config";
+import { getCurrentTierKey } from "@/lib/registration";
+
+/** e.g. "Spot Registration until 25 Oct 2026", from the tier active today. */
+function tierBadge() {
+  const tier: any = (conferenceConfig.payment.tiers as any)[getCurrentTierKey()]
+  if (!tier) return "Registration open"
+  const end = tier.endDate ? new Date(tier.endDate + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""
+  return end ? `${tier.label} until ${end}` : tier.label
+}
 import { PRIMARY_NAV } from "@/lib/constants";
 import type { InteractionState } from "@/components/anatomy/AnatomyParticles";
 
@@ -410,7 +420,8 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
             <div className="border-l-2 border-[#b3122a] bg-white/[0.93] px-4 py-4 backdrop-blur-sm">
               <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#7d656c]">Registration open</p>
               <p className="mt-1.5 text-[clamp(1rem,1.6vw,1.4rem)] font-black uppercase leading-tight tracking-[-.02em] text-[#b3122a]">
-                Early Bird until 27 Sept 2026
+                {/* Follows the active tier — this read "Early Bird until 27 Sept" long after it closed. */}
+                {tierBadge()}
               </p>
             </div>
           </div>
