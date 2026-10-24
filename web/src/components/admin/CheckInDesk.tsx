@@ -294,7 +294,6 @@ function SpotImportDialog({ open, onOpenChange, onDone }: {
 }) {
   const { toast } = useToast()
   const [file, setFile] = useState<File | null>(null)
-  const [syncCheckIns, setSyncCheckIns] = useState(true)
   const [createAll, setCreateAll] = useState(false)
   const [preview, setPreview] = useState<any>(null)
   const [running, setRunning] = useState(false)
@@ -308,7 +307,6 @@ function SpotImportDialog({ open, onOpenChange, onDone }: {
       const fd = new FormData()
       fd.append("file", file)
       fd.append("dryRun", dryRun ? "1" : "0")
-      fd.append("syncCheckIns", syncCheckIns ? "1" : "0")
       fd.append("createAllUnmatched", createAll ? "1" : "0")
       const res = await fetch("/api/admin/checkin/import", { method: "POST", body: fd })
       const json = await res.json()
@@ -318,7 +316,7 @@ function SpotImportDialog({ open, onOpenChange, onDone }: {
       } else {
         toast({
           title: "Import complete",
-          description: `${json.created.length} spot registrations added · ${json.checkIns.synced} check-ins carried over`
+          description: `${json.created.length} spot registrations added`
             + (json.errors.length ? ` · ${json.errors.length} errors` : ""),
           variant: json.errors.length ? "destructive" : "default",
         })
@@ -341,18 +339,12 @@ function SpotImportDialog({ open, onOpenChange, onDone }: {
           <DialogTitle>Import spot registrations</DialogTitle>
           <DialogDescription>
             Upload the badge desk export (.xlsx). Spot (onsite) rows not already in the database are added.
-            You see a preview first — nothing is saved until you confirm.
+            Everyone added starts as not checked in. You see a preview first — nothing is saved until you confirm.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
           <Input type="file" accept=".xlsx" onChange={(e) => { setFile(e.target.files?.[0] || null); setPreview(null) }} />
-          <div className="flex items-start gap-2">
-            <Checkbox id="sync" checked={syncCheckIns} onCheckedChange={(v) => { setSyncCheckIns(!!v); setPreview(null) }} />
-            <Label htmlFor="sync" className="leading-snug font-normal">
-              Carry over “Checked In = Yes” from the desk to matching registrations
-            </Label>
-          </div>
           <div className="flex items-start gap-2">
             <Checkbox id="all" checked={createAll} onCheckedChange={(v) => { setCreateAll(!!v); setPreview(null) }} />
             <Label htmlFor="all" className="leading-snug font-normal">
@@ -365,12 +357,6 @@ function SpotImportDialog({ open, onOpenChange, onDone }: {
               <p><strong>{preview.rows}</strong> rows in file, <strong>{preview.spotRows}</strong> spot.</p>
               <p><strong>{preview.created.length}</strong> new registrations will be added.</p>
               <p><strong>{preview.matchedSpot.length}</strong> spot rows already exist here (skipped).</p>
-              {preview.checkIns.enabled && (
-                <p>
-                  <strong>{preview.checkIns.toSync}</strong> existing registrations will be marked checked in
-                  ({preview.checkIns.alreadyCheckedIn} already were).
-                </p>
-              )}
               {preview.unmatchedImported.length > 0 && (
                 <p className="text-amber-700 dark:text-amber-400">
                   {preview.unmatchedImported.length} non-spot rows have no match here and will be skipped.
