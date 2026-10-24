@@ -37,6 +37,7 @@ export function ModernSidebar({ activeTab, onTabChange, isOpen, onToggle }: Mode
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'analytics', label: 'Analytics & Reports', icon: BarChart3 },
     { id: 'registrations', label: 'Registrations', icon: Users, badge: 12 },
+    { id: 'checkin', label: 'Entry Check-in', icon: UserCheck },
     { id: 'payments', label: 'Payments', icon: CreditCard },
     { id: 'sponsors', label: 'Sponsors', icon: Building2 },
     { id: 'abstracts', label: 'Abstracts', icon: FileText, badge: 5 },

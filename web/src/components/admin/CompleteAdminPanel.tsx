@@ -7,6 +7,7 @@ import { StunningDashboard } from './StunningDashboard'
 import { QuickSettings } from './QuickSettings'
 import { EnhancedExport } from './EnhancedExport'
 import { RegistrationTable } from './RegistrationTable'
+import { CheckInDesk } from './CheckInDesk'
 import { PricingTiersManager } from './PricingTiersManager'
 import { WorkshopManager } from './WorkshopManager'
 import { AbstractsSubmissionsManager } from './AbstractsSubmissionsManager'
@@ -131,6 +132,13 @@ export function CompleteAdminPanel() {
         return (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <RegistrationTable />
+          </motion.div>
+        )
+
+      case 'checkin':
+        return (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <CheckInDesk />
           </motion.div>
         )
 

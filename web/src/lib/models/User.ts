@@ -108,7 +108,13 @@ export interface IUser extends Document {
     sponsorCategory?: string
     paymentRemarks?: string
     // Source tracking
-    source?: 'normal' | 'sponsor-managed' | 'admin-created' | 'bulk-upload'
+    source?: 'normal' | 'sponsor-managed' | 'admin-created' | 'bulk-upload' | 'spot'
+    /** Entry at the venue, marked from the check-in desk (/admin/checkin). */
+    checkIn?: {
+      checkedIn: boolean
+      checkedInAt?: Date
+      checkedInBy?: string
+    }
   }
   payment?: {
     method: 'bank-transfer' | 'online' | 'pay-now' | 'cash'
@@ -316,8 +322,13 @@ const UserSchema = new Schema<IUser>({
     // Source tracking
     source: {
       type: String,
-      enum: ['normal', 'sponsor-managed', 'admin-created', 'bulk-upload'],
+      enum: ['normal', 'sponsor-managed', 'admin-created', 'bulk-upload', 'spot'],
       default: 'normal'
+    },
+    checkIn: {
+      checkedIn: { type: Boolean, default: false },
+      checkedInAt: { type: Date },
+      checkedInBy: { type: String }
     }
   },
   payment: {
@@ -395,6 +406,7 @@ const UserSchema = new Schema<IUser>({
 UserSchema.index({ 'registration.status': 1 })
 UserSchema.index({ 'registration.paymentType': 1 })
 UserSchema.index({ role: 1 })
+UserSchema.index({ 'registration.checkIn.checkedIn': 1 })
 UserSchema.index({ 'sponsorProfile.status': 1 })
 
 export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema)

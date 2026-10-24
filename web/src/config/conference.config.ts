@@ -344,7 +344,12 @@ export const conferenceConfig: ConferenceConfig = {
       { key: "faculty", label: "Faculty", adminOnly: true },
       { key: "special-invitee", label: "Special Invitee", adminOnly: true },
       { key: "organising-committee", label: "Organising Committee", adminOnly: true },
-      { key: "delegate", label: "Delegate", adminOnly: true }
+      { key: "delegate", label: "Delegate", adminOnly: true },
+      /* Event-day categories used by the onsite badge desk and brought in with
+         the spot registrations (24 October 2026). */
+      { key: "trade", label: "Trade", adminOnly: true },
+      { key: "crew", label: "Crew", adminOnly: true },
+      { key: "conference-manager", label: "Conference Manager", adminOnly: true }
     ],
 
     workshopsEnabled: true,

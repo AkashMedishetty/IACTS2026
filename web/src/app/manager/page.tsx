@@ -5,6 +5,7 @@ import { ProtectedRoute } from "../../components/auth/ProtectedRoute"
 import { RegistrationTable } from "../../components/admin/RegistrationTable"
 import { Navigation } from "../../components/Navigation"
 import { Button } from "../../components/ui/button"
+import Link from "next/link"
 import { 
   RefreshCw,
   Download,
@@ -80,6 +81,12 @@ export default function ManagerDashboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
+                <Button size="sm" asChild className="flex items-center gap-2">
+                  <Link href="/admin/checkin">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Entry Check-in</span>
+                  </Link>
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
