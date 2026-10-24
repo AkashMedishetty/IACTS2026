@@ -51,6 +51,15 @@ const fetcher = async (url: string): Promise<CheckInData> => {
 
 const normalise = (s: string) => s.toLowerCase().replace(/[^a-z0-9@.\s]/g, " ").replace(/\s+/g, " ").trim()
 
+/** Spelling-tolerant form for names typed at a busy desk: Sahir/Shahir,
+ *  Sreekanth/Srikanth, Malllikarjuna/Mallikarjuna collapse together.
+ *  Exact matches are still listed first. */
+const sound = (s: string) => normalise(s)
+  .replace(/h/g, "")
+  .replace(/ee|ea|y/g, "i").replace(/oo|ou/g, "u").replace(/w/g, "v").replace(/z/g, "j")
+  .replace(/ai|ay|ei/g, "e").replace(/au|ow/g, "o")
+  .replace(/([a-z])\1+/g, "$1")
+
 const timeIST = (iso: string | null) =>
   iso ? new Date(iso).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit" }) : ""
 
@@ -77,16 +86,20 @@ export function CheckInDesk() {
   const results = useMemo(() => {
     const attendees = data?.attendees || []
     const words = normalise(query).split(" ").filter(Boolean)
+    const soundWords = sound(query).split(" ").filter((w) => w.length >= 2)
     const digits = query.replace(/\D/g, "")
-    return attendees.filter((a) => {
-      if (filter === "in" && !a.checkedIn) return false
-      if (filter === "pending" && a.checkedIn) return false
-      if (typeFilter && a.type !== typeFilter) return false
-      if (!words.length) return true
-      const hay = normalise(`${a.name} ${a.email} ${a.registrationId} ${a.institution} ${a.city}`)
-      if (words.every((w) => hay.includes(w))) return true
-      return digits.length >= 4 && a.phone.replace(/\D/g, "").includes(digits)
-    })
+    const exact: Attendee[] = []
+    const close: Attendee[] = []
+    for (const a of attendees) {
+      if (filter === "in" && !a.checkedIn) continue
+      if (filter === "pending" && a.checkedIn) continue
+      if (typeFilter && a.type !== typeFilter) continue
+      const text = `${a.name} ${a.email} ${a.registrationId} ${a.institution} ${a.city}`
+      if (!words.length || words.every((w) => normalise(text).includes(w))) exact.push(a)
+      else if (digits.length >= 4 && a.phone.replace(/\D/g, "").includes(digits)) exact.push(a)
+      else if (soundWords.length && soundWords.every((w) => sound(text).includes(w))) close.push(a)
+    }
+    return [...exact, ...close]
   }, [data, query, filter, typeFilter])
 
   const shown = results.slice(0, 100)
