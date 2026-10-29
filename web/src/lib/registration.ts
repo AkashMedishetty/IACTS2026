@@ -204,3 +204,14 @@ export function categoryLabel(key?: string | null): string {
   if (hit) return hit.label
   return key.replace(/[-_]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
+
+/** Public registration is closed: switched off in config, or past its end date. */
+export function isRegistrationClosed(date: Date = new Date()): boolean {
+  const r = conferenceConfig.registration
+  return !r.enabled || Boolean(r.endDate && isoDay(date) > r.endDate)
+}
+
+/** Where the site's main call to action points: Register while open, the thank-you page after. */
+export function registerCta(date: Date = new Date()): { href: string; label: string } {
+  return isRegistrationClosed(date) ? { href: '/thank-you', label: 'Thank you' } : { href: '/register', label: 'Register now' }
+}

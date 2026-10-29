@@ -316,7 +316,10 @@ export const conferenceConfig: ConferenceConfig = {
   },
 
   registration: {
-    enabled: true,
+    // Closed after the conference (23–25 October 2026). Turns every Register
+    // button into "Thank you", shows the closed notice on /register and makes
+    // the public registration API refuse new sign-ups. Admin entry is unaffected.
+    enabled: false,
     startDate: "2026-01-01",
     endDate: "2026-10-25",
 

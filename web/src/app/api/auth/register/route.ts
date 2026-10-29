@@ -10,7 +10,7 @@ import { generateRegistrationId } from '@/lib/utils/generateId'
 import { EmailService } from '@/lib/email/service'
 import Razorpay from 'razorpay'
 import { sanitizeAccommodation } from '@/lib/accommodation'
-import { getCurrentTierKey, computeRegistrationAmount, tierLabel } from '@/lib/registration'
+import { getCurrentTierKey, computeRegistrationAmount, tierLabel, isRegistrationClosed } from '@/lib/registration'
 import { validateRegistration, normalisePhone } from '@/lib/validation/registration'
 
 // Initialize Razorpay only if credentials are available
@@ -27,6 +27,10 @@ try {
 }
 
 export async function POST(request: NextRequest) {
+  // The conference is over: no new public sign-ups (admin entry uses its own route).
+  if (isRegistrationClosed()) {
+    return NextResponse.json({ success: false, message: 'Registration for IACTS TechnoCollege CME 2026 is closed.' }, { status: 403 })
+  }
   const startTime = Date.now()
   console.log('=== AUTH/REGISTER ROUTE HIT ===')
   console.log('Timestamp:', new Date().toISOString())

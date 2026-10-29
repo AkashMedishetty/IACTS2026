@@ -3,7 +3,8 @@ import { connection } from "next/server";
 import SiteHeader from "@/components/site/SiteHeader";
 import RegisterForm from "@/components/register/RegisterForm";
 import Footer from "@/components/sections/Footer";
-import { conference, creditPoints } from "@/data/conference";
+import { conference, creditPoints, secretariat } from "@/data/conference";
+import { isRegistrationClosed } from "@/lib/registration";
 
 export const metadata: Metadata = {
   title: `Register — ${conference.name}`,
@@ -13,6 +14,40 @@ export const metadata: Metadata = {
 export default async function RegisterPage() {
   // Resolve the form's date-sensitive tier per request, not at build time.
   await connection();
+
+  if (isRegistrationClosed()) {
+    return (
+      <div className="conference-site relative isolate min-h-svh">
+        <SiteHeader cta={false} />
+        <main id="main" className="relative z-10 pb-24 pt-[104px]">
+          <div className="u-shell">
+            <p className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[.24em] text-[#7d656c]">
+              <span aria-hidden className="h-px w-8 bg-[#b3122a]" /> {conference.dates.label} · {conference.city}
+            </p>
+            <h1 className="mt-4 text-[clamp(2.2rem,6vw,4.5rem)] font-black uppercase leading-[.86] tracking-[-.06em] text-[#160a0d]">
+              Registration <span className="text-[#b3122a]">closed</span>
+            </h1>
+            <p className="mt-5 max-w-[56ch] text-[15px] leading-[1.7] text-[#614d53]">
+              Registration for {conference.name} has closed. Thank you to every delegate, faculty member and partner
+              who joined us in Hyderabad.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="/thank-you" className="inline-flex min-h-12 items-center rounded-full bg-[#b3122a] px-7 font-mono text-[11px] font-semibold uppercase tracking-[.15em] text-white no-underline">
+                Read our thank-you note
+              </a>
+              <a href="/auth/login" className="inline-flex min-h-12 items-center border-b border-[#b3122a]/30 px-1 font-mono text-[11px] font-semibold uppercase tracking-[.15em] text-[#b3122a] no-underline">
+                Delegate login
+              </a>
+            </div>
+            <p className="mt-8 text-[13px] text-[#7d656c]">
+              Questions: <a href={`mailto:${secretariat.email}`} className="text-[#b3122a]">{secretariat.email}</a>
+            </p>
+          </div>
+        </main>
+        <div className="relative z-10"><Footer /></div>
+      </div>
+    );
+  }
 
   return (
     <div className="conference-site relative isolate min-h-svh">

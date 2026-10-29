@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { conference, secretariat } from "@/data/conference";
 import { PRIMARY_NAV } from "@/lib/constants";
+import { registerCta } from "@/lib/registration";
 
 export function Arrow() {
   return (
@@ -52,8 +53,8 @@ export default function SiteHeader({ cta = true }: { cta?: boolean }) {
 
           <div className="flex items-center gap-2">
             {cta ? (
-              <a href="/register" className="hidden min-h-10 items-center gap-2 rounded-full bg-[#b3122a] px-6 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
-                Register <Arrow />
+              <a href={registerCta().href} className="hidden min-h-10 items-center gap-2 rounded-full bg-[#b3122a] px-6 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
+                {registerCta().label} <Arrow />
               </a>
             ) : null}
             <button

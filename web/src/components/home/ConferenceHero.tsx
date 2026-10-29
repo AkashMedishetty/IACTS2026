@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { conference, days, secretariat } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
-import { getCurrentTierKey } from "@/lib/registration";
+import { getCurrentTierKey, isRegistrationClosed, registerCta } from "@/lib/registration";
 
 /** e.g. "Spot Registration until 25 Oct 2026", from the tier active today. */
 function tierBadge() {
@@ -323,8 +323,8 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a href="/register" className="hidden min-h-10 items-center gap-2 rounded-full bg-[#b3122a] px-6 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
-              Register <Arrow />
+            <a href={registerCta().href} className="hidden min-h-10 items-center gap-2 rounded-full bg-[#b3122a] px-6 font-mono text-[12px] font-semibold uppercase tracking-[.12em] text-white no-underline transition-transform hover:-translate-y-0.5 sm:inline-flex">
+              {registerCta().label} <Arrow />
             </a>
             <button
               type="button"
@@ -383,8 +383,8 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
               </p>
             </div>
 
-            <a href="/register" className="flex min-h-14 items-center justify-center gap-3 bg-[#b3122a] px-6 text-[15px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
-              Register Now <Arrow />
+            <a href={registerCta().href} className="flex min-h-14 items-center justify-center gap-3 bg-[#b3122a] px-6 text-[15px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
+              {registerCta().label} <Arrow />
             </a>
           </div>
 
@@ -418,10 +418,10 @@ export default function ConferenceHero({ children }: { children?: ReactNode }) {
             </div>
 
             <div className="border-l-2 border-[#b3122a] bg-white/[0.93] px-4 py-4 backdrop-blur-sm">
-              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#7d656c]">Registration open</p>
+              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-[#7d656c]">{isRegistrationClosed() ? "23 — 25 October 2026" : "Registration open"}</p>
               <p className="mt-1.5 text-[clamp(1rem,1.6vw,1.4rem)] font-black uppercase leading-tight tracking-[-.02em] text-[#b3122a]">
                 {/* Follows the active tier — this read "Early Bird until 27 Sept" long after it closed. */}
-                {tierBadge()}
+                {isRegistrationClosed() ? "Thank you for joining us" : tierBadge()}
               </p>
             </div>
           </div>

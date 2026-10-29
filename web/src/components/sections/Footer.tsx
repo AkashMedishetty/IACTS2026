@@ -1,4 +1,5 @@
 import { EVENT_INFO } from "@/lib/constants";
+import { registerCta } from "@/lib/registration";
 import { secretariat, venues, registrationHelpline } from "@/data/conference";
 
 export default function Footer() {
@@ -41,8 +42,8 @@ export default function Footer() {
           </div>
           <div data-r>
             <p className="u-eyebrow text-gold-lift">Register</p>
-            <a href="/register" className="mt-2 inline-flex min-h-11 items-center gap-2 bg-[#b3122a] px-5 text-[13px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
-              Register now
+            <a href={registerCta().href} className="mt-2 inline-flex min-h-11 items-center gap-2 bg-[#b3122a] px-5 text-[13px] font-bold uppercase tracking-[.08em] text-white no-underline transition-transform hover:-translate-y-0.5">
+              {registerCta().label}
             </a>
             <p className="mt-5 font-mono text-[9px] uppercase tracking-[.16em] text-[#7d656c]">
               {registrationHelpline.label}

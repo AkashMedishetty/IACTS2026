@@ -2,7 +2,7 @@ import { EVENT_INFO } from "@/lib/constants";
 import { creditPoints, registrationIncludes } from "@/data/conference";
 import { conferenceConfig } from "@/config/conference.config";
 import { pricingTiers } from "@/config/pricing.config";
-import { getCurrentTierKey, tierLabel } from "@/lib/registration";
+import { getCurrentTierKey, isRegistrationClosed, registerCta, tierLabel } from "@/lib/registration";
 
 /**
  * Registration is OPEN. Fees come from config/pricing.config.ts — the same
@@ -19,6 +19,7 @@ function fmtDate(iso?: string) {
 
 export default function RegisterCta() {
   const activeKey = getCurrentTierKey();
+  const closed = isRegistrationClosed();
   /* Public fee table: only categories a delegate can actually buy. Admin-only
      categories (Faculty, Special Invitee, Organising Committee, Delegate) have
      no public price and must never appear here — they did, at ₹0, from
@@ -37,14 +38,16 @@ export default function RegisterCta() {
 
         <h2 className="mt-6 max-w-4xl u-heading" data-r>
           Registration is
-          <span className="u-serif block"> open.</span>
+          <span className="u-serif block"> {closed ? "closed." : "open."}</span>
         </h2>
 
         <p className="mt-5 max-w-[52ch] text-[clamp(.9rem,1.1vw,1.05rem)] leading-[1.7] text-muted-foreground" data-r>
-          {tierLabel(activeKey)} rates apply
+          {closed
+            ? "Thank you to everyone who joined us in Hyderabad. The fees below are kept for reference."
+            : <>{tierLabel(activeKey)} rates apply
           {conferenceConfig.payment.tiers[activeKey]?.endDate
             ? ` until ${fmtDate(conferenceConfig.payment.tiers[activeKey]?.endDate)}`
-            : ""}. {conferenceConfig.accommodation.note}
+            : ""}. {conferenceConfig.accommodation.note}</>}
         </p>
 
         {/* fee matrix */}
@@ -128,8 +131,8 @@ export default function RegisterCta() {
         </div>
 
         <div className="mt-[clamp(2rem,4vh,3rem)] flex flex-wrap items-center gap-3" data-r>
-          <a href="/register" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#b3122a] px-7 font-mono text-[10px] font-semibold uppercase tracking-[.15em] text-white no-underline transition-transform hover:-translate-y-0.5">
-            Register now
+          <a href={registerCta().href} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#b3122a] px-7 font-mono text-[10px] font-semibold uppercase tracking-[.15em] text-white no-underline transition-transform hover:-translate-y-0.5">
+            {registerCta().label}
             <svg viewBox="0 0 20 20" className="size-4" fill="none" aria-hidden="true">
               <path d="M4 10h11M11 6l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
